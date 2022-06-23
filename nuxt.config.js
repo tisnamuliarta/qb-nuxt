@@ -6,6 +6,14 @@ export default {
    ** See https://nuxtjs.org/api/configuration-mode
    */
   ssr: false,
+
+  env: {
+    baseApi: process.env.BASE_API,
+  },
+
+  publicRuntimeConfig: {
+    myPublicVariable: process.env.BASE_API,
+  },
   /*
    ** Headers of the page
    ** See https://nuxtjs.org/api/configuration-head
@@ -49,6 +57,7 @@ export default {
     { src: '~/plugins/dragable.js' },
     { src: '~/plugins/vue-gates.js' },
     { src: '~/plugins/vuetify-money.js' },
+    { src: '~/plugins/axios-host.js' },
   ],
   /*
    ** Auto import components
@@ -186,7 +195,7 @@ export default {
   axios: {
     debug: false,
     credentials: true,
-    baseURL: process.env.BASE_API, // Used as fallback if no runtime config is provided
+    // baseURL: location.protocol + '//' + location.hostname + process.env.BASE_API, // Used as fallback if no runtime config is provided
   },
   /*
    ** vuetify module configuration
