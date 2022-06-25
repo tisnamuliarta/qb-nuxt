@@ -38,7 +38,7 @@
 
 <script>
 export default {
-  name: 'Setting',
+  name: 'SettingList',
 
   data() {
     return {

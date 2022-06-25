@@ -3,7 +3,7 @@
     <component
       :is="selectComponent"
       ref="childComponent"
-      :formData="form"
+      :form-data="form"
     ></component>
   </v-container>
 </template>

@@ -15,15 +15,16 @@
           item-key="id"
           calculate-widths
           fixed-header
-          :height="(viewData) ? '60vh' : '70vh'"
+          :height="viewData ? '60vh' : '70vh'"
           show-select
           dense
           :footer-props="{ 'items-per-page-options': [20, 50, 100, -1] }"
         >
-          <template v-slot:top>
-
+          <template #top>
             <div v-if="!viewData" class="pl-4 pt-2">
-              <span class="font-weight-medium text-h6">Item Master Data</span>
+              <span class="font-weight-medium text-h6">{{
+                $t('Items Master Data')
+              }}</span>
             </div>
 
             <LazyMainToolbar
@@ -35,7 +36,7 @@
               :show-add="showAdd"
               title="Items"
               show-new-data
-              new-data-text="New Item"
+              :new-data-text="$t('New Item')"
               show-batch-action
               @emitData="emitData"
               @newData="newData"
@@ -149,10 +150,10 @@ export default {
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+      return this.editedIndex === -1 ? this.$t('New Item') : this.$t('Edit Item')
     },
     buttonTitle() {
-      return this.editedIndex === -1 ? 'Save' : 'Update'
+      return this.editedIndex === -1 ? this.$t('Save') : this.$t('Update')
     },
   },
 
@@ -173,7 +174,7 @@ export default {
 
   methods: {
     formatPrice(value) {
-      let val = (value / 1).toFixed(2).replace('.', ',')
+      const val = (value / 1).toFixed(2).replace('.', ',')
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
     },
 
@@ -203,6 +204,7 @@ export default {
     },
 
     editItem(item) {
+      this.editedIndex = 1
       this.editedIndex = this.allData.indexOf(item)
       this.$refs.formData.editItem(item, this.url)
     },
@@ -256,10 +258,30 @@ export default {
     mappingHeader() {
       if (this.viewData) {
         this.headers = [
-          { text: 'Item Code', value: 'code', cellClass: 'disable-wrap' },
-          { text: 'Item Name', value: 'name', cellClass: 'disable-wrap' },
-          { text: 'Item Category', value: 'categories', cellClass: 'disable-wrap' },
-          { text: 'Unit', value: 'unit', cellClass: 'disable-wrap' },
+          {
+            text: 'Item Code',
+            value: 'code',
+            cellClass: 'disable-wrap',
+            class: 'disable-wrap',
+          },
+          {
+            text: 'Item Name',
+            value: 'name',
+            cellClass: 'disable-wrap',
+            class: 'disable-wrap',
+          },
+          {
+            text: 'Item Category',
+            value: 'categories',
+            cellClass: 'disable-wrap',
+            class: 'disable-wrap',
+          },
+          {
+            text: 'Unit',
+            value: 'unit',
+            cellClass: 'disable-wrap',
+            class: 'disable-wrap',
+          },
         ]
       } else {
         this.headers = [

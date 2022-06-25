@@ -48,6 +48,7 @@
       </v-card>
     </template>
     <template #actions>
+      <v-spacer />
       <v-btn
         color="green darken-1"
         class="mr-3"
@@ -107,9 +108,11 @@ export default {
     }
   },
 
-  mounted() {
+  activated() {
     this.selectedItem = 0
+    this.$refs.dialogFull.openDialog()
     this.changeTabValue('company', true)
+    this.$refs.dialogFull.setTitle(this.$t('Account and settings'))
   },
 
   methods: {

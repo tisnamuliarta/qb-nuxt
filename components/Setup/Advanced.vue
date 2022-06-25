@@ -2,37 +2,37 @@
   <v-row>
     <v-col cols="12" md="12">
       <LazySetupSectionAdvanceAccounting :form="form" />
-      <hr>
+      <hr />
     </v-col>
 
     <v-col cols="12" md="12">
       <LazySetupSectionAdvancedChartOfAccount :form="form" />
-      <hr>
+      <hr />
     </v-col>
 
     <v-col cols="12" md="12">
       <LazySetupSectionAdvancedCategory :form="form" />
-      <hr>
+      <hr />
     </v-col>
 
     <v-col cols="12" md="12">
       <LazySetupSectionAdvancedProject :form="form" />
-      <hr>
+      <hr />
     </v-col>
 
     <v-col cols="12" md="12">
       <LazySetupSectionAdvancedTimeTracking :form="form" />
-      <hr>
+      <hr />
     </v-col>
 
     <v-col cols="12" md="12">
       <LazySetupSectionAdvancedCurrency :form="form" />
-      <hr>
+      <hr />
     </v-col>
 
     <v-col cols="12" md="12">
       <LazySetupSectionAdvancedOther :form="form" />
-      <hr>
+      <hr />
     </v-col>
   </v-row>
 </template>
@@ -83,7 +83,7 @@ export default {
     },
 
     getForm() {
-      let data = new FormData()
+      const data = new FormData()
       Object.entries(this.form).forEach((entry) => {
         const [key, value] = entry
         data.append(key, value)

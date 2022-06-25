@@ -19,9 +19,11 @@
           dense
           :footer-props="{ 'items-per-page-options': [20, 50, 100, -1] }"
         >
-          <template v-slot:top>
+          <template #top>
             <div class="pl-4 pt-2">
-              <span class="font-weight-medium text-h6">Business Partner Master Data</span>
+              <span class="font-weight-medium text-h6"
+                >{{ $t('Business Partner Master Data') }}</span
+              >
             </div>
             <LazyMainToolbar
               :document-status="documentStatus"
@@ -32,7 +34,7 @@
               title="Contacts"
               show-batch-action
               show-new-data
-              new-data-text="New Customer"
+              :new-data-text="$t('New Business Partner')"
               @emitData="emitData"
               @newData="newData"
             />
@@ -85,7 +87,7 @@
 
 <script>
 export default {
-  name: "customer",
+  name: 'CustomerList',
 
   data() {
     return {
@@ -103,53 +105,50 @@ export default {
       defaultItem: {},
       options: {},
       headers: [
-        {text: 'Name', value: 'name'},
-        {text: 'Type', value: 'type'},
-        {text: 'Company', value: 'company_name'},
+        { text: 'Name', value: 'name' },
+        { text: 'Type', value: 'type' },
+        { text: 'Company', value: 'company_name' },
         {
-          text: 'Email', value: 'email',
+          text: 'Email',
+          value: 'email',
           sortable: false,
           filterable: false,
         },
         {
-          text: 'Phone', value: 'phone',
+          text: 'Phone',
+          value: 'phone',
           sortable: false,
           filterable: false,
         },
         {
-          text: 'Balance', value: 'balance',
+          text: 'Balance',
+          value: 'balance',
           sortable: false,
           filterable: false,
         },
         {
-          text: 'Action', value: 'ACTIONS',
+          text: 'Action',
+          value: 'ACTIONS',
           align: 'center',
           sortable: false,
           filterable: false,
         },
       ],
       items: [
-        {text: 'Edit', action: 'edit'},
-        {text: 'Delete', action: 'delete'},
+        { text: 'Edit', action: 'edit' },
+        { text: 'Delete', action: 'delete' },
       ],
       itemText: '',
       itemAction: '',
     }
   },
 
-  activated() {
-    this.$nuxt.$emit('extensionSetting', {
-      show: false,
-      showBtn: false,
-    })
-  },
-
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? 'New Contacts' : 'Edit Contacts'
+      return this.editedIndex === -1 ? this.$t('New Business Partner') : this.$t('Edit Business Partner')
     },
     buttonTitle() {
-      return this.editedIndex === -1 ? 'Save' : 'Update'
+      return this.editedIndex === -1 ? this.$t('Save') : this.$t('Update')
     },
   },
 
@@ -160,6 +159,13 @@ export default {
       },
       deep: true,
     },
+  },
+
+  activated() {
+    this.$nuxt.$emit('extensionSetting', {
+      show: false,
+      showBtn: false,
+    })
   },
 
   mounted() {
@@ -181,7 +187,7 @@ export default {
       }
     },
     editItem(item) {
-
+      this.editedIndex = 1
       this.$refs.formData.editItem(item)
     },
 
@@ -225,6 +231,6 @@ export default {
           })
         })
     },
-  }
+  },
 }
 </script>

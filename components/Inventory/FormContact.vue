@@ -4,26 +4,16 @@
       ref="dialogForm"
       max-width="800px"
       :dialog-title="formTitle"
-      button-title="Save"
+      :button-title="$t('Save')"
     >
       <template #content>
         <v-form class="pt-2">
           <v-container>
             <v-row dense>
-              <v-col cols="12" class="">
-                <v-text-field
-                  v-model="form.name"
-                  label="Name"
-                  outlined
-                  dense
-                  hide-details="auto"
-                ></v-text-field>
-              </v-col>
-
               <v-col cols="12" md="4" class="">
                 <v-select
                   v-model="form.type"
-                  :items="['Vendor', 'Customer', 'Employee', 'Other']"
+                  :items="['Vendor', 'Customer', 'Other']"
                   label="Category"
                   outlined
                   persistent-hint
@@ -33,16 +23,26 @@
                 </v-select>
               </v-col>
 
-              <v-col cols="12" class="">
+              <v-col cols="12" md="8">
+                <v-text-field
+                  v-model="form.name"
+                  label="Name"
+                  outlined
+                  dense
+                  hide-details="auto"
+                ></v-text-field>
+              </v-col>
+
+              <!-- <v-col cols="12" class="">
                 <v-checkbox
                   v-model="form.can_login"
                   dense
                   hide-details
                   label="Can Login?"
                 ></v-checkbox>
-              </v-col>
+              </v-col> -->
 
-              <v-col v-if="form.can_login" cols="12" md="6" class="">
+              <!-- <v-col v-if="form.can_login" cols="12" md="6" class="">
                 <v-text-field
                   v-model="form.email"
                   label="Email"
@@ -51,9 +51,9 @@
                   hide-details="auto"
                   @click:append="show = !show"
                 ></v-text-field>
-              </v-col>
+              </v-col> -->
 
-              <v-col v-if="form.can_login" cols="12" md="6" class="">
+              <!-- <v-col v-if="form.can_login" cols="12" md="6" class="">
                 <v-text-field
                   v-model="form.password"
                   label="Password"
@@ -63,7 +63,7 @@
                   dense
                   hide-details="auto"
                 ></v-text-field>
-              </v-col>
+              </v-col> -->
 
               <v-col cols="12" class="">
                 <v-card flat>
@@ -344,8 +344,8 @@
                       <v-col v-if="form.active_max_payable" cols="12" class="">
                         <vuetify-money
                           v-model="form.max_payable"
-                          v-bind:valueWhenIsEmpty="valueWhenIsEmpty"
-                          v-bind:options="moneyOptions"
+                          :value-when-is-empty="valueWhenIsEmpty"
+                          :options="moneyOptions"
                           label="Max Payable"
                           outlined
                           dense

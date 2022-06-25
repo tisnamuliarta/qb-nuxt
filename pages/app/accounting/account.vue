@@ -17,7 +17,7 @@
         dense
         :footer-props="{ 'items-per-page-options': [20, 50, 100, -1] }"
       >
-        <template v-slot:top>
+        <template #top>
           <div class="pl-4 pt-2">
             <span class="font-weight-medium text-h6">{{ $t('Chart Of Accounts') }} </span>
           </div>
@@ -81,7 +81,7 @@
 
 <script>
 export default {
-  name: 'Account',
+  name: 'ChartOfAccount',
   data() {
     return {
       totalData: 0,
@@ -138,13 +138,6 @@ export default {
     }
   },
 
-  activated() {
-    this.$nuxt.$emit('extensionSetting', {
-      show: false,
-      showBtn: false,
-    })
-  },
-
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? 'New Account' : 'Edit Account'
@@ -161,6 +154,13 @@ export default {
       },
       deep: true,
     },
+  },
+
+  activated() {
+    this.$nuxt.$emit('extensionSetting', {
+      show: false,
+      showBtn: false,
+    })
   },
 
   methods: {

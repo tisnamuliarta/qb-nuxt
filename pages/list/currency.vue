@@ -21,24 +21,26 @@
           dense
           :footer-props="{ 'items-per-page-options': [20, 50, 100, -1] }"
         >
-          <template v-slot:top>
-            <v-toolbar flat color="white" dense>
-              <v-toolbar-title class="hidden-xs-only">Currency</v-toolbar-title>
-              <v-divider class="mx-2" inset vertical></v-divider>
-              <v-spacer></v-spacer>
-              <v-btn icon color="green" dark @click="newData()">
-                <v-icon>mdi-plus-circle</v-icon>
-              </v-btn>
-
-              <v-btn :loading="loading" icon @click="getDataFromApi">
-                <v-icon>mdi-refresh</v-icon>
-              </v-btn>
-            </v-toolbar>
+          <template #top>
+            <LazyMainToolbar
+              title="Currency"
+              show-new-data
+              show-back-link
+              new-data-text="New Currency"
+              @emitData="emitData"
+              @newData="newData"
+            />
           </template>
           <template #[`item.ACTIONS`]="{ item }">
-            <v-icon small class="mr-2" color="orange" @click="editItem(item)">
-              mdi-pencil-circle
-            </v-icon>
+            <v-btn
+              text
+              small
+              class="mr-2 font-weight-bold text-right pr-0"
+              color="secondary"
+              @click="editItem(item)"
+            >
+              Edit
+            </v-btn>
           </template>
         </v-data-table>
       </div>
@@ -114,7 +116,7 @@
 
 <script>
 export default {
-  name: 'Currency',
+  name: 'CurrencyList',
   data() {
     return {
       totalData: 0,

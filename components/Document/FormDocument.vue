@@ -194,16 +194,16 @@
 
     <v-col cols="12">
       <v-card flat>
-        <LazyFormAgGrid ref="agGrid"></LazyFormAgGrid>
+        <!-- <LazyFormAgGrid ref="agGrid"></LazyFormAgGrid> -->
         <!-- <lazyTabulator ref="tabulator" /> -->
-        <!-- <div class="scroll-container-min">
+        <div class="scroll-container-min">
           <LazyDocumentTableDetail
             ref="childDetails"
             @calcTotal="calcTotal"
           ></LazyDocumentTableDetail>
-        </div> -->
+        </div>
         <v-card-actions>
-          <v-btn small depressed outlined @click="$refs.tabulator.addLine(5)">
+          <v-btn small depressed outlined @click="$refs.childDetails.addLine(5)">
             Add Line
             <v-icon>mdi-plus</v-icon>
           </v-btn>

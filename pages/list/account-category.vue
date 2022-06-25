@@ -19,9 +19,16 @@
           hide-default-footer
           class="elevation-1"
           dense
+          fixed-header
+          height="75vh"
           :footer-props="{ 'items-per-page-options': [20, 50, 100, -1] }"
         >
-          <template v-slot:top>
+          <template #top>
+            <div class="pl-4 pt-2">
+              <span class="font-weight-medium text-h6"
+                >{{ $t('Account Category') }}
+              </span>
+            </div>
             <LazyMainToolbar
               :document-status="documentStatus"
               :search-status="searchStatus"
@@ -29,18 +36,31 @@
               :search-item="searchItem"
               :search="search"
               title="Account Category"
+              show-new-data
+              show-back-link
+              new-data-text="New Category"
               @emitData="emitData"
               @newData="newData"
+              @getDataFromApi="getDataFromApi"
             />
           </template>
           <template #[`item.id`]="{ item }">
             <v-btn
               text
               small
-              @click="editItem(item)"
               color="secondary"
               class="font-weight-bold text-right"
+              @click="editItem(item)"
               >Edit</v-btn
+            >
+
+            <v-btn
+              text
+              small
+              color="red"
+              class="font-weight-bold text-right"
+              @click="deleteItem(item)"
+              >Delete</v-btn
             >
           </template>
         </v-data-table>
@@ -78,9 +98,10 @@ export default {
       options: {},
       url: '/api/financial/account-category',
       headers: [
-        { text: 'Category Name', value: 'name' },
+        { text: 'Category Name', value: 'name', cellClass: 'disable-wrap' },
         { text: 'Category Type', value: 'category_type' },
-        { text: 'Actions', value: 'id' },
+        { text: 'Descriptions', value: 'descriptions' },
+        { text: 'Actions', value: 'id', cellClass: 'disable-wrap' },
       ],
     }
   },
@@ -128,6 +149,43 @@ export default {
       this.search = data.search
       this.filters = data.filters
       this.getDataFromApi()
+    },
+
+    deleteItem(item) {
+      const vm = this
+      this.$swal({
+        title: 'Are you sure?',
+        text: 'The data will be permanently deleted',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+      }).then((result) => {
+        if (result.value) {
+          this.$axios
+            .delete(vm.url + '/' + item.id, {
+              params: {
+                id: item.id,
+              },
+            })
+            .then((res) => {
+              this.$swal({
+                type: 'success',
+                title: 'Success...',
+                text: 'Data Deleted!',
+              })
+              vm.getDataFromApi()
+            })
+            .catch((err) => {
+              this.$swal({
+                type: 'error',
+                title: 'Oops...',
+                text: err.response.data.message,
+              })
+            })
+        }
+      })
     },
 
     getDataFromApi() {

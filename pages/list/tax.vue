@@ -2,11 +2,7 @@
   <v-layout>
     <v-flex sm12>
       <div class="mt-0">
-        <v-skeleton-loader
-          v-show="loading"
-          type="table"
-          class="mx-auto"
-        >
+        <v-skeleton-loader v-show="loading" type="table" class="mx-auto">
         </v-skeleton-loader>
         <v-data-table
           v-show="!loading"
@@ -21,22 +17,24 @@
           dense
           :footer-props="{ 'items-per-page-options': [20, 50, 100, -1] }"
         >
-          <template v-slot:top>
-            <v-toolbar flat color="white" dense>
-              <v-toolbar-title class="hidden-xs-only">Taxes</v-toolbar-title>
-              <v-divider class="mx-2" inset vertical></v-divider>
-              <v-spacer></v-spacer>
-              <v-btn icon color="green" dark @click="newData()">
-                <v-icon>mdi-plus-circle</v-icon>
-              </v-btn>
-
-              <v-btn :loading="loading" icon @click="getDataFromApi">
-                <v-icon>mdi-refresh</v-icon>
-              </v-btn>
-            </v-toolbar>
+          <template #top>
+            <LazyMainToolbar
+              title="Taxes"
+              show-new-data
+              show-back-link
+              new-data-text="New Tax"
+              @emitData="emitData"
+              @newData="newData"
+            />
           </template>
           <template #[`item.ACTIONS`]="{ item }">
-            <v-btn text small class="mr-2 font-weight-bold text-right pr-0" color="secondary" @click="editItem(item)">
+            <v-btn
+              text
+              small
+              class="mr-2 font-weight-bold text-right pr-0"
+              color="secondary"
+              @click="editItem(item)"
+            >
               Edit
             </v-btn>
           </template>
@@ -76,8 +74,8 @@
             <v-col cols="12" class="pr-1 pl-1 pb-1 pt-1 mt-1">
               <vuetify-money
                 v-model="form.rate"
-                v-bind:valueWhenIsEmpty="valueWhenIsEmpty"
-                v-bind:options="moneyOptions"
+                :value-when-is-empty="valueWhenIsEmpty"
+                :options="moneyOptions"
                 label="Rate"
                 outlined
                 dense
@@ -117,7 +115,7 @@
 
 <script>
 export default {
-  name: 'Taxes',
+  name: 'TaxesList',
   data() {
     return {
       totalData: 0,
@@ -131,9 +129,9 @@ export default {
 
       valueWhenIsEmpty: '0',
       moneyOptions: {
-        suffix: "",
+        suffix: '',
         length: 11,
-        precision: 2
+        precision: 2,
       },
 
       itemAccounts: [],
@@ -202,11 +200,12 @@ export default {
     },
 
     getAccounts() {
-      this.$axios.get(`/api/financial/accounts`, {
-        params: {
-          type: "All"
-        }
-      })
+      this.$axios
+        .get(`/api/financial/accounts`, {
+          params: {
+            type: 'All',
+          },
+        })
         .then((res) => {
           this.itemAccounts = res.data.data.rows
         })
@@ -242,13 +241,7 @@ export default {
         this.store('post', this.url, form, 'insert', type)
         vm.submitLoad = false
       } else if (status === 'update') {
-        this.store(
-          'put',
-          this.url + '/' + this.form.id,
-          form,
-          'update',
-          type
-        )
+        this.store('put', this.url + '/' + this.form.id, form, 'update', type)
         vm.submitLoad = false
       }
     },

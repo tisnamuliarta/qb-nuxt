@@ -2,17 +2,17 @@
   <v-row>
     <v-col cols="12" md="12">
       <LazySetupSectionExpenseFormContent :form="form" />
-      <hr>
+      <hr />
     </v-col>
 
     <v-col cols="12" md="12">
       <LazySetupSectionExpensePurchaseOrder :form="form" />
-      <hr>
+      <hr />
     </v-col>
 
     <v-col cols="12" md="12">
       <LazySetupSectionExpensesMessages :form="form" />
-      <hr>
+      <hr />
     </v-col>
   </v-row>
 </template>
@@ -63,7 +63,7 @@ export default {
     },
 
     getForm() {
-      let data = new FormData()
+      const data = new FormData()
       Object.entries(this.form).forEach((entry) => {
         const [key, value] = entry
         data.append(key, value)

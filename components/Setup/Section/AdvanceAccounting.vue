@@ -11,48 +11,61 @@
               First month of fiscal year
             </v-col>
             <v-col cols="12" md="8" class="pa-2">
-              <span class="text-subtitle-2" v-text="form.advanced_first_month_fiscal_year"></span>
+              <span
+                class="text-subtitle-2"
+                v-text="form.advanced_first_month_fiscal_year"
+              ></span>
             </v-col>
 
             <v-col cols="12" md="4" class="pa-2 font-weight-medium">
               First month income tax year
             </v-col>
             <v-col cols="12" md="8" class="pa-2">
-              <span class="text-subtitle-2" v-text="form.advanced_first_month_incoming_tax"></span>
+              <span
+                class="text-subtitle-2"
+                v-text="form.advanced_first_month_incoming_tax"
+              ></span>
             </v-col>
 
             <v-col cols="12" md="4" class="pa-2 font-weight-medium">
               Accounting Method
             </v-col>
             <v-col cols="12" md="8" class="pa-2">
-              <span class="text-subtitle-2" v-text="form.advanced_accounting_method"></span>
+              <span
+                class="text-subtitle-2"
+                v-text="form.advanced_accounting_method"
+              ></span>
             </v-col>
 
             <v-col cols="12" md="4" class="pa-2 font-weight-medium">
               Close the books
             </v-col>
             <v-col cols="12" md="8" class="pa-2">
-              <span class="text-subtitle-2"
-                    v-text="$formatter.formatCheckBox(form.advanced_closed_books)"></span>
+              <span
+                class="text-subtitle-2"
+                v-text="$formatter.formatCheckBox(form.advanced_closed_books)"
+              ></span>
             </v-col>
           </v-row>
         </template>
       </FormSectionView>
 
-      <FormSectionEdit ref="sectionEdit" v-else @save="save" @cancel="cancel">
+      <FormSectionEdit v-else ref="sectionEdit" @save="save" @cancel="cancel">
         <template #content>
           <v-row no-gutters>
             <v-col cols="12" md="5" class="pa-2">
               <v-list-item two-line class="pa-0">
                 <v-list-item-content>
-                  <v-list-item-title>First month of fiscal year</v-list-item-title>
+                  <v-list-item-title
+                    >First month of fiscal year</v-list-item-title
+                  >
                 </v-list-item-content>
               </v-list-item>
             </v-col>
             <v-col cols="12" md="7" class="pa-2">
               <v-select
+                v-model="formData.advanced_first_month_fiscal_year"
                 label="First month of fiscal year"
-                v-model="form.advanced_first_month_fiscal_year"
                 :items="itemMonth"
                 item-text="text"
                 item-value="value"
@@ -65,14 +78,16 @@
             <v-col cols="12" md="5" class="pa-2">
               <v-list-item two-line class="pa-0">
                 <v-list-item-content>
-                  <v-list-item-title>First month income tax year</v-list-item-title>
+                  <v-list-item-title
+                    >First month income tax year</v-list-item-title
+                  >
                 </v-list-item-content>
               </v-list-item>
             </v-col>
             <v-col cols="12" md="7" class="pa-2">
               <v-select
+                v-model="formData.advanced_first_month_incoming_tax"
                 label="First month income tax year"
-                v-model="form.advanced_first_month_incoming_tax"
                 :items="itemFiscalYear"
                 filled
                 dense
@@ -89,8 +104,8 @@
             </v-col>
             <v-col cols="12" md="7" class="pa-2">
               <v-select
+                v-model="formData.advanced_accounting_method"
                 label="Accounting Method"
-                v-model="form.advanced_accounting_method"
                 :items="itemAccountingMethod"
                 filled
                 dense
@@ -100,18 +115,24 @@
 
             <v-col cols="12" md="5" class="pa-2">
               <v-checkbox
-                v-model="form.advanced_closed_books"
+                v-model="formData.advanced_closed_books"
                 label="Close the books"
                 hide-details="auto"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="7" class="pa-2">
-              <span class="text-subtitle-2"
-                    v-text="$formatter.formatCheckBox(form.advanced_closed_books)"
+              <span
+                class="text-subtitle-2"
+                v-text="$formatter.formatCheckBox(formData.advanced_closed_books)"
               ></span>
             </v-col>
 
-            <v-col v-if="form.advanced_closed_books" cols="12" md="5" class="pa-2">
+            <v-col
+              v-if="formData.advanced_closed_books"
+              cols="12"
+              md="5"
+              class="pa-2"
+            >
               <v-menu
                 ref="menu"
                 v-model="menu"
@@ -122,7 +143,7 @@
               >
                 <template #activator="{ on, attrs }">
                   <v-text-field
-                    v-model="form.advanced_closing_date"
+                    v-model="formData.advanced_closing_date"
                     label="Due Date"
                     prepend-icon="mdi-calendar"
                     readonly
@@ -136,7 +157,7 @@
                 </template>
 
                 <v-date-picker
-                  v-model="form.advanced_closing_date"
+                  v-model="formData.advanced_closing_date"
                   no-title
                   @input="menu = false"
                 >
@@ -144,12 +165,20 @@
               </v-menu>
             </v-col>
             <v-col cols="12" md="7" class="pa-2">
-              <span class="text-subtitle-2" v-text="form.advanced_closing_date"></span>
+              <span
+                class="text-subtitle-2"
+                v-text="formData.advanced_closing_date"
+              ></span>
             </v-col>
 
-            <v-col v-if="form.advanced_closing_date" cols="12" md="8" class="pa-2">
+            <v-col
+              v-if="formData.advanced_closing_date"
+              cols="12"
+              md="8"
+              class="pa-2"
+            >
               <v-select
-                v-model="form.advanced_closing_action"
+                v-model="formData.advanced_closing_action"
                 label="Action"
                 :items="itemCloseBook"
                 filled
@@ -158,9 +187,14 @@
               ></v-select>
             </v-col>
 
-            <v-col v-if="form.advanced_closing_action === itemCloseBook[1]" cols="12" md="8" class="pa-2">
+            <v-col
+              v-if="formData.advanced_closing_action === itemCloseBook[1]"
+              cols="12"
+              md="8"
+              class="pa-2"
+            >
               <v-text-field
-                v-model="form.advanced_closing_password"
+                v-model="formData.advanced_closing_password"
                 :append-icon="show ? 'mdi-eye-off' : 'mdi-eye'"
                 :type="show ? 'text' : 'password'"
                 outlined
@@ -171,7 +205,6 @@
                 @click:append="show = !show"
               ></v-text-field>
             </v-col>
-
           </v-row>
         </template>
       </FormSectionEdit>
@@ -191,38 +224,42 @@ export default {
       type: Object,
       default() {
         return {}
-      }
+      },
     },
 
     logo: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
 
   data() {
     return {
       menu: '',
       show: false,
+      formData: this.form,
       companyNameView: true,
       itemPaymentTerm: [],
       itemMonth: [
-        {text: 'January', value: 1},
-        {text: 'February', value: 2},
-        {text: 'March', value: 3},
-        {text: 'April', value: 4},
-        {text: 'May', value: 5},
-        {text: 'June', value: 6},
-        {text: 'July', value: 7},
-        {text: 'August', value: 8},
-        {text: 'September', value: 9},
-        {text: 'October', value: 10},
-        {text: 'November', value: 11},
-        {text: 'December', value: 12},
+        { text: 'January', value: 1 },
+        { text: 'February', value: 2 },
+        { text: 'March', value: 3 },
+        { text: 'April', value: 4 },
+        { text: 'May', value: 5 },
+        { text: 'June', value: 6 },
+        { text: 'July', value: 7 },
+        { text: 'August', value: 8 },
+        { text: 'September', value: 9 },
+        { text: 'October', value: 10 },
+        { text: 'November', value: 11 },
+        { text: 'December', value: 12 },
       ],
       itemFiscalYear: ['Same as fiscal year', 'January'],
       itemAccountingMethod: ['Accrual', 'Cash'],
-      itemCloseBook: ['Allow changes after viewing a warning', 'Allow changes after viewing a warning and entering password']
+      itemCloseBook: [
+        'Allow changes after viewing a warning',
+        'Allow changes after viewing a warning and entering password',
+      ],
     }
   },
 
@@ -232,10 +269,9 @@ export default {
 
   methods: {
     getPaymentTerm() {
-      this.$axios.get(`/api/financial/payment-terms`)
-        .then(res => {
-          this.itemPaymentTerm = res.data.data.simple
-        })
+      this.$axios.get(`/api/financial/payment-terms`).then((res) => {
+        this.itemPaymentTerm = res.data.data.simple
+      })
     },
 
     save() {
@@ -246,6 +282,6 @@ export default {
     cancel() {
       this.companyNameView = true
     },
-  }
+  },
 }
 </script>

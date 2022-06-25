@@ -111,8 +111,8 @@
               <v-col v-if="form.item_group_id === 1" cols="12" md="4">
                 <vuetify-money
                   v-model="form.onhand"
-                  v-bind:valueWhenIsEmpty="valueWhenIsEmpty"
-                  v-bind:options="moneyOptions"
+                  :value-when-is-empty="valueWhenIsEmpty"
+                  :options="moneyOptions"
                   label="Initial quantity onhand"
                   class="text-money"
                   outlined
@@ -157,8 +157,8 @@
               <v-col v-if="form.item_group_id === 1" cols="12" md="4">
                 <vuetify-money
                   v-model="form.reorder_point"
-                  v-bind:valueWhenIsEmpty="valueWhenIsEmpty"
-                  v-bind:options="moneyOptions"
+                  :value-when-is-empty="valueWhenIsEmpty"
+                  :options="moneyOptions"
                   label="Reorder point"
                   class="text-money"
                   outlined
@@ -183,8 +183,8 @@
               <v-col cols="12" md="4">
                 <vuetify-money
                   v-model="form.commision_rate"
-                  v-bind:valueWhenIsEmpty="valueWhenIsEmpty"
-                  v-bind:options="moneyOptions"
+                  :value-when-is-empty="valueWhenIsEmpty"
+                  :options="moneyOptions"
                   label="Commission Rate"
                   class="text-money"
                   outlined
@@ -218,8 +218,8 @@
               <v-col v-if="form.is_sell" cols="12" md="3">
                 <vuetify-money
                   v-model="form.sale_price"
-                  v-bind:valueWhenIsEmpty="valueWhenIsEmpty"
-                  v-bind:options="moneyOptions"
+                  :value-when-is-empty="valueWhenIsEmpty"
+                  :options="moneyOptions"
                   label="Sales Price"
                   class="text-money"
                   outlined
@@ -279,8 +279,8 @@
               <v-col v-if="form.is_purchase" cols="12" md="3">
                 <vuetify-money
                   v-model="form.purchase_price"
-                  v-bind:valueWhenIsEmpty="valueWhenIsEmpty"
-                  v-bind:options="moneyOptions"
+                  :value-when-is-empty="valueWhenIsEmpty"
+                  :options="moneyOptions"
                   class="text-money"
                   label="Cost"
                   outlined
@@ -339,13 +339,13 @@
 </template>
 
 <script>
-import Dropzone from 'nuxt-dropzone'
-import 'nuxt-dropzone/dropzone.css'
+// import Dropzone from 'nuxt-dropzone'
+// import 'nuxt-dropzone/dropzone.css'
 
 export default {
   name: 'FormProduct',
 
-  components: { Dropzone },
+  // components: { Dropzone },
 
   props: {
     formTitle: {
@@ -379,22 +379,22 @@ export default {
         {
           id: 1,
           name: 'Inventory',
-          desc: 'Product you buy and/or sell and you track quantities of',
+          desc: this.$t('Product you buy and/or sell and you track quantities of'),
         },
         {
           id: 2,
           name: 'Non inventory',
-          desc: "Product you buy and/or sell but you don't need to (or can't) track quantities of, for example nuts and bolts used in an installation",
+          desc: this.$t("Product you buy and/or sell but you don't need to (or can't) track quantities of, for example nuts and bolts used in an installation"),
         },
         {
           id: 3,
           name: 'Service',
-          desc: 'Service that you provide to customers, for example, landscaping or tax preparation services',
+          desc: this.$t('Service that you provide to customers, for example, landscaping or tax preparation services'),
         },
         {
           id: 4,
           name: 'Bundle',
-          desc: 'A collection of products and/or services that you sell together, for example a gift basket of fruit, cheese, and whine',
+          desc: this.$t('A collection of products and/or services that you sell together, for example a gift basket of fruit, cheese, and whine'),
         },
       ],
       menu: '',
@@ -548,8 +548,8 @@ export default {
     },
 
     sendingParams(file, xhr, formData) {
-      const temp_id = this.form.id ? this.form.id : this.form.temp_id
-      formData.append('temp_id', temp_id)
+      const tempId = this.form.id ? this.form.id : this.form.temp_id
+      formData.append('temp_id', tempId)
       formData.append('type', 'item')
     },
 
@@ -589,13 +589,13 @@ export default {
     getFiles() {
       this.showLoadingAttachment = true
       const vm = this
-      const temp_id = this.form.id ? this.form.id : this.form.temp_id
+      const tempId = this.form.id ? this.form.id : this.form.temp_id
 
       this.$axios
         .get(this.options.url, {
           params: {
             type: 'item',
-            temp_id,
+            temp_id: tempId,
           },
         })
         .then((res) => {

@@ -1,28 +1,17 @@
 <template>
-  <dropzone
-    id="attachment"
-    ref="attachment"
-    :options="{
-        url: '/api/document-files',
-        timeout: 9000000000,
-        addRemoveLinks: true,
-        withCredentials: true,
-        thumbnailWidth: 50,
-        thumbnailHeight: 50,
-        acceptedFiles: 'image/*',
-        dictDefaultMessage:
-          '<span class=\'mdi mdi-cloud-upload\'></span> UPLOAD HERE',
-        headers: {
-          'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN'),
-        },
-      }"
-    :destroy-dropzone="true"
-    @vdropzone-sending="
-      (file, xhr, formData) => sendingParams(file, xhr, formData)
-    "
-    @vdropzone-success="(file, response) => reloadAttachment(file, response)"
-    @vdropzone-error="(file, message, xhr) => handleError(file, message, xhr)"
-  ></dropzone>
+  <div>
+    <dropzone
+      id="attachment"
+      ref="attachment"
+      :options="options"
+      :destroy-dropzone="true"
+      @vdropzone-sending="
+        (file, xhr, formData) => sendingParams(file, xhr, formData)
+      "
+      @vdropzone-success="(file, response) => reloadAttachment(file, response)"
+      @vdropzone-error="(file, message, xhr) => handleError(file, message, xhr)"
+    ></dropzone>
+  </div>
 </template>
 
 <script>
@@ -52,7 +41,12 @@ export default {
       showLoadingAttachment: false,
       form: this.formData,
       options: {
-        url: '/api/document-files',
+        url:
+          window.location.protocol +
+          '//' +
+          window.location.hostname +
+          process.env.baseApi +
+          '/api/document-files',
         timeout: 9000000000,
         addRemoveLinks: true,
         withCredentials: true,
@@ -62,7 +56,7 @@ export default {
         dictDefaultMessage:
           "<span class='mdi mdi-cloud-upload'></span> UPLOAD HERE",
         headers: {
-          'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN'),
+          Authorization: this.$auth.$storage.getLocalStorage('_token.local'),
         },
       },
     }
@@ -70,8 +64,8 @@ export default {
 
   methods: {
     sendingParams(file, xhr, formData) {
-      const temp_id = this.form.id !== 0 ? this.form.id : this.form.temp_id
-      formData.append('temp_id', temp_id)
+      const tempId = this.form.id !== 0 ? this.form.id : this.form.temp_id
+      formData.append('temp_id', tempId)
       formData.append('type', this.formType)
     },
 
@@ -106,13 +100,13 @@ export default {
     getFiles() {
       this.showLoadingAttachment = true
       const vm = this
-      const temp_id = this.form.id ? this.form.id : this.form.temp_id
+      const tempId = this.form.id ? this.form.id : this.form.temp_id
 
       this.$axios
         .get(vm.options.url, {
           params: {
             type: this.formType,
-            temp_id,
+            temp_id: tempId,
           },
         })
         .then((res) => {

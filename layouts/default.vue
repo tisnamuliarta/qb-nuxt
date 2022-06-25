@@ -11,9 +11,9 @@
       <v-toolbar-title class="ml-0 pl-0">
         <span
           class="font-weight-bold"
-          v-text="companyName"
-          @click="$router.push('/home/business-overview')"
           style="cursor: pointer"
+          @click="$router.push('/home/business-overview')"
+          v-text="companyName"
         ></span>
       </v-toolbar-title>
 
@@ -41,13 +41,7 @@
           bottom
         >
           <template #activator="{ on, attrs }">
-            <v-btn
-              small
-              color="primary"
-              elevation="0"
-              v-bind="attrs"
-              v-on="on"
-            >
+            <v-btn small color="primary" elevation="0" v-bind="attrs" v-on="on">
               New Transactions
               <v-btn dark small icon>
                 <v-icon>mdi-menu-down</v-icon>
@@ -165,7 +159,7 @@
 
     <v-snackbar v-model="snackbar" top color="primary" right elevation="24">
       {{ message }}
-      <template v-slot:action="{ attrs }">
+      <template #action="{ attrs }">
         <v-btn color="pink" small icon v-bind="attrs" @click="snackbar = false">
           <v-icon>mdi-close-thick</v-icon>
         </v-btn>
@@ -256,13 +250,11 @@ export default {
             // type: data.item.type,
           },
         })
-      } else {
-        if (data.item.type === 'function') {
+      } else if (data.item.type === 'function') {
           this[data.item.action]()
         } else {
           this.$refs.settingForm.openDialog(data, 0, null)
         }
-      }
     },
 
     extensionSetting(data) {
@@ -325,6 +317,7 @@ export default {
         .get(`/api/menus`, {
           params: {
             appName,
+            locale: this.$i18n.locale
           },
         })
         .then((res) => {

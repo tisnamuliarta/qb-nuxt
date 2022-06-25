@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: 'Document',
+  name: 'CheckForm',
 
   data() {
     return {
@@ -44,7 +44,7 @@ export default {
           },
         })
         .then((res) => {
-          let form =
+          const form =
             res.data.data.count > 0 ? res.data.data.rows : res.data.data.form
           this.audits = res.data.data.audits
 

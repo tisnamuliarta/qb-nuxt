@@ -120,7 +120,13 @@ export default {
 
   methods: {
     openAction(data) {
-      this.$emit('openAction', data)
+      if (data.item.route) {
+        this.$emit('openAction', data)
+      } else {
+        this.$router.push({
+          path: '/app/settings',
+        })
+      }
     },
 
     async logout() {

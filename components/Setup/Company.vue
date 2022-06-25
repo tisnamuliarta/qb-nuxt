@@ -7,7 +7,12 @@
         </v-col>
 
         <v-col cols="12" md="2" class="pa-1">
-          <v-img v-if="companyNameView" max-width="250" max-height="150" :src="logo"></v-img>
+          <v-img
+            v-if="companyNameView"
+            max-width="250"
+            max-height="150"
+            :src="logo"
+          ></v-img>
           <DocumentFieldUpload
             v-else
             ref="uploadField"
@@ -24,27 +29,27 @@
         </v-col>
       </v-row>
 
-      <hr>
+      <hr />
     </v-col>
 
     <v-col cols="12" md="12">
       <LazySetupSectionCompanyName :form="form" :logo="logo" />
-      <hr>
+      <hr />
     </v-col>
 
     <v-col cols="12" md="12">
       <LazySetupSectionCompanyInfo :form="form" />
-      <hr>
+      <hr />
     </v-col>
 
     <v-col cols="12" md="12">
       <LazySetupSectionCompanyAddress :form="form" />
-      <hr>
+      <hr />
     </v-col>
 
     <v-col cols="12" md="12">
       <LazySetupSectionCompanyBank :form="form" />
-      <hr>
+      <hr />
     </v-col>
   </v-row>
 </template>
@@ -101,7 +106,7 @@ export default {
     },
 
     getForm() {
-      let data = new FormData()
+      const data = new FormData()
       Object.entries(this.form).forEach((entry) => {
         const [key, value] = entry
         data.append(key, value)

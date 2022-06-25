@@ -33,6 +33,17 @@
                 ></v-text-field>
               </v-col>
 
+              <v-col cols="12" class="pr-1 pl-1 pb-1 pt-1 mt-1">
+                <v-textarea
+                  v-model="form.descriptions"
+                  rows="5"
+                  label="Descriptions"
+                  outlined
+                  dense
+                  hide-details="auto"
+                ></v-textarea>
+              </v-col>
+
             </v-row>
           </v-container>
         </v-form>

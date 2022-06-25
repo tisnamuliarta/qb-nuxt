@@ -28,7 +28,6 @@ import {
 import {
   registerPlugin,
   ManualColumnResize,
-  AutoColumnSize,
   CopyPaste,
   Filters,
   PersistentState,
@@ -44,7 +43,6 @@ import 'handsontable/dist/handsontable.full.css'
 registerCellType(DropdownCellType)
 registerCellType(NumericCellType)
 registerCellType(CheckboxCellType)
-registerPlugin(AutoColumnSize)
 registerPlugin(ManualColumnResize)
 registerPlugin(CopyPaste)
 registerPlugin(Filters)
@@ -63,8 +61,8 @@ Handsontable.renderers.registerRenderer(
       button = document.createElement('button')
       button.type = 'button'
       // button.innerText = '>'
-      // button.innerHTML = '<span class="mdi mdi-arrow-right-bold"></span>'
-      button.innerHTML = 'Item'
+      button.innerHTML = '<span class="mdi mdi-arrow-right-bold"></span>'
+      // button.innerHTML = 'Item'
       button.className = 'btnNPB'
       button.value = 'Details'
 
@@ -90,8 +88,8 @@ Handsontable.renderers.registerRenderer(
       button = document.createElement('button')
       button.type = 'button'
       // button.innerText = '-'
-      // button.innerHTML = '<span class="mdi mdi-delete"></span>'
-      button.innerHTML = 'Delete'
+      button.innerHTML = '<span class="mdi mdi-delete"></span>'
+      // button.innerHTML = 'Delete'
       button.className = 'btnDelete'
       button.value = 'Details2'
 
@@ -125,13 +123,12 @@ export default {
         manualColumnResize: true,
         rowHeights: 28,
         filters: true,
-        autoColumnSize: true,
         viewportRowRenderingOffset: 1000,
         viewportColumnRenderingOffset: 100,
         colWidths: 80,
         persistentState: true,
         width: '100%',
-        // stretchH: 'all',
+        stretchH: 'all',
         preventOverflow: 'horizontal',
         hiddenColumns: {
           copyPasteEnabled: false,
@@ -157,40 +154,38 @@ export default {
         columns: [
           // TODO
           {
-            width: '30px',
+            width: 30,
             wordWrap: false,
             renderer: 'ButtonAddRenderer',
           },
           {
             data: 'id',
-            // width: 100,
             wordWrap: false,
           },
           {
             data: 'item_id',
-            // width: '50px',
             wordWrap: false,
           },
           {
             data: 'sku',
-            // width: '100px',
+            width: 150,
             readOnly: true,
             wordWrap: false,
           },
           {
             data: 'name',
-            // width: '120px',
+            width: 140,
             readOnly: true,
             wordWrap: false,
           },
           {
             data: 'description',
-            // width: '200px',
+            width: 350,
             wordWrap: false,
           },
           {
             data: 'quantity',
-            width: '70px',
+            width: 100,
             wordWrap: false,
             type: 'numeric',
             numericFormat: {
@@ -199,20 +194,20 @@ export default {
           },
           {
             data: 'unit',
-            width: '50px',
+            width: 100,
             readOnly: true,
             wordWrap: false,
           },
           {
             data: 'default_currency_symbol',
-            width: '40px',
+            width: 100,
             readOnly: true,
             wordWrap: false,
             align: 'right',
           },
           {
             data: 'price',
-            width: '70px',
+            width: 100,
             wordWrap: false,
             type: 'numeric',
             numericFormat: {
@@ -221,7 +216,7 @@ export default {
           },
           {
             data: 'discount_rate',
-            width: '40px',
+            width: 100,
             wordWrap: false,
             type: 'numeric',
             numericFormat: {
@@ -230,7 +225,7 @@ export default {
           },
           {
             data: 'tax_name',
-            width: '30px',
+            width: 100,
             type: 'dropdown',
             height: 26,
             wordWrap: false,
@@ -245,7 +240,7 @@ export default {
           },
           {
             data: 'total',
-            width: '70px',
+            width: 100,
             wordWrap: false,
             type: 'numeric',
             readOnly: true,
@@ -254,7 +249,7 @@ export default {
             },
           },
           {
-            width: '30px',
+            width: 40,
             wordWrap: false,
             renderer: 'ButtonDeleteRenderer',
           },
@@ -360,7 +355,7 @@ export default {
       selected.forEach(function (item, index) {
         const price =
           type.substr(0, 1) === 'S' ? item.sale_price : item.purchase_price
-        const tax_name =
+        const taxName =
           type.substr(0, 1) === 'S' ? item.sell_tax_name : item.buy_tax_name
 
         vm.$refs.details.hotInstance.setDataAtRowProp([
@@ -371,7 +366,7 @@ export default {
           [rowData, 'default_currency_symbol', vm.form.default_currency_symbol],
           [rowData, 'item_id', item.id],
           [rowData, 'price', price],
-          [rowData, 'tax_name', tax_name],
+          [rowData, 'tax_name', taxName],
           [rowData, 'quantity', 1],
         ])
         rowData++

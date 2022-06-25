@@ -2,7 +2,7 @@
   <div>
     <DialogForm
       ref="dialogForm"
-      max-width="500px"
+      max-width="600px"
       :dialog-title="formTitle"
       button-title="Save"
     >
@@ -10,79 +10,117 @@
         <v-form class="pt-2">
           <v-container>
             <v-row dense>
-              <v-col cols="12">
-                <v-autocomplete
-                  v-model="form.account_type"
-                  :items="itemAccountType"
-                  label="Account Type"
-                  outlined
-                  persistent-hint
-                  dense
-                  hide-details="auto"
-                  @change="changeAccountType"
-                >
-                </v-autocomplete>
+              <v-col cols="12" md="7">
+                <v-row dense>
+                  <v-col cols="12">
+                    <v-autocomplete
+                      v-model="form.account_type"
+                      :items="itemAccountType"
+                      label="Account Type"
+                      outlined
+                      persistent-hint
+                      dense
+                      hide-details="auto"
+                      @change="changeAccountType"
+                    >
+                    </v-autocomplete>
+                  </v-col>
+
+                  <v-col cols="12">
+                    <v-autocomplete
+                      v-model="form.category_id"
+                      :items="itemCategory"
+                      label="Category"
+                      item-text="name"
+                      item-value="id"
+                      outlined
+                      persistent-hint
+                      dense
+                      hide-details="auto"
+                      @change="changeCategory"
+                    >
+                    </v-autocomplete>
+                  </v-col>
+
+                  <v-col cols="12">
+                    <v-text-field
+                      v-model="form.name"
+                      label="Name"
+                      outlined
+                      dense
+                      hide-details="auto"
+                    ></v-text-field>
+                  </v-col>
+
+                  <v-col cols="12">
+                    <v-text-field
+                      v-model="form.code"
+                      label="Number"
+                      outlined
+                      dense
+                      hide-details="auto"
+                    ></v-text-field>
+                  </v-col>
+
+                  <v-col cols="12">
+                    <v-textarea
+                      v-model="form.description"
+                      rows="3"
+                      label="Description"
+                      outlined
+                      dense
+                      hide-details="auto"
+                    ></v-textarea>
+                  </v-col>
+
+                  <v-col cols="12">
+                    <v-menu
+                      ref="menu"
+                      v-model="menu"
+                      :close-on-content-click="false"
+                      transition="scale-transition"
+                      offset-y
+                      min-width="290px"
+                    >
+                      <template #activator="{ on, attrs }">
+                        <v-text-field
+                          v-model="form.opening_balance_date"
+                          label="Opening Balance Date"
+                          prepend-icon="mdi-calendar"
+                          readonly
+                          persistent-hint
+                          outlined
+                          dense
+                          hide-details="auto"
+                          v-bind="attrs"
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+
+                      <v-date-picker
+                        v-model="form.opening_balance_date"
+                        no-title
+                        @input="menu = false"
+                      >
+                      </v-date-picker>
+                    </v-menu>
+                  </v-col>
+
+                  <v-col cols="12">
+                    <v-text-field
+                      v-model="form.opening_balance_amount"
+                      rows="3"
+                      label="Opening Ballance"
+                      outlined
+                      dense
+                      hide-details="auto"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
               </v-col>
 
-              <v-col cols="12">
-                <v-autocomplete
-                  v-model="form.category_id"
-                  :items="itemCategory"
-                  label="Category"
-                  item-text="name"
-                  item-value="id"
-                  outlined
-                  persistent-hint
-                  dense
-                  hide-details="auto"
-                >
-                </v-autocomplete>
-              </v-col>
-
-              <v-col cols="12">
-                <v-text-field
-                  v-model="form.name"
-                  label="Name"
-                  outlined
-                  dense
-                  hide-details="auto"
-                ></v-text-field>
-              </v-col>
-
-              <!--              <v-col cols="12">-->
-              <!--                <v-autocomplete-->
-              <!--                  v-model="form.currency_id"-->
-              <!--                  :items="itemCurrency"-->
-              <!--                  label="Currency"-->
-              <!--                  item-text="currency_code"-->
-              <!--                  item-value="id"-->
-              <!--                  outlined-->
-              <!--                  persistent-hint-->
-              <!--                  dense-->
-              <!--                  hide-details="auto"-->
-              <!--                >-->
-              <!--                </v-autocomplete>-->
-              <!--              </v-col>-->
-
-              <!--              <v-col cols="12" >-->
-              <!--                <v-text-field-->
-              <!--                  v-model="form.code"-->
-              <!--                  label="Number"-->
-              <!--                  outlined-->
-              <!--                  dense-->
-              <!--                  hide-details="auto"-->
-              <!--                ></v-text-field>-->
-              <!--              </v-col>-->
-
-              <v-col cols="12">
-                <v-textarea
-                  rows="3"
-                  v-model="form.description"
-                  label="Description"
-                  outlined
-                  dense
-                  hide-details="auto"
-                ></v-textarea>
+              <v-col cols="12" md="5" class="bg-grey lighten-3">
+                <span v-text="categoryDesc"></span>
               </v-col>
             </v-row>
           </v-container>
@@ -130,6 +168,7 @@ export default {
 
   data() {
     return {
+      menu: '',
       dialog: false,
       submitLoad: false,
       form: this.formData,
@@ -139,6 +178,7 @@ export default {
       itemAccountType: [],
       itemBank: [],
       itemTax: [],
+      categoryDesc: '',
       statusProcessing: 'insert',
     }
   },
@@ -154,6 +194,8 @@ export default {
       this.statusProcessing = 'insert'
       this.form = Object.assign({}, form)
       this.itemAccountType = form.account_type_list
+      this.form.account_type = this.itemAccountType[0]
+      this.changeAccountType()
     },
 
     editItem(item, form) {
@@ -166,10 +208,27 @@ export default {
 
     changeAccountType() {
       this.itemCategory = this.itemAllCurrency.filter(this.filterTransType)
+      if (this.statusProcessing === 'insert') {
+        this.form.category_id = this.itemCategory[0].id
+        this.categoryDesc = this.itemCategory[0].descriptions
+        this.form.name = this.itemCategory[0].name
+      }
     },
 
     filterTransType(item) {
       if (item.category_type === this.form.account_type) {
+        return true
+      }
+    },
+
+    changeCategory() {
+      const categoryDesc = this.itemAllCurrency.filter(this.filterItemDesc)
+      this.categoryDesc = categoryDesc[0].descriptions
+      this.form.name = categoryDesc[0].name
+    },
+
+    filterItemDesc(item) {
+      if (item.id === this.form.category_id) {
         return true
       }
     },
@@ -262,3 +321,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.bg-grey {
+  background-color: #eee;
+}
+</style>

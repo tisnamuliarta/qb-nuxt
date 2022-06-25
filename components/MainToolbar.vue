@@ -168,12 +168,12 @@
           <v-col cols="12" md="12" sm="12" class="mt-0 mr-2">
             <v-text-field
               v-model="searchData"
-              @change="getDataFromApi"
               label="search"
               class="mt-1"
               outlined
               dense
               hide-details="auto"
+              @change="getDataFromApi"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -284,18 +284,18 @@
     </v-btn>
 
     <v-menu offset-y left class="d-flex d-sm-none" :nudge-width="120">
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn icon v-bind="attrs" v-on="on" class="d-flex d-sm-none">
+      <template #activator="{ on, attrs }">
+        <v-btn icon v-bind="attrs" class="d-flex d-sm-none" v-on="on">
           <v-icon>mdi-dots-vertical</v-icon>
         </v-btn>
       </template>
 
       <v-list dense>
         <v-list-item
-          link
-          dense
           v-for="(item, i) in itemsMenu"
           :key="i"
+          link
+          dense
           @click="processAction(item.action)"
         >
           <v-list-item-icon>
@@ -309,15 +309,9 @@
 </template>
 
 <script>
-import TableFilter from './TableFilter'
 
 export default {
   name: 'MainToolbar',
-
-  components: {
-    TableFilter,
-  },
-
   props: {
     title: {
       type: String,

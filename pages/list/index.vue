@@ -6,7 +6,7 @@
       </v-col>
 
       <v-col cols="12" md="10">
-        <v-expansion-panels v-model="panel" multiple ref="tableDocument">
+        <v-expansion-panels ref="tableDocument" v-model="panel" multiple>
           <v-expansion-panel v-for="(item, i) in items" :key="i">
             <v-expansion-panel-header>{{
               item.header
@@ -18,10 +18,10 @@
                   :key="index"
                   :to="item.route"
                   two-line
-                  @click="$router.push({ path: value.route })"
                   link
                   dense
                   class="pt-0 pb-0"
+                  @click="$router.push({ path: value.route })"
                 >
                   <v-list-item-content>
                     <v-list-item-title
@@ -62,8 +62,13 @@ export default {
               desc: 'Displays your accounts. Balance sheet accounts track your assets and liabilities, and income and expense accounts categorize your transactions. From here, you can add or edit accounts.',
             },
             {
+              name: 'Account Category',
+               route: '/list/account-category',
+              desc: 'Display list of account category',
+            },
+            {
               name: 'Taxes',
-              route: 'Display list of sales tax',
+               route: '/list/tax',
               desc: 'Display list of sales tax',
             },
           ],
