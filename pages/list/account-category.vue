@@ -2,12 +2,6 @@
   <v-layout>
     <v-flex sm12>
       <div class="mt-0">
-        <!--        <v-skeleton-loader-->
-        <!--          v-show="loading"-->
-        <!--          type="table"-->
-        <!--          class="mx-auto"-->
-        <!--        >-->
-        <!--        </v-skeleton-loader>-->
         <v-data-table
           :mobile-breakpoint="0"
           :headers="headers"

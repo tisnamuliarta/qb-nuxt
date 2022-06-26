@@ -104,14 +104,14 @@ export default {
       itemAction: 'edit',
       url: '/api/financial/accounts',
       headers: [
-        { text: 'Account Code', value: 'code', cellClass: 'disable-wrap', class: 'disable-wrap' },
+        { text: 'Account Code', value: 'code'},
         { text: 'Account Name', value: 'name', cellClass: 'disable-wrap' },
         {
           text: 'Account Type',
           value: 'account_type',
           cellClass: 'disable-wrap',
         },
-        { text: 'Category', value: 'category.name', cellClass: 'disable-wrap' },
+        { text: 'Category', value: 'category.name' },
         {
           text: 'Currency',
           value: 'currency.currency_code',

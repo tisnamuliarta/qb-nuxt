@@ -149,6 +149,10 @@
     </v-navigation-drawer>
 
     <v-main class="grey lighten-4">
+      <v-overlay :value="overlay">
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+      </v-overlay>
+
       <v-container fluid>
         <Nuxt
           keep-alive
@@ -184,6 +188,7 @@ export default {
   data() {
     return {
       snackbar: false,
+      overlay: false,
       clipped: false,
       drawer: false,
       fixed: false,
@@ -223,6 +228,8 @@ export default {
     this.$nuxt.$on('getCompany', ($event) => this.getCompany($event))
     this.$nuxt.$on('snackbar', ($event) => this.openSnackbar($event))
     this.$nuxt.$on('openSetting', ($event) => this.openSetting($event))
+    this.$nuxt.$on('showLoading', ($event) => this.showLoading($event))
+    this.$nuxt.$on('hideLoading', ($event) => this.hideLoading($event))
     this.$nuxt.$on('extensionSetting', ($event) =>
       this.extensionSetting($event)
     )
@@ -241,20 +248,29 @@ export default {
       this.$refs.settingForm.openDialog(data, 0, null)
     },
 
-    openAction(data) {
+    showLoading() {
+      this.overlay = true
+    },
+
+    hideLoading() {
+      this.overlay = false
+    },
+
+    async openAction(data) {
       if (data.item.route) {
-        this.$router.push({
+        this.overlay = true
+        await this.$router.push({
           path: data.item.route,
           query: {
             document: 0,
-            // type: data.item.type,
           },
         })
+        this.overlay = false
       } else if (data.item.type === 'function') {
-          this[data.item.action]()
-        } else {
-          this.$refs.settingForm.openDialog(data, 0, null)
-        }
+        this[data.item.action]()
+      } else {
+        this.$refs.settingForm.openDialog(data, 0, null)
+      }
     },
 
     extensionSetting(data) {
@@ -317,7 +333,7 @@ export default {
         .get(`/api/menus`, {
           params: {
             appName,
-            locale: this.$i18n.locale
+            locale: this.$i18n.locale,
           },
         })
         .then((res) => {

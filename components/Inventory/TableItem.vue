@@ -40,6 +40,7 @@
               show-batch-action
               @emitData="emitData"
               @newData="newData"
+              @getDataFromApi="getDataFromApi"
             />
           </template>
           <template #[`item.ACTIONS`]="{ item }">
@@ -271,8 +272,14 @@ export default {
             class: 'disable-wrap',
           },
           {
+            text: 'Item Type',
+            value: 'group_name',
+            cellClass: 'disable-wrap',
+            class: 'disable-wrap',
+          },
+          {
             text: 'Item Category',
-            value: 'categories',
+            value: 'category.name',
             cellClass: 'disable-wrap',
             class: 'disable-wrap',
           },
@@ -288,14 +295,20 @@ export default {
           { text: 'Item Code', value: 'code', width: '120px' },
           { text: 'Item Name', value: 'name', width: '150px' },
           {
+            text: 'Item Type',
+            value: 'group_name',
+            cellClass: 'disable-wrap',
+            class: 'disable-wrap',
+          },
+          {
             text: 'Item Category',
-            value: 'categories',
+            value: 'category.name',
             sortable: false,
             filterable: false,
           },
           {
-            text: 'Minimum Stock',
-            value: 'minimum_stock',
+            text: 'Reorder Point',
+            value: 'reorder_point',
             align: 'right',
             sortable: false,
             filterable: false,

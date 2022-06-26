@@ -10,7 +10,7 @@
         <v-form>
           <v-container>
             <v-row dense>
-              <v-col cols="12" md="6">
+              <v-col cols="12" md="4">
                 <v-autocomplete
                   v-model="form.item_group_id"
                   :items="itemGroup"
@@ -36,18 +36,17 @@
                 </v-autocomplete>
               </v-col>
 
-              <v-col cols="12" md="6">
+              <v-col cols="12" md="8">
                 <v-text-field
                   v-model="form.name"
                   label="Name"
-                  placeholder="Name"
                   outlined
                   dense
                   hide-details="auto"
                 ></v-text-field>
               </v-col>
 
-              <v-col cols="12" md="6">
+              <v-col cols="12" md="4">
                 <v-text-field
                   v-model="form.code"
                   label="Code"
@@ -57,47 +56,11 @@
                 ></v-text-field>
               </v-col>
 
-              <v-col cols="12" md="6">
+              <v-col cols="12" md="4">
                 <v-autocomplete
-                  v-model="form.category"
+                  v-model="form.category_id"
                   :items="itemCategory"
                   label="Category"
-                  placeholder="Category"
-                  outlined
-                  persistent-hint
-                  dense
-                  hide-details="auto"
-                >
-                  <template #prepend-item>
-                    <div>
-                      <v-btn text block small class="text-left">
-                        <v-icon>mdi-plus</v-icon>
-                        Add New
-                      </v-btn>
-                    </div>
-                  </template>
-                </v-autocomplete>
-              </v-col>
-
-              <v-col cols="12" md="6">
-                <v-autocomplete
-                  v-model="form.unit"
-                  :items="itemUnit"
-                  label="Unit"
-                  placeholder="Unit"
-                  outlined
-                  persistent-hint
-                  dense
-                  hide-details="auto"
-                >
-                </v-autocomplete>
-              </v-col>
-
-              <v-col cols="12" md="6">
-                <v-autocomplete
-                  v-model="form.classification_id"
-                  :items="itemClassification"
-                  label="Unit"
                   item-text="name"
                   item-value="id"
                   outlined
@@ -108,9 +71,40 @@
                 </v-autocomplete>
               </v-col>
 
+              <v-col cols="12" md="4">
+                <v-autocomplete
+                  v-model="form.unit"
+                  :items="itemUnit"
+                  label="Unit"
+                  item-text="name"
+                  item-value="name"
+                  outlined
+                  persistent-hint
+                  dense
+                  hide-details="auto"
+                >
+                </v-autocomplete>
+              </v-col>
+
+              <!-- <v-col cols="12" md="6">
+                <v-autocomplete
+                  v-model="form.classification_id"
+                  :items="itemClassification"
+                  label="Classification"
+                  item-text="name"
+                  item-value="id"
+                  outlined
+                  persistent-hint
+                  dense
+                  hide-details="auto"
+                >
+                </v-autocomplete>
+              </v-col> -->
+
               <v-col v-if="form.item_group_id === 1" cols="12" md="4">
-                <vuetify-money
+                <v-text-field
                   v-model="form.onhand"
+                  type="number"
                   :value-when-is-empty="valueWhenIsEmpty"
                   :options="moneyOptions"
                   label="Initial quantity onhand"
@@ -118,7 +112,7 @@
                   outlined
                   dense
                   hide-details="auto"
-                ></vuetify-money>
+                ></v-text-field>
               </v-col>
 
               <v-col v-if="form.item_group_id === 1" cols="12" md="4">
@@ -155,8 +149,9 @@
               </v-col>
 
               <v-col v-if="form.item_group_id === 1" cols="12" md="4">
-                <vuetify-money
+                <v-text-field
                   v-model="form.reorder_point"
+                  type="number"
                   :value-when-is-empty="valueWhenIsEmpty"
                   :options="moneyOptions"
                   label="Reorder point"
@@ -164,10 +159,10 @@
                   outlined
                   dense
                   hide-details="auto"
-                ></vuetify-money>
+                ></v-text-field>
               </v-col>
 
-              <v-col cols="12" md="12">
+              <v-col v-if="form.item_group_id === 1" cols="12" md="12">
                 <v-autocomplete
                   v-model="form.inventory_account"
                   :items="itemAccounts"
@@ -181,8 +176,9 @@
               </v-col>
 
               <v-col cols="12" md="4">
-                <vuetify-money
+                <v-text-field
                   v-model="form.commision_rate"
+                  type="number"
                   :value-when-is-empty="valueWhenIsEmpty"
                   :options="moneyOptions"
                   label="Commission Rate"
@@ -190,7 +186,7 @@
                   outlined
                   dense
                   hide-details="auto"
-                ></vuetify-money>
+                ></v-text-field>
               </v-col>
 
               <v-col cols="12" md="12" class="pb-0 font-weight-bold">
@@ -216,8 +212,9 @@
               </v-col>
 
               <v-col v-if="form.is_sell" cols="12" md="3">
-                <vuetify-money
+                <v-text-field
                   v-model="form.sale_price"
+                  type="number"
                   :value-when-is-empty="valueWhenIsEmpty"
                   :options="moneyOptions"
                   label="Sales Price"
@@ -225,7 +222,7 @@
                   outlined
                   dense
                   hide-details="auto"
-                ></vuetify-money>
+                ></v-text-field>
               </v-col>
 
               <v-col v-if="form.is_sell" cols="12" md="9">
@@ -241,7 +238,7 @@
                 ></v-autocomplete>
               </v-col>
 
-              <v-col v-if="form.is_sell" cols="12" md="12">
+              <v-col v-if="form.is_sell" cols="12" md="3">
                 <v-autocomplete
                   v-model="form.sell_tax_id"
                   :items="itemTax"
@@ -277,8 +274,9 @@
               </v-col>
 
               <v-col v-if="form.is_purchase" cols="12" md="3">
-                <vuetify-money
+                <v-text-field
                   v-model="form.purchase_price"
+                  type="number"
                   :value-when-is-empty="valueWhenIsEmpty"
                   :options="moneyOptions"
                   class="text-money"
@@ -286,7 +284,7 @@
                   outlined
                   dense
                   hide-details="auto"
-                ></vuetify-money>
+                ></v-text-field>
               </v-col>
 
               <v-col v-if="form.is_purchase" cols="12" md="9">
@@ -379,22 +377,30 @@ export default {
         {
           id: 1,
           name: 'Inventory',
-          desc: this.$t('Product you buy and/or sell and you track quantities of'),
+          desc: this.$t(
+            'Product you buy and/or sell and you track quantities of'
+          ),
         },
         {
           id: 2,
           name: 'Non inventory',
-          desc: this.$t("Product you buy and/or sell but you don't need to (or can't) track quantities of, for example nuts and bolts used in an installation"),
+          desc: this.$t(
+            "Product you buy and/or sell but you don't need to (or can't) track quantities of, for example nuts and bolts used in an installation"
+          ),
         },
         {
           id: 3,
           name: 'Service',
-          desc: this.$t('Service that you provide to customers, for example, landscaping or tax preparation services'),
+          desc: this.$t(
+            'Service that you provide to customers, for example, landscaping or tax preparation services'
+          ),
         },
         {
           id: 4,
           name: 'Bundle',
-          desc: this.$t('A collection of products and/or services that you sell together, for example a gift basket of fruit, cheese, and whine'),
+          desc: this.$t(
+            'A collection of products and/or services that you sell together, for example a gift basket of fruit, cheese, and whine'
+          ),
         },
       ],
       menu: '',
@@ -427,15 +433,19 @@ export default {
     }
   },
 
-  mounted() {
-    this.getItemCategory()
-    this.getItemUnit()
-    this.getAccounts()
-    this.getTaxes()
-    this.getContacts()
+  activated() {
+    this.loadData()
   },
 
   methods: {
+    loadData() {
+      this.getItemCategory()
+      this.getItemUnit()
+      this.getAccounts()
+      this.getTaxes()
+      this.getContacts()
+    },
+
     newData(form) {
       this.$refs.dialogForm.openDialog()
       this.statusProcessing = 'insert'
@@ -454,13 +464,13 @@ export default {
 
     getItemCategory() {
       this.$axios
-        .get(`/api/master/categories`, {
+        .get(`/api/inventory/item-category`, {
           params: {
             type: 'Item Category',
           },
         })
         .then((res) => {
-          this.itemCategory = res.data.data.simple
+          this.itemCategory = res.data.data.rows
         })
         .catch((err) => {
           this.$swal({
@@ -479,7 +489,7 @@ export default {
           },
         })
         .then((res) => {
-          this.itemTax = res.data.data.row_simple
+          this.itemTax = res.data.data.rows
         })
         .catch((err) => {
           this.$swal({
@@ -517,7 +527,7 @@ export default {
           },
         })
         .then((res) => {
-          this.itemUnit = res.data.data.simple
+          this.itemUnit = res.data.data.rows
         })
         .catch((err) => {
           this.$swal({

@@ -78,8 +78,10 @@ export default {
   },
 
   activated() {
-    this.$refs.dialogForm.openDialog()
-    this.getDataFromApi()
+    setTimeout(() => {
+      this.getDataFromApi()
+      this.$refs.dialogForm.openDialog()
+    }, 300)
   },
 
   methods: {
@@ -124,7 +126,7 @@ export default {
 
     getDataFromApi(copyFromId) {
       // this.dialogLoading = true
-      this.showLoading = true
+      this.$nuxt.$loading.start()
       const type = this.formType
       this.$axios
         .get(this.url + '/' + this.$route.query.document, {
@@ -152,7 +154,7 @@ export default {
 
           setTimeout(() => {
             this.$refs.formDocument.setData(this.form)
-          }, 30)
+          }, 100)
         })
         .catch((err) => {
           const message =
@@ -164,7 +166,7 @@ export default {
           })
         })
         .finally((res) => {
-          this.showLoading = false
+          this.$nuxt.$loading.finish()
         })
     },
 

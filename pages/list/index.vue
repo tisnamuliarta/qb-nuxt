@@ -71,6 +71,11 @@ export default {
                route: '/list/tax',
               desc: 'Display list of sales tax',
             },
+            {
+              name: 'Reporting Period',
+               route: '/list/reporting-period',
+              desc: 'Display list of reporting period',
+            },
           ],
         },
 
@@ -107,6 +112,16 @@ export default {
               name: 'Product and services',
               route: '/app/item/list',
               desc: 'Displays the products and services you sell. From here, you can edit information about a product or service, such as its description, or the rate you charge.',
+            },
+            {
+              name: 'Product category',
+              route: '/list/item-category',
+              desc: 'A means of classifying items that you sell to customers. Provide a way for you to quickly organize what you sell, and save you time when completing sales transaction forms.',
+            },
+            {
+              name: 'Product unit',
+              route: '/list/item-unit',
+              desc: 'Display list of item unit.',
             },
             {
               name: 'Payment Term',

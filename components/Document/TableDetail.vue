@@ -352,41 +352,49 @@ export default {
       const selected = data.selected
       const type = this.form.type
       const vm = this
-      selected.forEach(function (item, index) {
-        const price =
-          type.substr(0, 1) === 'S' ? item.sale_price : item.purchase_price
-        const taxName =
-          type.substr(0, 1) === 'S' ? item.sell_tax_name : item.buy_tax_name
+      this.$refs.details.hotInstance.batch(() => {
+        selected.forEach(function (item, index) {
+          const price =
+            type.substr(0, 1) === 'S' ? item.sale_price : item.purchase_price
+          const taxName =
+            type.substr(0, 1) === 'S' ? item.sell_tax_name : item.buy_tax_name
 
-        vm.$refs.details.hotInstance.setDataAtRowProp([
-          [rowData, 'name', item.name],
-          [rowData, 'sku', item.code],
-          [rowData, 'unit', item.unit],
-          [rowData, 'description', item.description],
-          [rowData, 'default_currency_symbol', vm.form.default_currency_symbol],
-          [rowData, 'item_id', item.id],
-          [rowData, 'price', price],
-          [rowData, 'tax_name', taxName],
-          [rowData, 'quantity', 1],
-        ])
-        rowData++
+          vm.$refs.details.hotInstance.setDataAtRowProp([
+            [rowData, 'name', item.name],
+            [rowData, 'sku', item.code],
+            [rowData, 'unit', item.unit],
+            [rowData, 'description', item.description],
+            [
+              rowData,
+              'default_currency_symbol',
+              vm.form.default_currency_symbol,
+            ],
+            [rowData, 'item_id', item.id],
+            [rowData, 'price', price],
+            [rowData, 'tax_name', taxName],
+            [rowData, 'quantity', 1],
+          ])
+          rowData++
+        })
       })
     },
 
     setDataToDetails(data, form) {
-      this.form = form
-      this.updateTableSettings()
       const vm = this
-      const items = form.items.length > 0 ? form.items : data
-      vm.$refs.details.hotInstance.loadData(items)
-      const countRows = this.$refs.details.hotInstance.countRows()
-      for (let i = 0; i < countRows; i++) {
-        this.$refs.details.hotInstance.setDataAtRowProp(
-          i,
-          'default_currency_symbol',
-          vm.form.default_currency_symbol
-        )
-      }
+      this.form = form
+      this.$refs.details.hotInstance.batch(() => {
+        this.updateTableSettings()
+        const items = form.items.length > 0 ? form.items : data
+        vm.$refs.details.hotInstance.loadData(items)
+        const countRows = this.$refs.details.hotInstance.countRows()
+        for (let i = 0; i < countRows; i++) {
+          this.$refs.details.hotInstance.setDataAtRowProp(
+            i,
+            'default_currency_symbol',
+            vm.form.default_currency_symbol
+          )
+        }
+      })
       // setTimeout(() => {
       //   vm.$refs.details.hotInstance.loadData(data)
       // }, 20)
@@ -401,54 +409,60 @@ export default {
       let amountRow = 0
       if (countRows > 0) {
         for (let i = 0; i < countRows; i++) {
-          const qty = this.$refs.details.hotInstance.getDataAtRowProp(
-            i,
-            'quantity'
-          )
-          const unitPrice = this.$refs.details.hotInstance.getDataAtRowProp(
-            i,
-            'price'
-          )
-          const discount = this.$refs.details.hotInstance.getDataAtRowProp(
-            i,
-            'discount_rate'
-          )
-          const tax = this.$refs.details.hotInstance.getDataAtRowProp(
-            i,
-            'tax_name'
-          )
+          this.$refs.details.hotInstance.batch(() => {
+            const qty = this.$refs.details.hotInstance.getDataAtRowProp(
+              i,
+              'quantity'
+            )
+            const unitPrice = this.$refs.details.hotInstance.getDataAtRowProp(
+              i,
+              'price'
+            )
+            const discount = this.$refs.details.hotInstance.getDataAtRowProp(
+              i,
+              'discount_rate'
+            )
+            const tax = this.$refs.details.hotInstance.getDataAtRowProp(
+              i,
+              'tax_name'
+            )
 
-          const subTotalRow = qty * unitPrice
-          subTotal = subTotal + qty * unitPrice
+            const subTotalRow = qty * unitPrice
+            subTotal = subTotal + qty * unitPrice
 
-          const discountPerLine = parseFloat(
-            (discount / 100) * subTotalRow
-          ).toFixed(2)
-          discountAmount =
-            parseFloat(discountAmount) + parseFloat(discountPerLine)
+            const discountPerLine = parseFloat(
+              (discount / 100) * subTotalRow
+            ).toFixed(2)
+            discountAmount =
+              parseFloat(discountAmount) + parseFloat(discountPerLine)
 
-          amountRow = subTotalRow - discountPerLine
+            amountRow = subTotalRow - discountPerLine
 
-          if (tax) {
-            let taxRate = 0
-            this.$auth.$storage
-              .getLocalStorage('tax_row')
-              .forEach(function (item, index) {
-                if (item.name === tax) {
-                  taxRate = parseFloat(item.rate)
-                }
+            if (tax) {
+              let taxRate = 0
+              this.$auth.$storage
+                .getLocalStorage('tax_row')
+                .forEach(function (item, index) {
+                  if (item.name === tax) {
+                    taxRate = parseFloat(item.rate)
+                  }
+                })
+
+              const taxRow = (parseFloat(taxRate) / 100) * amountRow
+              taxDetail.push({
+                name: tax,
+                amount: taxRow,
               })
+            }
 
-            const taxRow = (parseFloat(taxRate) / 100) * amountRow
-            taxDetail.push({
-              name: tax,
-              amount: taxRow,
-            })
-          }
+            amount = amount + (subTotalRow - discountPerLine)
 
-          amount = amount + (subTotalRow - discountPerLine)
-
-          this.$refs.details.hotInstance.setDataAtRowProp(i, 'total', amountRow)
+            this.$refs.details.hotInstance.setDataAtRowProp(
+              i,
+              'total',
+              amountRow
+            )
+          })
         }
       }
       this.$emit('calcTotal', {

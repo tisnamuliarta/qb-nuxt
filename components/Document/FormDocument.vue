@@ -811,6 +811,7 @@ export default {
 
     getItemCategory() {
       // this.$refs.dialogSendEmail.openEmailDialog()
+      this.$nuxt.$loading.start()
       this.$axios
         .get(`/api/master/categories`, {
           params: {
@@ -827,9 +828,13 @@ export default {
             text: err.response.data.message,
           })
         })
+        .finally((res) => {
+          this.$nuxt.$loading.finish()
+        })
     },
 
     getItemUnit() {
+      this.$nuxt.$loading.start()
       this.$axios
         .get(`/api/inventory/item-units`, {
           params: {
@@ -846,9 +851,13 @@ export default {
             text: err.response.data.message,
           })
         })
+        .finally((res) => {
+          this.$nuxt.$loading.finish()
+        })
     },
 
     getAccounts() {
+      this.$nuxt.$loading.start()
       this.$axios
         .get(`/api/financial/accounts`, {
           params: {
@@ -865,9 +874,13 @@ export default {
             text: err.response.data.message,
           })
         })
+        .finally((res) => {
+          this.$nuxt.$loading.finish()
+        })
     },
 
     getContact() {
+      this.$nuxt.$loading.start()
       const vm = this
       this.$axios
         .get(`/api/bp/contacts`, {
@@ -885,9 +898,13 @@ export default {
             text: err.response.data.message,
           })
         })
+        .finally((res) => {
+          this.$nuxt.$loading.finish()
+        })
     },
 
     getPaymentTerms() {
+      this.$nuxt.$loading.start()
       this.$axios
         .get(`/api/financial/payment-terms`, {
           params: {
@@ -904,11 +921,14 @@ export default {
             text: err.response.data.message,
           })
         })
+        .finally((res) => {
+          this.$nuxt.$loading.finish()
+        })
     },
 
     getTax() {
       // this.$refs.uploadField.getFiles()
-
+      this.$nuxt.$loading.start()
       this.$axios
         .get(`/api/financial/taxes`, {
           params: {
@@ -925,6 +945,9 @@ export default {
             title: 'Error',
             text: err.response.data.message,
           })
+        })
+        .finally((res) => {
+          this.$nuxt.$loading.finish()
         })
     },
 

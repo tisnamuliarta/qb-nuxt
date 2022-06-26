@@ -38,10 +38,16 @@ export default {
   /*
    ** Customize the progress-bar color
    */
-  loading: {
-    color: 'green',
-    height: '5px',
-  },
+  // loading: {
+  //   color: 'green',
+  //   height: '5px',
+  //   throttle: 0,
+  // },
+
+  loading: '~/components/Common/LoadingBar.vue',
+
+  // Target: https://go.nuxtjs.dev/config-target
+  target: 'static',
   /*
    ** Global CSS
    */

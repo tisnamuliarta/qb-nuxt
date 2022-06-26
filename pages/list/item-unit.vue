@@ -2,10 +2,7 @@
   <v-layout>
     <v-flex sm12>
       <div class="mt-0">
-        <v-skeleton-loader v-show="loading" type="table" class="mx-auto">
-        </v-skeleton-loader>
         <v-data-table
-          v-show="!loading"
           :mobile-breakpoint="0"
           :headers="headers"
           :items="allData"
@@ -13,15 +10,17 @@
           :options.sync="options"
           :server-items-length="totalData"
           :loading="loading"
+          hide-default-footer
           class="elevation-1"
-          fixed-header
           dense
+          fixed-header
+          height="75vh"
           :footer-props="{ 'items-per-page-options': [20, 50, 100, -1] }"
         >
           <template #top>
             <div class="pl-4 pt-2">
               <span class="font-weight-medium text-h6"
-                >{{ $t('Reporting Period') }}
+                >{{ $t('Product Units') }}
               </span>
             </div>
             <LazyMainToolbar
@@ -30,10 +29,10 @@
               :item-search="itemSearch"
               :search-item="searchItem"
               :search="search"
-              title="Reporting Period"
+              title="Product Units"
               show-new-data
               show-back-link
-              new-data-text="New Period"
+              new-data-text="New Unit"
               @emitData="emitData"
               @newData="newData"
               @getDataFromApi="getDataFromApi"
@@ -48,25 +47,34 @@
               @click="editItem(item)"
               >Edit</v-btn
             >
+
+            <v-btn
+              text
+              small
+              color="red"
+              class="font-weight-bold text-right"
+              @click="deleteItem(item)"
+              >Delete</v-btn
+            >
           </template>
         </v-data-table>
       </div>
     </v-flex>
 
-    <LazyAccountingFormReportingPeriod
+    <LazyInventoryFormItemUnit
       ref="forms"
       :form-data="form"
       :form-title="formTitle"
       :button-title="buttonTitle"
       :url="url"
       @getDataFromApi="getDataFromApi"
-    ></LazyAccountingFormReportingPeriod>
+    ></LazyInventoryFormItemUnit>
   </v-layout>
 </template>
 
 <script>
 export default {
-  name: 'ReportingPeriod',
+  name: 'AccountCategory',
   data() {
     return {
       totalData: 0,
@@ -75,32 +83,30 @@ export default {
       allData: [],
       documentStatus: [],
       itemSearch: [],
+      itemCategoryType: [],
       searchStatus: '',
       searchItem: '',
       search: '',
       form: {},
       defaultItem: {},
       options: {},
-      url: '/api/financial/reporting-period',
+      url: '/api/inventory/item-units',
       headers: [
-        { text: 'Period Count', value: 'period_count' },
-        { text: 'Status', value: 'status' },
-        { text: 'Year', value: 'calendar_year' },
-        { text: 'Closing Date', value: 'closing_date' },
-        { text: 'Actions', value: 'id' },
+        { text: 'Category Name', value: 'name', cellClass: 'disable-wrap' },
+        { text: 'Actions', value: 'id', cellClass: 'disable-wrap' },
       ],
     }
   },
 
   head() {
     return {
-      title: 'Account Category',
+      title: 'Product Units',
     }
   },
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? 'New Period' : 'Edit Period'
+      return this.editedIndex === -1 ? 'New Category' : 'Edit Category'
     },
     buttonTitle() {
       return this.editedIndex === -1 ? 'Save' : 'Update'
@@ -119,12 +125,12 @@ export default {
   methods: {
     newData() {
       this.editedIndex = -1
-      this.$refs.forms.newData(this.form)
+      this.$refs.forms.newData(this.form, this.itemCategoryType)
     },
 
     editItem(item) {
       this.editedIndex = this.allData.indexOf(item)
-      this.$refs.forms.editItem(item, this.form)
+      this.$refs.forms.editItem(item, this.itemCategoryType)
     },
 
     emitData(data) {
@@ -135,6 +141,43 @@ export default {
       this.search = data.search
       this.filters = data.filters
       this.getDataFromApi()
+    },
+
+    deleteItem(item) {
+      const vm = this
+      this.$swal({
+        title: 'Are you sure?',
+        text: 'The data will be permanently deleted',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+      }).then((result) => {
+        if (result.value) {
+          this.$axios
+            .delete(vm.url + '/' + item.id, {
+              params: {
+                id: item.id,
+              },
+            })
+            .then((res) => {
+              this.$swal({
+                type: 'success',
+                title: 'Success...',
+                text: 'Data Deleted!',
+              })
+              vm.getDataFromApi()
+            })
+            .catch((err) => {
+              this.$swal({
+                type: 'error',
+                title: 'Oops...',
+                text: err.response.data.message,
+              })
+            })
+        }
+      })
     },
 
     getDataFromApi() {
@@ -157,6 +200,7 @@ export default {
           this.itemSearch = res.data.filter
           this.form = Object.assign({}, res.data.data.form)
           this.defaultItem = Object.assign({}, res.data.data.form)
+          this.itemCategoryType = res.data.data.category_type_list
         })
         .catch((err) => {
           this.loading = false
