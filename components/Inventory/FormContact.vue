@@ -605,18 +605,13 @@ export default {
 
     save() {
       const vm = this
-      const form = this.form
       const status = this.statusProcessing
-      const data = {
-        form,
-        status,
-      }
 
       if (status === 'insert') {
-        this.store('post', this.url, data)
+        this.store('post', this.url, this.form)
         vm.submitLoad = false
       } else if (status === 'update') {
-        this.store('put', this.url + '/' + this.form.id, data)
+        this.store('put', this.url + '/' + this.form.id, this.form)
         vm.submitLoad = false
       }
     },

@@ -52,9 +52,7 @@
 
               <v-col cols="12">
                 <v-card flat>
-                  <v-tabs
-                    v-model="tab"
-                  >
+                  <v-tabs v-model="tab">
                     <v-tab
                       v-for="item in items"
                       :key="item.tab"
@@ -185,52 +183,9 @@
                     <v-tab-item value="tab-2">
                       <v-row dense class="mt-2">
                         <v-col cols="12" md="4">
-                          <v-menu
-                            ref="menu3"
-                            v-model="menu3"
-                            :close-on-content-click="false"
-                            transition="scale-transition"
-                            offset-y
-                            min-width="290px"
-                          >
-                            <template #activator="{ on, attrs }">
-                              <v-text-field
-                                v-model="form.birth_date"
-                                label="Birth Date"
-                                prepend-icon="mdi-calendar"
-                                readonly
-                                persistent-hint
-                                outlined
-                                dense
-                                hide-details="auto"
-                                v-bind="attrs"
-                                v-on="on"
-                              ></v-text-field>
-                            </template>
-
-                            <v-date-picker
-                              v-model="form.birth_date"
-                              no-title
-                              @input="menu3 = false"
-                            >
-                            </v-date-picker>
-                          </v-menu>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
                           <v-text-field
-                            v-model="form.gender"
-                            label="Gender"
-                            outlined
-                            dense
-                            hide-details="auto"
-                          ></v-text-field>
-                        </v-col>
-
-                        <v-col cols="12" md="12">
-                          <v-text-field
-                            v-model="form.address"
-                            label="Address"
+                            v-model="form.pay_type"
+                            label="Pay Type"
                             outlined
                             dense
                             hide-details="auto"
@@ -239,8 +194,8 @@
 
                         <v-col cols="12" md="4">
                           <v-text-field
-                            v-model="form.city"
-                            label="City"
+                            v-model="form.pay_frequency"
+                            label="Pay Frequency"
                             outlined
                             dense
                             hide-details="auto"
@@ -249,8 +204,8 @@
 
                         <v-col cols="12" md="4">
                           <v-text-field
-                            v-model="form.zip_code"
-                            label="Zip Code"
+                            v-model="form.salary"
+                            label="Salary"
                             outlined
                             dense
                             hide-details="auto"
@@ -259,8 +214,8 @@
 
                         <v-col cols="12" md="4">
                           <v-text-field
-                            v-model="form.home_phone"
-                            label="Home Phone"
+                            v-model="form.per_hour_rate"
+                            label="Per Hour Rate"
                             outlined
                             dense
                             hide-details="auto"
@@ -269,8 +224,8 @@
 
                         <v-col cols="12" md="4">
                           <v-text-field
-                            v-model="form.work_phone"
-                            label="Work Phone"
+                            v-model="form.hour_per_day"
+                            label="Hour per day"
                             outlined
                             dense
                             hide-details="auto"
@@ -279,18 +234,8 @@
 
                         <v-col cols="12" md="4">
                           <v-text-field
-                            v-model="form.mobile_phone"
-                            label="Mobile Phone"
-                            outlined
-                            dense
-                            hide-details="auto"
-                          ></v-text-field>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
-                          <v-text-field
-                            v-model="form.national_id"
-                            label="National ID"
+                            v-model="form.day_per_week"
+                            label="Day per week"
                             outlined
                             dense
                             hide-details="auto"
@@ -303,8 +248,8 @@
                       <v-row dense class="mt-2">
                         <v-col cols="12" md="4">
                           <v-menu
-                            ref="menu3"
-                            v-model="menu3"
+                            ref="menu4"
+                            v-model="menu4"
                             :close-on-content-click="false"
                             transition="scale-transition"
                             offset-y
@@ -312,8 +257,8 @@
                           >
                             <template #activator="{ on, attrs }">
                               <v-text-field
-                                v-model="form.birth_date"
-                                label="Birth Date"
+                                v-model="form.hire_date"
+                                label="Hire Date"
                                 prepend-icon="mdi-calendar"
                                 readonly
                                 persistent-hint
@@ -326,9 +271,9 @@
                             </template>
 
                             <v-date-picker
-                              v-model="form.birth_date"
+                              v-model="form.hire_date"
                               no-title
-                              @input="menu3 = false"
+                              @input="menu4 = false"
                             >
                             </v-date-picker>
                           </v-menu>
@@ -336,18 +281,8 @@
 
                         <v-col cols="12" md="4">
                           <v-text-field
-                            v-model="form.gender"
-                            label="Gender"
-                            outlined
-                            dense
-                            hide-details="auto"
-                          ></v-text-field>
-                        </v-col>
-
-                        <v-col cols="12" md="12">
-                          <v-text-field
-                            v-model="form.address"
-                            label="Address"
+                            v-model="form.work_location_id"
+                            label="Work Location"
                             outlined
                             dense
                             hide-details="auto"
@@ -356,125 +291,23 @@
 
                         <v-col cols="12" md="4">
                           <v-text-field
-                            v-model="form.city"
-                            label="City"
+                            v-model="form.employee_id"
+                            label="Employee ID"
                             outlined
                             dense
                             hide-details="auto"
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="4">
-                          <v-text-field
-                            v-model="form.zip_code"
-                            label="Zip Code"
-                            outlined
-                            dense
-                            hide-details="auto"
-                          ></v-text-field>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
-                          <v-text-field
-                            v-model="form.home_phone"
-                            label="Home Phone"
-                            outlined
-                            dense
-                            hide-details="auto"
-                          ></v-text-field>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
-                          <v-text-field
-                            v-model="form.work_phone"
-                            label="Work Phone"
-                            outlined
-                            dense
-                            hide-details="auto"
-                          ></v-text-field>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
-                          <v-text-field
-                            v-model="form.mobile_phone"
-                            label="Mobile Phone"
-                            outlined
-                            dense
-                            hide-details="auto"
-                          ></v-text-field>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
-                          <v-text-field
-                            v-model="form.national_id"
-                            label="National ID"
-                            outlined
-                            dense
-                            hide-details="auto"
-                          ></v-text-field>
-                        </v-col>
                       </v-row>
                     </v-tab-item>
 
                     <v-tab-item value="tab-4">
                       <v-row dense class="mt-2">
                         <v-col cols="12" md="4">
-                          <v-menu
-                            ref="menu3"
-                            v-model="menu3"
-                            :close-on-content-click="false"
-                            transition="scale-transition"
-                            offset-y
-                            min-width="290px"
-                          >
-                            <template #activator="{ on, attrs }">
-                              <v-text-field
-                                v-model="form.birth_date"
-                                label="Birth Date"
-                                prepend-icon="mdi-calendar"
-                                readonly
-                                persistent-hint
-                                outlined
-                                dense
-                                hide-details="auto"
-                                v-bind="attrs"
-                                v-on="on"
-                              ></v-text-field>
-                            </template>
-
-                            <v-date-picker
-                              v-model="form.birth_date"
-                              no-title
-                              @input="menu3 = false"
-                            >
-                            </v-date-picker>
-                          </v-menu>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
                           <v-text-field
-                            v-model="form.gender"
-                            label="Gender"
-                            outlined
-                            dense
-                            hide-details="auto"
-                          ></v-text-field>
-                        </v-col>
-
-                        <v-col cols="12" md="12">
-                          <v-text-field
-                            v-model="form.address"
-                            label="Address"
-                            outlined
-                            dense
-                            hide-details="auto"
-                          ></v-text-field>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
-                          <v-text-field
-                            v-model="form.city"
-                            label="City"
+                            v-model="form.pay_schedule_name"
+                            label="Pay Schedule"
                             outlined
                             dense
                             hide-details="auto"
@@ -532,7 +365,6 @@
                         </v-col>
                       </v-row>
                     </v-tab-item>
-
                   </v-tabs-items>
                 </v-card>
               </v-col>
@@ -556,9 +388,8 @@
 </template>
 
 <script>
-
 export default {
-  name: 'FormContact',
+  name: 'FormEmployee',
 
   props: {
     formTitle: {
@@ -574,6 +405,10 @@ export default {
       default() {
         return {}
       },
+    },
+    formUrl: {
+      type: String,
+      default: '',
     },
   },
 
@@ -591,19 +426,20 @@ export default {
       itemPaymentTerm: [],
       statusProcessing: 'insert',
       menu3: '',
+      menu4: '',
       valueWhenIsEmpty: '0',
-      url: '/api/bp/contacts',
+      url: '/api/payroll/employees',
       moneyOptions: {
-        suffix: "",
+        suffix: '',
         length: 11,
-        precision: 2
+        precision: 2,
       },
       tab: null,
       items: [
-        {tab: 'Personal Info', href: '#tab-1'},
-        {tab: 'Payment method', href: '#tab-2'},
-        {tab: 'Employment details', href: '#tab-3'},
-        {tab: 'Pay types', href: '#tab-4'},
+        { tab: 'Personal Info', href: '#tab-1' },
+        { tab: 'Payment method', href: '#tab-2' },
+        { tab: 'Employment details', href: '#tab-3' },
+        { tab: 'Pay types', href: '#tab-4' },
       ],
     }
   },
@@ -615,10 +451,10 @@ export default {
   },
 
   methods: {
-    newData(form, defaultItem) {
+    newData(form) {
       this.$refs.dialogForm.openDialog()
       this.statusProcessing = 'insert'
-      this.form = Object.assign({}, defaultItem)
+      this.form = Object.assign({}, form)
     },
 
     editItem(item) {
@@ -653,11 +489,12 @@ export default {
     },
 
     getAccounts() {
-      this.$axios.get(`/api/financial/accounts`, {
-        params: {
-          type: "All"
-        }
-      })
+      this.$axios
+        .get(`/api/financial/accounts`, {
+          params: {
+            type: 'All',
+          },
+        })
         .then((res) => {
           this.itemAccounts = res.data.data.rows
         })
@@ -671,11 +508,12 @@ export default {
     },
 
     getPaymentTerms() {
-      this.$axios.get(`/api/financial/payment-terms`, {
-        params: {
-          type: "All"
-        }
-      })
+      this.$axios
+        .get(`/api/financial/payment-terms`, {
+          params: {
+            type: 'All',
+          },
+        })
         .then((res) => {
           this.itemPaymentTerm = res.data.data.auto_complete
         })
@@ -689,11 +527,12 @@ export default {
     },
 
     getBanks() {
-      this.$axios.get(`/api/master/banks`, {
-        params: {
-          type: "All"
-        }
-      })
+      this.$axios
+        .get(`/api/master/banks`, {
+          params: {
+            type: 'All',
+          },
+        })
         .then((res) => {
           this.itemBank = res.data.data.simple
         })
@@ -724,18 +563,13 @@ export default {
 
     save() {
       const vm = this
-      const form = this.form
       const status = this.statusProcessing
-      const data = {
-        form,
-        status,
-      }
 
       if (status === 'insert') {
-        this.store('post', this.url, data)
+        this.store('post', this.url, this.form)
         vm.submitLoad = false
       } else if (status === 'update') {
-        this.store('put', this.url + '/' + this.form.id, data)
+        this.store('put', this.url + '/' + this.form.id, this.form)
         vm.submitLoad = false
       }
     },
@@ -743,7 +577,7 @@ export default {
     store(method, url, data) {
       const vm = this
       vm.submitLoad = true
-      this.$axios({method, url, data})
+      this.$axios({ method, url, data })
         .then((res) => {
           this.$refs.dialogForm.closeDialog()
           this.$emit('getDataFromApi')

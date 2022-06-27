@@ -3,21 +3,33 @@
     <PayrollTableEmployee
       ref="tableDocument"
       type-document="EMPLOYEE"
-      table-title="Employees"
+      :table-title="$t('Employees')"
       form-url="/app/purchasereturn/form"
       :header-table="[
-        {text: 'Name', value: 'name', cellClass: 'disable-wrap'},
-        {text: 'Pay Rate', value: 'contact_name', cellClass: 'disable-wrap'},
-        {text: 'Pay Method', value: 'type', cellClass: 'disable-wrap'},
-        {text: 'Status', value: 'issued_at', cellClass: 'disable-wrap', sortable: false, filterable: false},
-        {text: 'Phone Number', value: 'due_at', cellClass: 'disable-wrap', sortable: false, filterable: false},
+        { text: 'Name', value: 'first_name', cellClass: 'disable-wrap' },
+        { text: 'Pay Rate', value: 'contact_name', cellClass: 'disable-wrap' },
+        { text: 'Pay Method', value: 'type', cellClass: 'disable-wrap' },
+        {
+          text: 'Status',
+          value: 'issued_at',
+          cellClass: 'disable-wrap',
+          sortable: false,
+          filterable: false,
+        },
+        {
+          text: 'Phone Number',
+          value: 'due_at',
+          cellClass: 'disable-wrap',
+          sortable: false,
+          filterable: false,
+        },
         {
           text: 'Actions',
           value: 'actions',
           align: 'center',
           cellClass: 'disable-wrap',
           sortable: false,
-          filterable: false
+          filterable: false,
         },
       ]"
     ></PayrollTableEmployee>
@@ -26,7 +38,7 @@
 
 <script>
 export default {
-  name: 'Employees',
+  name: 'EmployeesList',
 
   head() {
     return {
@@ -50,10 +62,7 @@ export default {
       if (this.$refs.tableDocument) {
         this.$refs.tableDocument.getDataFromApi()
       }
-    }
-  }
+    },
+  },
 }
 </script>
-
-
-

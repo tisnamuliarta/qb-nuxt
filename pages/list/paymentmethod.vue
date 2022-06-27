@@ -20,7 +20,7 @@
           height="70vh"
           :footer-props="{ 'items-per-page-options': [20, 50, 100, -1] }"
         >
-          <template v-slot:top>
+          <template #top>
             <div class="pl-4 pt-2">
               <span class="font-weight-medium text-h6">Payment Method</span>
             </div>
@@ -206,18 +206,12 @@ export default {
     },
 
     save(type = 'all', row = null) {
-      const vm = this
-      const form = this.form
       const status = this.statusProcessing
-      const data = {
-        form,
-        status,
-      }
 
       if (status === 'insert') {
-        this.store('post', this.url, data, 'insert', type)
+        this.store('post', this.url, this.form, 'insert', type)
       } else if (status === 'update') {
-        this.store('put', this.url + '/' + this.form.id, data, 'update', type)
+        this.store('put', this.url + '/' + this.form.id, this.form, 'update', type)
       }
     },
 

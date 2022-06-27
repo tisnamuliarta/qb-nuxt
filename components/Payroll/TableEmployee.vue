@@ -16,7 +16,7 @@
         dense
         :footer-props="{ 'items-per-page-options': [20, 50, 100, -1] }"
       >
-        <template v-slot:top>
+        <template #top>
           <div class="pl-4 pt-2">
             <span class="font-weight-medium text-h6">{{ tableTitle }}</span>
           </div>
@@ -35,6 +35,7 @@
             new-data-text="New Employee"
             @emitData="emitData"
             @newData="newData"
+            @getDataFromApi="getDataFromApi"
           />
         </template>
         <template #[`item.document_number`]="{ item }">
@@ -77,7 +78,7 @@
             {{ itemText }}
           </v-btn>
           <v-menu transition="slide-y-transition" bottom>
-            <template v-slot:activator="{ on, attrs }">
+            <template #activator="{ on, attrs }">
               <v-btn color="black" dark icon v-bind="attrs" v-on="on">
                 <v-icon>mdi-menu-down</v-icon>
               </v-btn>
@@ -103,6 +104,7 @@
       :form-data="form"
       :form-title="formTitle"
       :button-title="buttonTitle"
+      :form-url="formUrl"
       @getDataFromApi="getDataFromApi"
     ></LazyPayrollFormEmployee>
   </v-row>
@@ -177,8 +179,8 @@ export default {
   computed: {
     formTitle() {
       return this.editedIndex === -1
-        ? 'New ' + this.typeDocument
-        : 'Edit ' + +this.typeDocument
+        ? this.$t('New Employee')
+        : this.$t('Edit Employee')
     },
     buttonTitle() {
       return this.editedIndex === -1 ? 'Save' : 'Update'
@@ -194,11 +196,8 @@ export default {
     },
   },
 
-  created() {
-    this.mappingDocument()
-  },
 
-  mounted() {
+  activated() {
     this.itemText = this.items[0].text
     this.itemAction = this.items[0].action
   },
@@ -226,17 +225,9 @@ export default {
     },
 
     editItem(item) {
+      this.editedIndex = 1
       this.editedIndex = this.allData.indexOf(item)
       this.$refs.formData.editItem(item, this.url)
-    },
-
-    mappingAction(type) {
-      switch (type) {
-        case 'EMPLOYEE':
-          return '/app/form/sales/quote'
-        case 'CONTRACTOR':
-          return '/app/form/sales/order'
-      }
     },
 
     actions(action, item) {
@@ -254,10 +245,6 @@ export default {
           this.getDataFromApi()
           this.$nuxt.$emit('getMenu', 'nice payload')
         })
-    },
-
-    mappingDocument() {
-      this.toolbarTitle = this.$helper.mapping(this.typeDocument)
     },
 
     emitData(data) {
@@ -291,7 +278,6 @@ export default {
           this.itemSearch = res.data.filter
           this.form = Object.assign({}, res.data.data.form)
           this.defaultItem = Object.assign({}, res.data.data.form)
-          this.company = this.$auth.$storage.getState('company')
         })
         .catch((err) => {
           this.loading = false

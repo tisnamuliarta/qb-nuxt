@@ -38,7 +38,7 @@
 
 <script>
 export default {
-  name: 'New',
+  name: 'NewForm',
 
   data() {
     return {
@@ -83,11 +83,6 @@ export default {
 
       itemPurchase: [
         {
-          text: this.$t('Expenses'),
-          type: 'EXPENSE',
-          route: '/app/form/purchase/expense',
-        },
-        {
           text: this.$t('Purchase Quotations'),
           type: 'PQ',
           route: '/app/form/purchase/quote',
@@ -96,6 +91,11 @@ export default {
           text: this.$t('Purchase Order'),
           type: 'PO',
           route: '/app/form/purchase/order',
+        },
+        {
+          text: this.$t('Goods Receipt PO'),
+          type: 'GRPO',
+          route: '/app/form/purchase/receipt',
         },
         {
           text: this.$t('A/P Invoice'),
@@ -162,6 +162,11 @@ export default {
           text: this.$t('Inventory Qty Adjustment'),
           type: 'INVADJ',
           route: '/app/invtoryqtyadjustment',
+        },
+        {
+          text: this.$t('Expenses'),
+          type: 'EXPENSE',
+          route: '/app/form/purchase/expense',
         },
       ],
     }
