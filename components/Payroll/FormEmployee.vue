@@ -2,7 +2,7 @@
   <div>
     <DialogForm
       ref="dialogForm"
-      max-width="800px"
+      max-width="600px"
       :dialog-title="formTitle"
       button-title="Save"
     >
@@ -65,7 +65,7 @@
                   <v-tabs-items v-model="tab">
                     <v-tab-item value="tab-1">
                       <v-row dense class="mt-2">
-                        <v-col cols="12" md="4">
+                        <v-col cols="12" md="5">
                           <v-menu
                             ref="menu3"
                             v-model="menu3"
@@ -98,14 +98,17 @@
                           </v-menu>
                         </v-col>
 
-                        <v-col cols="12" md="4">
-                          <v-text-field
+                        <v-col cols="12" md="5">
+                          <v-select
                             v-model="form.gender"
+                            :items="itemGender"
+                            item-text="name"
+                            item-value="id"
                             label="Gender"
                             outlined
                             dense
                             hide-details="auto"
-                          ></v-text-field>
+                          ></v-select>
                         </v-col>
 
                         <v-col cols="12" md="12">
@@ -118,7 +121,7 @@
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="4">
+                        <v-col cols="12" md="7">
                           <v-text-field
                             v-model="form.city"
                             label="City"
@@ -128,7 +131,7 @@
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="4">
+                        <v-col cols="12" md="7">
                           <v-text-field
                             v-model="form.zip_code"
                             label="Zip Code"
@@ -138,7 +141,7 @@
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="4">
+                        <v-col cols="12" md="7">
                           <v-text-field
                             v-model="form.home_phone"
                             label="Home Phone"
@@ -148,7 +151,7 @@
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="4">
+                        <v-col cols="12" md="7">
                           <v-text-field
                             v-model="form.work_phone"
                             label="Work Phone"
@@ -158,7 +161,7 @@
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="4">
+                        <v-col cols="12" md="7">
                           <v-text-field
                             v-model="form.mobile_phone"
                             label="Mobile Phone"
@@ -168,7 +171,7 @@
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="4">
+                        <v-col cols="12" md="7">
                           <v-text-field
                             v-model="form.national_id"
                             label="National ID"
@@ -180,62 +183,44 @@
                       </v-row>
                     </v-tab-item>
 
+                    <!-- payment  -->
                     <v-tab-item value="tab-2">
                       <v-row dense class="mt-2">
-                        <v-col cols="12" md="4">
+                        <v-col cols="12" md="7">
+                          <v-select
+                            v-model="form.payment_method"
+                            :items="itemPaymentMethod"
+                            label="Payment Method"
+                            item-text="name"
+                            item-value="id"
+                            outlined
+                            dense
+                            hide-details="auto"
+                          ></v-select>
+                        </v-col>
+
+                        <v-col
+                          v-if="form.payment_method === 2"
+                          cols="12"
+                          md="7"
+                        >
                           <v-text-field
-                            v-model="form.pay_type"
-                            label="Pay Type"
+                            v-model="form.bank_account_name"
+                            label="Bank Account Name"
                             outlined
                             dense
                             hide-details="auto"
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="4">
+                        <v-col
+                          v-if="form.payment_method === 2"
+                          cols="12"
+                          md="7"
+                        >
                           <v-text-field
-                            v-model="form.pay_frequency"
-                            label="Pay Frequency"
-                            outlined
-                            dense
-                            hide-details="auto"
-                          ></v-text-field>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
-                          <v-text-field
-                            v-model="form.salary"
-                            label="Salary"
-                            outlined
-                            dense
-                            hide-details="auto"
-                          ></v-text-field>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
-                          <v-text-field
-                            v-model="form.per_hour_rate"
-                            label="Per Hour Rate"
-                            outlined
-                            dense
-                            hide-details="auto"
-                          ></v-text-field>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
-                          <v-text-field
-                            v-model="form.hour_per_day"
-                            label="Hour per day"
-                            outlined
-                            dense
-                            hide-details="auto"
-                          ></v-text-field>
-                        </v-col>
-
-                        <v-col cols="12" md="4">
-                          <v-text-field
-                            v-model="form.day_per_week"
-                            label="Day per week"
+                            v-model="form.bank_account_number"
+                            label="Bank Account Number"
                             outlined
                             dense
                             hide-details="auto"
@@ -246,7 +231,7 @@
 
                     <v-tab-item value="tab-3">
                       <v-row dense class="mt-2">
-                        <v-col cols="12" md="4">
+                        <v-col cols="12" md="7">
                           <v-menu
                             ref="menu4"
                             v-model="menu4"
@@ -279,7 +264,7 @@
                           </v-menu>
                         </v-col>
 
-                        <v-col cols="12" md="4">
+                        <v-col cols="12" md="7">
                           <v-text-field
                             v-model="form.work_location_id"
                             label="Work Location"
@@ -289,7 +274,7 @@
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="4">
+                        <v-col cols="12" md="7">
                           <v-text-field
                             v-model="form.employee_id"
                             label="Employee ID"
@@ -298,66 +283,65 @@
                             hide-details="auto"
                           ></v-text-field>
                         </v-col>
-
                       </v-row>
                     </v-tab-item>
 
                     <v-tab-item value="tab-4">
                       <v-row dense class="mt-2">
-                        <v-col cols="12" md="4">
+                        <v-col cols="12" md="7">
                           <v-text-field
-                            v-model="form.pay_schedule_name"
-                            label="Pay Schedule"
+                            v-model="form.pay_type"
+                            label="Pay Type"
                             outlined
                             dense
                             hide-details="auto"
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="4">
+                        <v-col cols="12" md="7">
                           <v-text-field
-                            v-model="form.zip_code"
-                            label="Zip Code"
+                            v-model="form.pay_frequency"
+                            label="Pay Frequency"
                             outlined
                             dense
                             hide-details="auto"
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="4">
+                        <v-col cols="12" md="7">
                           <v-text-field
-                            v-model="form.home_phone"
-                            label="Home Phone"
+                            v-model="form.salary"
+                            label="Salary"
                             outlined
                             dense
                             hide-details="auto"
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="4">
+                        <v-col cols="12" md="7">
                           <v-text-field
-                            v-model="form.work_phone"
-                            label="Work Phone"
+                            v-model="form.per_hour_rate"
+                            label="Per Hour Rate"
                             outlined
                             dense
                             hide-details="auto"
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="4">
+                        <v-col cols="12" md="7">
                           <v-text-field
-                            v-model="form.mobile_phone"
-                            label="Mobile Phone"
+                            v-model="form.hour_per_day"
+                            label="Hour per day"
                             outlined
                             dense
                             hide-details="auto"
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="4">
+                        <v-col cols="12" md="7">
                           <v-text-field
-                            v-model="form.national_id"
-                            label="National ID"
+                            v-model="form.day_per_week"
+                            label="Day per week"
                             outlined
                             dense
                             hide-details="auto"
@@ -435,6 +419,8 @@ export default {
         precision: 2,
       },
       tab: null,
+      itemGender: [],
+      itemPaymentMethod: [],
       items: [
         { tab: 'Personal Info', href: '#tab-1' },
         { tab: 'Payment method', href: '#tab-2' },
@@ -451,6 +437,14 @@ export default {
   },
 
   methods: {
+    setItemGender(data) {
+      this.itemGender = data
+    },
+
+    setPaymentMethod(data) {
+      this.itemPaymentMethod = data
+    },
+
     newData(form) {
       this.$refs.dialogForm.openDialog()
       this.statusProcessing = 'insert'

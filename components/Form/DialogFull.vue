@@ -60,6 +60,7 @@ export default {
     closeDialog() {
       this.$router.back()
       this.$emit('getDataFromApi')
+      this.$nuxt.$emit('getDataFromApi')
     },
   },
 }

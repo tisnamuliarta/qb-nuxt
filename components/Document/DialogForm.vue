@@ -17,8 +17,15 @@
       <v-btn text small dark>More</v-btn>
 
       <v-spacer />
-      <v-btn small color="green darken-1" class="mr-3" dark @click="close">
-        Save and send
+      <v-btn
+        small
+        color="green darken-1"
+        class="mr-3"
+        dark
+        :loading="loading"
+        @click="actionSave('saveNew')"
+      >
+        Save and new
 
         <v-menu transition="slide-y-transition" bottom>
           <template #activator="{ on, attrs }">
@@ -26,8 +33,12 @@
               <v-icon>mdi-menu-down</v-icon>
             </v-btn>
           </template>
-          <v-list>
-            <v-list-item v-for="(value, i) in items" :key="i">
+          <v-list link>
+            <v-list-item
+              v-for="(value, i) in items"
+              :key="i"
+              @click="actionSave(value.action)"
+            >
               <v-list-item-content>
                 <v-list-item-title>{{ value.text }}</v-list-item-title>
               </v-list-item-content>
@@ -52,6 +63,10 @@ export default {
       type: String,
       default: '',
     },
+    formUrl: {
+      type: String,
+      default: '',
+    },
     dialogTitle: {
       type: String,
       default: '',
@@ -62,8 +77,8 @@ export default {
     return {
       title: this.dialogTitle,
       items: [
-        { text: 'Save and new', action: 'edit' },
-        { text: 'Save and close', action: 'delete' },
+        { text: 'Save and send', action: 'saveSend' },
+        { text: 'Save and close', action: 'saveClose' },
       ],
       breadcrumb: [],
       form: {},
@@ -72,6 +87,7 @@ export default {
       dialogLoading: false,
       showLoading: false,
       dialog: true,
+      loading: false,
       itemAction: [],
       actionName: 'Save',
     }
@@ -85,6 +101,7 @@ export default {
   },
 
   methods: {
+    // A method that is called when the dialog is closed.
     close() {
       this.$router.back()
       this.$emit('getDataFromApi')
@@ -152,9 +169,7 @@ export default {
           this.title = this.dialogTitle + ' #' + this.form.document_number
           this.$refs.dialogForm.setTitle(this.title)
 
-          setTimeout(() => {
-            this.$refs.formDocument.setData(this.form)
-          }, 100)
+          this.$refs.formDocument.setData(this.form)
         })
         .catch((err) => {
           const message =
@@ -281,23 +296,19 @@ export default {
         })
     },
 
-    store() {
-      const method = this.$route.query.document === '0' ? 'post' : 'patch'
-      const url =
-        this.$route.query.document === '0'
-          ? this.url
-          : this.url + '/' + this.$route.query.document;
-
-      const data = this.$refs.formDocument.returnData(this.$route.query.document)
-
-      this.dialogLoading = true
+    actionSave(action) {
+      const docId = this.$route.query.document
+      const url = docId === '0' ? this.url : this.url + '/' + docId
+      const method = docId === '0' ? 'post' : 'patch'
+      const data = this.$refs.formDocument.returnData(docId)
+      const vm = this
+      this.loading = true
       this.$axios({ method, url, data })
         .then((res) => {
           this.$router.push({
-            path: '/dashboard/documents/form',
+            path: vm.formUrl,
             query: {
               document: res.data.data.id,
-              type: res.data.data.type,
             },
           })
           this.$nuxt.$emit('snackbar', res.data.message)
@@ -313,7 +324,7 @@ export default {
           })
         })
         .finally((res) => {
-          this.dialogLoading = false
+          this.loading = false
         })
     },
   },

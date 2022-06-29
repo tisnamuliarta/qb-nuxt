@@ -2,8 +2,10 @@
   <div>
     <LazyDocumentDialogForm
       ref="dialogForm"
-      url="/api/documents"
-      form-type="APCM"
+      url="/api/transactions"
+      form-url="/app/form/purchase/creditmemo"
+      form-type="DN"
+      form-type-prefix="DN"
       dialog-title="AP Credit Memo"
       @getDataFromApi="getDataFromApi"
     ></LazyDocumentDialogForm>

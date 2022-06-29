@@ -16,43 +16,45 @@
 <script>
 import { HotTable } from '@handsontable/vue'
 // import the base only
-import Handsontable from 'handsontable'
+// import * as dom from 'handsontable/helpers/dom'
 // choose cell types you want to use and import them
 import {
   registerCellType,
   DropdownCellType,
   NumericCellType,
   CheckboxCellType,
+  HandsontableCellType,
 } from 'handsontable/cellTypes'
+
 // choose plugins you want to use and import them
 import {
   registerPlugin,
   ManualColumnResize,
   CopyPaste,
-  Filters,
   PersistentState,
   HiddenColumns,
-  ContextMenu,
-  DropdownMenu,
   HiddenRows,
+  DropdownMenu ,
 } from 'handsontable/plugins'
+
+import { registerRenderer } from 'handsontable/renderers'
 
 import 'handsontable/dist/handsontable.full.css'
 
 // register imported cell types and plugins
 registerCellType(DropdownCellType)
+registerCellType(HandsontableCellType)
 registerCellType(NumericCellType)
 registerCellType(CheckboxCellType)
+
 registerPlugin(ManualColumnResize)
 registerPlugin(CopyPaste)
-registerPlugin(Filters)
 registerPlugin(PersistentState)
 registerPlugin(HiddenColumns)
 registerPlugin(HiddenRows)
-registerPlugin(ContextMenu)
 registerPlugin(DropdownMenu)
 
-Handsontable.renderers.registerRenderer(
+registerRenderer(
   'ButtonAddRenderer',
   function (hotInstance, td, row, column, prop, value, cellProperties) {
     let button = null
@@ -60,26 +62,24 @@ Handsontable.renderers.registerRenderer(
     if (vm.form.status !== 'closed' && vm.form.status !== 'cancel') {
       button = document.createElement('button')
       button.type = 'button'
-      // button.innerText = '>'
       button.innerHTML = '<span class="mdi mdi-arrow-right-bold"></span>'
-      // button.innerHTML = 'Item'
       button.className = 'btnNPB'
       button.value = 'Details'
 
-      Handsontable.dom.addEvent(button, 'mousedown', (event) => {
+      button.addEventListener('mousedown', (event) => {
         event.preventDefault()
         vm.$refs.dialogItem.openDialog(row)
-        // vm.$refs.inv.open()
       })
 
-      Handsontable.dom.empty(td)
+      // dom.empty(td)
+      td.innerText = '';
       td.appendChild(button)
       return td
     }
   }
 )
 
-Handsontable.renderers.registerRenderer(
+registerRenderer(
   'ButtonDeleteRenderer',
   function (hotInstance, td, row, column, prop, value, cellProperties) {
     let button = null
@@ -93,12 +93,13 @@ Handsontable.renderers.registerRenderer(
       button.className = 'btnDelete'
       button.value = 'Details2'
 
-      Handsontable.dom.addEvent(button, 'mousedown', (event) => {
+      button.addEventListener('mousedown', (event) => {
         event.preventDefault()
         vm.removeRow(row)
       })
 
-      Handsontable.dom.empty(td)
+      // dom.empty(td)
+      td.innerText = '';
       td.appendChild(button)
     }
     return td
@@ -122,14 +123,14 @@ export default {
         rowHeaders: true,
         manualColumnResize: true,
         rowHeights: 28,
-        filters: true,
         viewportRowRenderingOffset: 1000,
         viewportColumnRenderingOffset: 100,
         colWidths: 80,
         persistentState: true,
         width: '100%',
+        height: '28vh',
         stretchH: 'all',
-        preventOverflow: 'horizontal',
+        // preventOverflow: 'horizontal',
         hiddenColumns: {
           copyPasteEnabled: false,
           indicator: false,
@@ -185,7 +186,7 @@ export default {
           },
           {
             data: 'quantity',
-            width: 100,
+            width: 80,
             wordWrap: false,
             type: 'numeric',
             numericFormat: {
@@ -254,6 +255,15 @@ export default {
             renderer: 'ButtonDeleteRenderer',
           },
         ],
+        beforeRender(isForced) {
+          const vm = window.details
+          vm.$nuxt.$loading.start()
+        },
+
+        afterRender(isForced) {
+          const vm = window.details
+          vm.$nuxt.$loading.finish()
+        },
       },
       detailsRoot: 'detailsRoot',
       colHeaders: [],
@@ -282,18 +292,6 @@ export default {
     updateTableSettings(header) {
       this.$refs.details.hotInstance.updateSettings({
         licenseKey: 'non-commercial-and-evaluation',
-        contextMenu: {
-          callback(key, options) {
-            // eslint-disable-next-line no-unused-vars
-            let indexArr, selectedData
-            const vm = window.details
-            // console.log(key)
-            if (key === 'remove_row') {
-              vm.isInvDetailChanges = true
-              vm.isInvChanges = true
-            }
-          },
-        },
         afterRemoveRow: (index, amount, physicalRow, source) => {
           const vm = window.details
           vm.calculateTotal()

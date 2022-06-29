@@ -17,46 +17,6 @@
           ></v-autocomplete>
         </v-col>
 
-        <v-col cols="12" md="4">
-          <v-combobox
-            v-model="form.tags"
-            :items="itemTag"
-            :search-input.sync="search"
-            hide-selected
-            label="Customer Email"
-            hide-details
-            dense
-            multiple
-            persistent-hint
-            small-chips
-            outlined
-          >
-            <template #no-data>
-              <v-list-item>
-                <v-list-item-content>
-                  <v-list-item-title>
-                    No results matching "<strong>{{ search }}</strong
-                    >". Press <kbd>enter</kbd> to create a new one
-                  </v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </template>
-          </v-combobox>
-        </v-col>
-
-        <v-col cols="12" md="2"></v-col>
-
-        <v-col cols="12" md="4">
-          <v-textarea
-            v-model="form.contact_address"
-            rows="2"
-            label="Billing Address"
-            outlined
-            dense
-            hide-details="auto"
-          ></v-textarea>
-        </v-col>
-
         <v-col cols="12" md="2" sm="6">
           <v-select
             v-model="form.payment_term_id"
@@ -136,6 +96,20 @@
             </v-date-picker>
           </v-menu>
         </v-col>
+        <!-- <v-col cols="12" md="2"></v-col> -->
+
+        <v-col cols="12" md="4">
+          <v-textarea
+            v-model="form.contact_address"
+            rows="2"
+            label="Billing Address"
+            outlined
+            dense
+            hide-details="auto"
+          ></v-textarea>
+        </v-col>
+
+        <v-col cols="12" md="8"></v-col>
 
         <v-col cols="12" md="8">
           <v-combobox
@@ -181,11 +155,16 @@
         </v-col>
         <v-col cols="12">
           <v-autocomplete
-            v-model="form.sales_persons"
+            v-model="form.sales_person"
             :items="itemSalesPersons"
+            item-value="user_id"
+            item-text="first_name"
             label="Sales Person"
             outlined
             dense
+            multiple
+            persistent-hint
+            small-chips
             hide-details="auto"
           ></v-autocomplete>
         </v-col>
@@ -196,14 +175,23 @@
       <v-card flat>
         <!-- <LazyFormAgGrid ref="agGrid"></LazyFormAgGrid> -->
         <!-- <lazyTabulator ref="tabulator" /> -->
-        <div class="scroll-container-min">
+        <LazyDocumentTableDetail
+          ref="childDetails"
+          @calcTotal="calcTotal"
+        ></LazyDocumentTableDetail>
+        <!-- <div class="scroll-container-min">
           <LazyDocumentTableDetail
             ref="childDetails"
             @calcTotal="calcTotal"
           ></LazyDocumentTableDetail>
-        </div>
+        </div> -->
         <v-card-actions>
-          <v-btn small depressed outlined @click="$refs.childDetails.addLine(5)">
+          <v-btn
+            small
+            depressed
+            outlined
+            @click="$refs.childDetails.addLine(5)"
+          >
             Add Line
             <v-icon>mdi-plus</v-icon>
           </v-btn>
@@ -618,13 +606,9 @@ export default {
     },
   },
 
+  // The above code is calling the methods that are defined in the methods section of the Vue instance.
   mounted() {
-    this.getItemCategory()
-    this.getItemUnit()
-    this.getAccounts()
-    this.getContact()
-    this.getPaymentTerms()
-    this.getTax()
+    this.getMasterData()
   },
 
   methods: {
@@ -652,6 +636,7 @@ export default {
       this.changeCalculation(data)
     },
 
+    // Calculating the tax amount, discount amount, total amount, balance due, etc.
     changeCalculation(data) {
       // this.taxDetails = (data) ? data.taxDetail : []
       // calculate discount
@@ -681,8 +666,6 @@ export default {
       this.taxAmount = this.taxAmount === undefined ? 0 : this.taxAmount
 
       // calculate tax details
-      // if (this.form.discount_rate > 0) {
-      // }
       if (
         this.taxDetails.length > 0 &&
         parseFloat(this.form.discount_rate) > 0
@@ -693,9 +676,6 @@ export default {
       }
 
       // calculate total amount
-      // console.log(this.form.sub_total)
-      // console.log(this.form.discount_per_line)
-      // console.log(this.form.discount_amount)
       this.form.amount =
         parseFloat(this.form.sub_total) -
         parseFloat(this.form.discount_per_line) -
@@ -722,6 +702,7 @@ export default {
         parseFloat(this.form.shipping_fee)
     },
 
+    // Reducing the array of tax details and returning the result.
     reduceArrayTaxAfterDiscount(taxDetails) {
       const result = []
       const vm = this
@@ -776,6 +757,7 @@ export default {
       this.showLoading = value
     },
 
+    // Setting the data to the child component.
     setData(form) {
       this.showLoading = true
       setTimeout(() => {
@@ -809,146 +791,75 @@ export default {
       this.itemFiles = data.row
     },
 
-    getItemCategory() {
-      // this.$refs.dialogSendEmail.openEmailDialog()
+    // The above code is fetching data from the server and storing it in the local storage.
+    async getMasterData() {
       this.$nuxt.$loading.start()
-      this.$axios
-        .get(`/api/master/categories`, {
+      try {
+        const resItemCategory = await this.$axios.get(
+          `/api/master/categories`,
+          {
+            params: {
+              type: 'Item Category',
+            },
+          }
+        )
+        const resItemUnit = await this.$axios.get(`/api/inventory/item-units`, {
           params: {
             type: 'Item Category',
           },
         })
-        .then((res) => {
-          this.itemCategory = res.data.data.simple
-        })
-        .catch((err) => {
-          this.$swal({
-            type: 'error',
-            title: 'Error',
-            text: err.response.data.message,
-          })
-        })
-        .finally((res) => {
-          this.$nuxt.$loading.finish()
-        })
-    },
-
-    getItemUnit() {
-      this.$nuxt.$loading.start()
-      this.$axios
-        .get(`/api/inventory/item-units`, {
-          params: {
-            type: 'Item Category',
-          },
-        })
-        .then((res) => {
-          this.itemUnit = res.data.data.simple
-        })
-        .catch((err) => {
-          this.$swal({
-            type: 'error',
-            title: 'Error',
-            text: err.response.data.message,
-          })
-        })
-        .finally((res) => {
-          this.$nuxt.$loading.finish()
-        })
-    },
-
-    getAccounts() {
-      this.$nuxt.$loading.start()
-      this.$axios
-        .get(`/api/financial/accounts`, {
+        const resAccount = await this.$axios.get(`/api/financial/accounts`, {
           params: {
             type: 'All',
           },
         })
-        .then((res) => {
-          this.itemAccounts = res.data.data.rows
-        })
-        .catch((err) => {
-          this.$swal({
-            type: 'error',
-            title: 'Error',
-            text: err.response.data.message,
-          })
-        })
-        .finally((res) => {
-          this.$nuxt.$loading.finish()
-        })
-    },
 
-    getContact() {
-      this.$nuxt.$loading.start()
-      const vm = this
-      this.$axios
-        .get(`/api/bp/contacts`, {
+        const resContact = await this.$axios.get(`/api/bp/contacts`, {
           params: {
-            type: vm.$route.query.type,
+            type: this.$route.query.type,
           },
         })
-        .then((res) => {
-          this.itemContact = res.data.data.rows
-        })
-        .catch((err) => {
-          this.$swal({
-            type: 'error',
-            title: 'Error',
-            text: err.response.data.message,
-          })
-        })
-        .finally((res) => {
-          this.$nuxt.$loading.finish()
-        })
-    },
 
-    getPaymentTerms() {
-      this.$nuxt.$loading.start()
-      this.$axios
-        .get(`/api/financial/payment-terms`, {
+        const resPaymentTerm = await this.$axios.get(
+          `/api/financial/payment-terms`,
+          {
+            params: {
+              type: 'All',
+            },
+          }
+        )
+
+        const resTax = await this.$axios.get(`/api/financial/taxes`, {
           params: {
             type: 'All',
           },
         })
-        .then((res) => {
-          this.itemPaymentTerm = res.data.data.auto_complete
-        })
-        .catch((err) => {
-          this.$swal({
-            type: 'error',
-            title: 'Error',
-            text: err.response.data.message,
-          })
-        })
-        .finally((res) => {
-          this.$nuxt.$loading.finish()
-        })
-    },
 
-    getTax() {
-      // this.$refs.uploadField.getFiles()
-      this.$nuxt.$loading.start()
-      this.$axios
-        .get(`/api/financial/taxes`, {
+        const resEmployee = await this.$axios.get(`/api/payroll/employees`, {
           params: {
             type: 'All',
           },
         })
-        .then((res) => {
-          this.$auth.$storage.setLocalStorage('tax', res.data.data.simple)
-          this.$auth.$storage.setLocalStorage('tax_row', res.data.data.rows)
+
+        this.itemCategory = resItemCategory.data.data.simple
+        this.itemUnit = resItemUnit.data.data.simple
+        this.itemAccounts = resAccount.data.data.rows
+        this.itemContact = resContact.data.data.rows
+        this.itemPaymentTerm = resPaymentTerm.data.data.auto_complete
+        this.$auth.$storage.setLocalStorage('tax', resTax.data.data.simple)
+        this.$auth.$storage.setLocalStorage('tax_row', resTax.data.data.rows)
+        this.$auth.$storage.setLocalStorage(
+          'salesPerson',
+          resEmployee.data.data.rows
+        )
+        this.itemSalesPersons = resEmployee.data.data.rows
+      } catch (err) {
+        this.$swal({
+          type: 'error',
+          title: 'Error',
+          text: err.response.data.error,
         })
-        .catch((err) => {
-          this.$swal({
-            type: 'error',
-            title: 'Error',
-            text: err.response.data.message,
-          })
-        })
-        .finally((res) => {
-          this.$nuxt.$loading.finish()
-        })
+      }
     },
 
     changePaymentTerm() {
@@ -960,12 +871,13 @@ export default {
     changeContact() {
       const contact = this.form.contact_id
       this.form.contact_id = contact.id
-      this.form.contact_address = this.form.contact_address
-        ? this.form.contact_address
-        : contact.address
-      this.form.shipping_address = this.form.shipping_address
-        ? this.form.shipping_address
-        : contact.shipping_address
+      this.form.contact_address = contact.address
+        ? contact.address
+        : this.form.contact_address
+
+      this.form.shipping_address = contact.shipping_address
+        ? contact.shipping_address
+        : this.form.shipping_address
     },
 
     checkDocument() {
@@ -979,6 +891,7 @@ export default {
       }
     },
 
+    // Getting the data from the child component and adding it to the form object.
     returnData(document) {
       const vm = this
       const details = {}

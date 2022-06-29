@@ -85,7 +85,7 @@
 
 <script>
 export default {
-  name: 'Reconcile',
+  name: 'ReconcileList',
   data() {
     return {
       totalData: 0,

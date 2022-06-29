@@ -278,6 +278,8 @@ export default {
           this.itemSearch = res.data.filter
           this.form = Object.assign({}, res.data.data.form)
           this.defaultItem = Object.assign({}, res.data.data.form)
+          this.$refs.formData.setItemGender(res.data.data.itemGender)
+          this.$refs.formData.setPaymentMethod(res.data.data.paymentMethod)
         })
         .catch((err) => {
           this.loading = false

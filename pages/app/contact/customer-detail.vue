@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: "customer-detail",
+  name: "CustomerDetail",
 
   activated() {
     this.$nuxt.$emit('extensionSetting', {

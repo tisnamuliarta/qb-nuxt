@@ -2,8 +2,10 @@
   <div>
     <LazyDocumentDialogForm
       ref="dialogForm"
-      url="/api/documents"
-      form-type="PP"
+      url="/api/transactions"
+      form-url="/app/form/purchase/payment"
+      form-type="PY"
+      form-type-prefix="PP"
       dialog-title="Outgoing Payment"
       @getDataFromApi="getDataFromApi"
     ></LazyDocumentDialogForm>

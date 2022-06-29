@@ -4,11 +4,38 @@
 
 <script>
 import { HotTable } from '@handsontable/vue'
-import { registerAllModules } from 'handsontable/registry'
+import {
+  registerCellType,
+  DropdownCellType,
+  NumericCellType,
+  CheckboxCellType,
+  HandsontableCellType,
+} from 'handsontable/cellTypes'
+
+import {
+  registerPlugin,
+  ManualColumnResize,
+  CopyPaste,
+  PersistentState,
+  HiddenColumns,
+  HiddenRows,
+  DropdownMenu ,
+} from 'handsontable/plugins'
 
 import 'handsontable/dist/handsontable.full.css'
 
-registerAllModules()
+// register imported cell types and plugins
+registerCellType(DropdownCellType)
+registerCellType(HandsontableCellType)
+registerCellType(NumericCellType)
+registerCellType(CheckboxCellType)
+
+registerPlugin(ManualColumnResize)
+registerPlugin(CopyPaste)
+registerPlugin(PersistentState)
+registerPlugin(HiddenColumns)
+registerPlugin(HiddenRows)
+registerPlugin(DropdownMenu)
 
 export default {
   name: 'PermissionList',
@@ -46,19 +73,13 @@ export default {
         currentRowClassName: 'currentRow',
         currentColClassName: 'currentCol',
         startRows: 0,
-        manualColumnFreeze: true,
         currData: {},
         rowHeaders: true,
         manualColumnResize: true,
-        manualRowResize: true,
-        filters: true,
-        autoRowSize: false,
-        autoColumnSize: false,
         viewportRowRenderingOffset: 1000,
         viewportColumnRenderingOffset: 100,
         colWidths: 80,
         dropdownMenu: true,
-        columnSorting: true,
         persistentState: true,
         width: '100%',
         stretchH: 'all',

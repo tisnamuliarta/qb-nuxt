@@ -2,11 +2,11 @@
   <div>
     <LazyDocumentDialogForm
       ref="dialogForm"
-      url="/api/documents"
-      form-url="/app/form/purchase/receipt"
-      form-type="GR"
-      form-type-prefix="GR"
-      dialog-title="Goods Receipt Purchase Order"
+      url="/api/transactions"
+      form-url="/app/form/accounting/transfer"
+      form-type="CE"
+      form-type-prefix="TF"
+      dialog-title="Transfer"
       @getDataFromApi="getDataFromApi"
     ></LazyDocumentDialogForm>
   </div>
@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: 'SalesQuotation',
+  name: 'BankTransfer',
 
   // activated() {
   //   this.$refs.dialogForm.getDataFromApi()
@@ -22,7 +22,7 @@ export default {
 
   head() {
     return {
-      title: 'Goods Receipt',
+      title: 'Transfer',
     }
   },
 

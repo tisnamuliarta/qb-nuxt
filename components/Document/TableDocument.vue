@@ -35,6 +35,7 @@
             new-data-text="New Transactions"
             @emitData="emitData"
             @newData="newData"
+            @getDataFromApi="getDataFromApi"
           />
         </template>
         <template #[`item.document_number`]="{ item }">
@@ -52,7 +53,7 @@
 
         <template #[`item.balance_due`]="{ item }">
           {{
-            form.default_currency_symbol +
+            item.currency.currency_code +
             ' ' +
             $formatter.formatPrice(item.balance_due)
           }}
@@ -60,7 +61,7 @@
 
         <template #[`item.amount`]="{ item }">
           {{
-            form.default_currency_symbol +
+            item.currency.currency_code +
             ' ' +
             $formatter.formatPrice(item.amount)
           }}

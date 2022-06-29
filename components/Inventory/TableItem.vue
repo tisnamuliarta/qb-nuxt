@@ -97,7 +97,6 @@
     </v-flex>
 
     <LazyInventoryFormItem
-      v-if="!viewData"
       ref="formData"
       :form-data="form"
       :form-title="formTitle"

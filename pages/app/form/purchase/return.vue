@@ -3,7 +3,9 @@
     <LazyDocumentDialogForm
       ref="dialogForm"
       url="/api/documents"
-      form-type="GR"
+      form-url="/app/form/purchase/return"
+      form-type="GN"
+      form-type-prefix="GN"
       dialog-title="Goods Return"
       @getDataFromApi="getDataFromApi"
     ></LazyDocumentDialogForm>

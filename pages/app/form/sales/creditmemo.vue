@@ -3,7 +3,9 @@
     <LazyDocumentDialogForm
       ref="dialogForm"
       url="/api/documents"
-      form-type="APCM"
+      form-url="/app/form/sales/creditmemo"
+      form-type="CN"
+      form-type-prefix="CN"
       dialog-title="AR Credit Memo"
       @getDataFromApi="getDataFromApi"
     ></LazyDocumentDialogForm>

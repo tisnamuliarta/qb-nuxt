@@ -170,6 +170,16 @@ export default {
   },
 
   methods: {
+    emitData(data) {
+      this.documentStatus = data.documentStatus
+      this.itemSearch = data.itemSearch
+      this.searchStatus = data.searchStatus
+      this.searchItem = data.searchItem
+      this.search = data.search
+      this.filters = data.filters
+      this.getDataFromApi()
+    },
+
     getDataFromApi() {
       this.loading = true
       const vm = this

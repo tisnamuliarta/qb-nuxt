@@ -77,7 +77,8 @@ export default {
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module',
     '@nuxtjs/vuetify',
-    // 'nuxt-webpack-optimisations',
+    'nuxt-compress',
+    'nuxt-webpack-optimisations',
     // '@nuxtjs/web-vitals',
     // '@nuxt/image',
     // '@nuxtjs/google-fonts',
