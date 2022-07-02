@@ -80,6 +80,7 @@ export default {
     '@nuxtjs/vuetify',
     'nuxt-compress',
     'nuxt-webpack-optimisations',
+    '@nuxtjs/moment',
     // '@nuxtjs/web-vitals',
     // '@nuxt/image',
     // '@nuxtjs/google-fonts',

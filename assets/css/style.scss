@@ -514,5 +514,12 @@ body {
 }
 
 .tabulator-edit-list {
-  font-family: "Roboto", sans-serif !important;
+  font-family: 'Roboto', sans-serif !important;
+}
+
+.theme--light.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active),
+.theme--light.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active) > .v-icon,
+.theme--light.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active) > .v-btn,
+.theme--light.v-tabs > .v-tabs-bar .v-tab--disabled {
+  color: rgba(0, 0, 0, 0.8) !important;
 }

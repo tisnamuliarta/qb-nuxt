@@ -1,33 +1,5 @@
 <template>
   <v-app-bar flat color="white" class="rounded" dense elevation="0">
-    <!--    <v-toolbar-title class="hidden-xs-only subtitle-1 font-weight-bold">{{-->
-    <!--      title-->
-    <!--    }}</v-toolbar-title>-->
-    <!--    <v-spacer></v-spacer>-->
-
-    <!--    <v-dialog v-model="dialogFilter" persistent max-width="400px">-->
-    <!--      <v-card>-->
-    <!--        <v-card-title>Filter Form</v-card-title>-->
-    <!--        <v-card-text>-->
-    <!--          <TableFilter-->
-    <!--            class="hidden-md-and-up"-->
-    <!--            :document-status="documentStatus"-->
-    <!--            :search-status="searchStatusData"-->
-    <!--            :item-search="itemSearch"-->
-    <!--            :search-item="searchItemData"-->
-    <!--            :search="searchData"-->
-    <!--            @passDataToToolbar="passDataToToolbar"-->
-    <!--          ></TableFilter>-->
-    <!--        </v-card-text>-->
-    <!--        <v-card-actions>-->
-    <!--          <v-spacer></v-spacer>-->
-    <!--          <v-btn color="red darken-1" text small @click="dialogFilter = false">-->
-    <!--            Close-->
-    <!--          </v-btn>-->
-    <!--        </v-card-actions>-->
-    <!--      </v-card>-->
-    <!--    </v-dialog>-->
-
     <v-btn v-if="showBatchAction" icon class="mr-0 pr-0">
       <v-icon>mdi-arrow-down-left</v-icon>
     </v-btn>
@@ -41,16 +13,15 @@
       <template #activator="{ on, attrs }">
         <v-btn
           small
-          color="black"
+          color="green"
           class="ml-0 mr-2"
           dark
-          outlined
           elevation="0"
           v-bind="attrs"
           v-on="on"
         >
           Batch Action
-          <v-btn color="black" class="" dark small icon>
+          <v-btn dark small icon>
             <v-icon>mdi-menu-down</v-icon>
           </v-btn>
         </v-btn>
@@ -207,41 +178,15 @@
       <v-icon>mdi-plus-box</v-icon>
     </v-btn>
 
-    <v-menu
+    <v-btn
       v-if="showNewDataMultiple"
-      transition="slide-y-transition"
-      offset-y
-      bottom
+      small
+      color="primary"
+      elevation="0"
+      @click="newData"
     >
-      <template #activator="{ on, attrs }">
-        <v-btn small color="primary" elevation="0" v-bind="attrs" v-on="on">
-          New Transactions
-          <v-btn dark small icon>
-            <v-icon>mdi-menu-down</v-icon>
-          </v-btn>
-        </v-btn>
-      </template>
-      <v-list dense>
-        <v-list-item
-          v-for="(value, i) in newDataMultipleItem"
-          :key="i"
-          dense
-          @click="
-            $router.push({
-              path: value.route,
-              query: {
-                document: 0,
-                type: value.type,
-              },
-            })
-          "
-        >
-          <v-list-item-content>
-            <v-list-item-title>{{ value.text }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-menu>
+      New Transactions
+    </v-btn>
 
     <v-btn
       class="ml-1 mr-1 d-none d-sm-flex"
@@ -309,7 +254,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'MainToolbar',
   props: {
@@ -318,6 +262,14 @@ export default {
       default: '',
     },
     doctype: {
+      type: String,
+      default: '',
+    },
+    newDataRoute: {
+      type: String,
+      default: '',
+    },
+    newDataType: {
       type: String,
       default: '',
     },

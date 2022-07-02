@@ -1,62 +1,6 @@
 <template>
   <div>
-    <DocumentTableDocument
-      ref="tableDocument"
-      type-document="P"
-      form-url="/app/purchasereturn/form"
-      table-title="Purchase Transactions"
-      :item-multiple="itemMultiple"
-      :header-table="[
-        { text: 'Number', value: 'document_number', cellClass: 'disable-wrap' },
-        { text: 'Customer', value: 'contact_name', cellClass: 'disable-wrap' },
-        {
-          text: 'Date',
-          value: 'issued_at',
-          cellClass: 'disable-wrap',
-          sortable: false,
-          filterable: false,
-        },
-        {
-          text: 'Due Date',
-          value: 'due_at',
-          cellClass: 'disable-wrap',
-          sortable: false,
-          filterable: false,
-        },
-        {
-          text: 'Status',
-          value: 'status',
-          align: 'left',
-          cellClass: 'disable-wrap',
-          sortable: false,
-          filterable: false,
-        },
-        {
-          text: 'Balance Due',
-          value: 'balance_due',
-          align: 'right',
-          cellClass: 'disable-wrap',
-          sortable: false,
-          filterable: false,
-        },
-        {
-          text: 'Total',
-          value: 'amount',
-          align: 'right',
-          cellClass: 'disable-wrap',
-          sortable: false,
-          filterable: false,
-        },
-        {
-          text: 'Actions',
-          value: 'actions',
-          align: 'center',
-          cellClass: 'disable-wrap',
-          sortable: false,
-          filterable: false,
-        },
-      ]"
-    ></DocumentTableDocument>
+    <NuxtChild keep-alive :keep-alive-props="{ exclude: ['modal'] }" />
   </div>
 </template>
 
@@ -64,9 +8,51 @@
 export default {
   name: 'AllPurchase',
 
-  data() {
+  head() {
     return {
-      itemMultiple: [
+      title: 'All Purchase',
+    }
+  },
+
+  activated() {
+    this.$nuxt.$emit('extensionSetting', {
+      tabs: [
+        {
+          title: this.$t('Purchase Overview'),
+          route: '/app/purchase/list/',
+        },
+        {
+          title: this.$t('Purchase Quotations'),
+          route: '/app/purchase/list/quotation',
+        },
+        {
+          title: this.$t('Purchase Order'),
+          route: '/app/purchase/list/purchaseorder',
+        },
+        {
+          title: this.$t('Goods Receipt PO'),
+          route: '/app/purchase/list/receipt',
+        },
+        {
+          title: this.$t('A/P Invoice'),
+          route: '/app/purchase/list/invoice',
+        },
+        {
+          title: this.$t('Outgoing Payment'),
+          route: '/app/purchase/list/payment',
+        },
+        {
+          title: this.$t('Goods Return'),
+          route: '/app/purchase/list/return',
+        },
+        {
+          title: this.$t('A/P Credit Memo'),
+          route: '/app/purchase/list/creditmemo',
+        },
+      ],
+      show: true,
+      showBtn: false,
+      itemBtn: [
         {
           text: this.$t('Purchase Quotations'),
           type: 'PQ',
@@ -103,19 +89,6 @@ export default {
           route: '/app/form/purchase/return',
         },
       ],
-    }
-  },
-
-  head() {
-    return {
-      title: 'All Sales',
-    }
-  },
-
-  activated() {
-    this.$nuxt.$emit('extensionSetting', {
-      show: false,
-      showBtn: false,
     })
   },
 

@@ -22,7 +22,12 @@
       <LazyLayoutToolBar ref="toolbar" @openAction="openAction" />
 
       <template v-if="showExtension" #extension>
-        <v-tabs align-with-title>
+        <v-tabs
+          v-model="activeExtension"
+          align-with-title
+          color="black"
+          slider-size="4"
+        >
           <v-tab
             v-for="(item, key) in extensionTabs"
             :key="key"
@@ -35,7 +40,7 @@
         <v-spacer />
 
         <v-menu
-          v-if="showExtensionButon"
+          v-if="showExtensionButton"
           transition="slide-y-transition"
           offset-y
           bottom
@@ -203,9 +208,10 @@ export default {
       loadImage: false,
       companyName: '',
       showExtension: false,
-      showExtensionButon: false,
+      showExtensionButton: false,
       extensionMenu: [],
       extensionTabs: '',
+      activeExtension: 0,
     }
   },
 
@@ -230,6 +236,7 @@ export default {
     this.$nuxt.$on('openSetting', ($event) => this.openSetting($event))
     this.$nuxt.$on('showLoading', ($event) => this.showLoading($event))
     this.$nuxt.$on('hideLoading', ($event) => this.hideLoading($event))
+    this.$nuxt.$on('extensionActive', ($event) => this.extensionActive($event))
     this.$nuxt.$on('extensionSetting', ($event) =>
       this.extensionSetting($event)
     )
@@ -275,9 +282,13 @@ export default {
 
     extensionSetting(data) {
       this.showExtension = data.show
-      this.showExtensionButon = data.showBtn
+      this.showExtensionButton = data.showBtn
       this.extensionTabs = data.tabs
-      this.extensionMenu = data.item
+      this.extensionMenu = data.itemBtn
+    },
+
+    extensionActive(data) {
+      this.activeExtension = parseInt(data.active)
     },
 
     changeDrawer() {

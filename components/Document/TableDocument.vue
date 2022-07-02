@@ -252,13 +252,13 @@ export default {
         case 'PO':
           return '/app/form/purchase/order'
         case 'PI':
-          return  '/app/form/purchase/invoice'
+          return '/app/form/purchase/invoice'
         case 'PP':
           return '/app/form/purchase/payment'
         case 'APCM':
           return '/app/form/purchase/creditmemo'
         case 'GR':
-          return  '/app/form/purchase/return'
+          return '/app/form/purchase/return'
       }
     },
 
