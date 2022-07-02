@@ -42,7 +42,7 @@
     "nuxt-sweetalert2": "^1.0.0",
     "tabulator-tables": "^5.2.7",
     "v-currency-field": "^3.1.1",
-    "vue": "^2.6.14",
+    "vue": "^3.2.37",
     "vue-echarts": "^6.1.0",
     "vue-gates": "^2.1.2",
     "vue-server-renderer": "^2.6.14",
