@@ -64,6 +64,7 @@ export default {
     { src: '~/plugins/vue-gates.js' },
     { src: '~/plugins/vuetify-money.js' },
     { src: '~/plugins/axios-host.js' },
+    // { src: '~/plugins/vue-mask.js' },
   ],
   /*
    ** Auto import components
@@ -83,6 +84,13 @@ export default {
     // '@nuxt/image',
     // '@nuxtjs/google-fonts',
   ],
+
+  // webpackOptimisations: {
+  //   // hard source is the riskiest, if you have issues don't enable it
+  //   // hardSourcePlugin: process.env.NODE_ENV === 'development',
+  //   // parallelPlugin: process.env.NODE_ENV === 'development',
+  //   // measure: true,
+  // },
 
   // googleFonts: {
   //   families: {

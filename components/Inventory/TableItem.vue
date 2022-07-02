@@ -11,7 +11,7 @@
           :options.sync="options"
           :server-items-length="totalData"
           :loading="loading"
-          class="elevation-1"
+          class="elevation-0"
           item-key="id"
           calculate-widths
           fixed-header

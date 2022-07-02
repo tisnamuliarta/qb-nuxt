@@ -109,7 +109,15 @@
           ></v-textarea>
         </v-col>
 
-        <v-col cols="12" md="8"></v-col>
+        <v-col cols="12" md="4">
+          <v-text-field
+            v-model="form.reference_no"
+            label="No Contract"
+            outlined
+            dense
+            hide-details="auto"
+          ></v-text-field>
+        </v-col>
 
         <v-col cols="12" md="8">
           <v-combobox
@@ -617,23 +625,27 @@ export default {
     },
 
     calcTotal(data) {
-      this.form.discount_per_line = data.discountAmount
-      this.form.sub_total = data.subTotal
-      this.form.tax_details = this.reduceArrayTax(data.taxDetail)
-      this.taxDetails = data.taxDetail
-      this.form.amount = data.amount + this.tempTotalTax
-      this.form.balance_due = this.form.amount
-      this.subTotalMinDiscount =
-        parseFloat(this.form.sub_total) -
-        parseFloat(this.form.discount_per_line)
-      // this.taxAmount = this.tempTotalTax
+      try {
+        this.form.discount_per_line = data.discountAmount
+        this.form.sub_total = data.subTotal
+        this.form.tax_details = this.reduceArrayTax(data.taxDetail)
+        this.taxDetails = data.taxDetail
+        this.form.amount = data.amount + this.tempTotalTax
+        this.form.balance_due = this.form.amount
+        this.subTotalMinDiscount =
+          parseFloat(this.form.sub_total) -
+          parseFloat(this.form.discount_per_line)
+        // this.taxAmount = this.tempTotalTax
 
-      if (this.form.sub_total === 0) {
-        this.form.discount_rate = 0
-        this.form.discount_amount = 0
+        if (this.form.sub_total === 0) {
+          this.form.discount_rate = 0
+          this.form.discount_amount = 0
+        }
+
+        this.changeCalculation(data)
+      } catch (e) {
+        console.log(e)
       }
-
-      this.changeCalculation(data)
     },
 
     // Calculating the tax amount, discount amount, total amount, balance due, etc.
@@ -865,7 +877,31 @@ export default {
     changePaymentTerm() {
       this.$axios
         .get(`/api/financial/payment-terms/` + this.form.payment_term_id)
-        .then((res) => {})
+        .then((res) => {
+          // eslint-disable-next-line no-extend-native
+          Date.prototype.addDays = function (days) {
+            const date = new Date(this.valueOf())
+            date.setDate(date.getDate() + days)
+            return date
+          }
+          // Add 7 Days
+          const date = new Date(this.form.issued_at)
+          this.form.due_at = this.formatDate(
+            date.addDays(res.data.data.rows.value)
+          )
+        })
+    },
+
+    formatDate(date) {
+      const d = new Date(date)
+      let month = '' + (d.getMonth() + 1)
+      let day = '' + d.getDate()
+      const year = d.getFullYear()
+
+      if (month.length < 2) month = '0' + month
+      if (day.length < 2) day = '0' + day
+
+      return [year, month, day].join('-')
     },
 
     changeContact() {

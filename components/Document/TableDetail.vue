@@ -35,6 +35,7 @@ import {
   HiddenColumns,
   HiddenRows,
   DropdownMenu ,
+  AutoColumnSize,
 } from 'handsontable/plugins'
 
 import { registerRenderer } from 'handsontable/renderers'
@@ -53,6 +54,7 @@ registerPlugin(PersistentState)
 registerPlugin(HiddenColumns)
 registerPlugin(HiddenRows)
 registerPlugin(DropdownMenu)
+registerPlugin(AutoColumnSize)
 
 registerRenderer(
   'ButtonAddRenderer',

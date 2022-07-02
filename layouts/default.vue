@@ -256,10 +256,10 @@ export default {
       this.overlay = false
     },
 
-    async openAction(data) {
+    openAction(data) {
       if (data.item.route) {
         this.overlay = true
-        await this.$router.push({
+        this.$router.push({
           path: data.item.route,
           query: {
             document: 0,

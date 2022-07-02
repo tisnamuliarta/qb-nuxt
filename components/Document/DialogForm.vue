@@ -95,8 +95,17 @@ export default {
 
   activated() {
     setTimeout(() => {
-      this.getDataFromApi()
       this.$refs.dialogForm.openDialog()
+      this.$refs.dialogForm.openDialog()
+      this.getDataFromApi()
+    }, 300)
+  },
+
+  mounted() {
+    setTimeout(() => {
+      this.$refs.dialogForm.openDialog()
+      this.$refs.dialogForm.openDialog()
+      this.getDataFromApi()
     }, 300)
   },
 
