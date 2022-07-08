@@ -44,6 +44,12 @@
           </a>
         </template>
 
+        <template #[`item.transaction_no`]="{ item }">
+          <a @click="editItem(item)">
+            <strong v-text="item.transaction_no"></strong>
+          </a>
+        </template>
+
         <template #[`item.status`]="{ item }">
           <v-btn text small>
             <v-icon :color="statusColor(item)" left> mdi-circle </v-icon>
@@ -52,19 +58,15 @@
         </template>
 
         <template #[`item.balance_due`]="{ item }">
-          {{
-            item.currency.currency_code +
-            ' ' +
-            $formatter.formatPrice(item.balance_due)
-          }}
+          {{ $formatter.formatPrice(item.balance_due) }}
         </template>
 
         <template #[`item.amount`]="{ item }">
-          {{
-            item.currency.currency_code +
-            ' ' +
-            $formatter.formatPrice(item.amount)
-          }}
+          {{ $formatter.formatPrice(item.amount) }}
+        </template>
+
+        <template #[`item.main_account_amount`]="{ item }">
+          {{ $formatter.formatPrice(item.main_account_amount) }}
         </template>
 
         <template #[`item.actions`]="{ item }">
@@ -121,6 +123,10 @@ export default {
     btnTitle: {
       type: String,
       default: 'New Transaction',
+    },
+    tableUrl: {
+      type: String,
+      default: '/api/documents',
     },
     items: {
       type: Array,
@@ -224,13 +230,24 @@ export default {
     },
 
     editItem(item) {
-      this.$router.push({
-        path: this.mappingAction(item.type),
-        query: {
-          document: item.id,
-          type: item.type,
-        },
-      })
+      if (item.transaction_type) {
+        this.$router.push({
+          path: this.mappingAction(item.transaction_type),
+          query: {
+            document: item.id,
+            type: item.transaction_type,
+          },
+        })
+      } else {
+        this.$router.push({
+          path: this.mappingAction(item.type),
+          query: {
+            document: item.id,
+            type: item.type,
+          },
+        })
+      }
+
     },
 
     mappingAction(type) {
@@ -241,23 +258,27 @@ export default {
           return '/app/form/sales/order'
         case 'SD':
           return '/app/form/sales/delivery'
-        case 'SI':
+        case 'IN':
           return '/app/form/sales/invoice'
-        case 'SP':
+        case 'RC':
           return '/app/form/sales/payment'
-        case 'ARCM':
+        case 'CN':
           return '/app/form/sales/creditmemo'
         case 'SR':
           return '/app/form/sales/return'
+        case 'PQ':
+          return '/app/form/purchase/quote'
         case 'PO':
           return '/app/form/purchase/order'
-        case 'PI':
-          return '/app/form/purchase/invoice'
-        case 'PP':
-          return '/app/form/purchase/payment'
-        case 'APCM':
-          return '/app/form/purchase/creditmemo'
         case 'GR':
+          return '/app/form/purchase/receipt'
+        case 'BL':
+          return '/app/form/purchase/invoice'
+        case 'PY':
+          return '/app/form/purchase/payment'
+        case 'DN':
+          return '/app/form/purchase/creditmemo'
+        case 'GN':
           return '/app/form/purchase/return'
       }
     },
@@ -297,7 +318,7 @@ export default {
       this.loading = true
       const vm = this
       this.$axios
-        .get(`/api/documents`, {
+        .get(this.tableUrl, {
           params: {
             options: vm.options,
             searchItem: vm.searchItem,

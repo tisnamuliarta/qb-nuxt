@@ -6,6 +6,7 @@
     persistent
     transition="dialog-top-transition"
     scrollable
+    no-click-animation
   >
     <v-card tile>
       <v-card-title>

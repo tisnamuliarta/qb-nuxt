@@ -185,7 +185,7 @@
       elevation="0"
       @click="newData"
     >
-      New Transactions
+      {{ $t('New Transactions') }}
     </v-btn>
 
     <v-btn

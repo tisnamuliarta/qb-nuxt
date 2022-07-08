@@ -46,6 +46,12 @@ export default {
 
   loading: '~/components/Common/LoadingBar.vue',
 
+  loadingIndicator: {
+    name: 'three-bounce',
+    color: 'green',
+    background: 'white'
+  },
+
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
   /*
@@ -62,6 +68,7 @@ export default {
     { src: '~/plugins/formatter.js' },
     { src: '~/plugins/dragable.js' },
     { src: '~/plugins/vue-gates.js' },
+    // { src: '~/plugins/vue-graph.js' },
     { src: '~/plugins/vuetify-money.js' },
     { src: '~/plugins/axios-host.js' },
     // { src: '~/plugins/vue-mask.js' },
@@ -81,30 +88,20 @@ export default {
     'nuxt-compress',
     'nuxt-webpack-optimisations',
     '@nuxtjs/moment',
+    // 'nuxt-vite',
     // '@nuxtjs/web-vitals',
     // '@nuxt/image',
     // '@nuxtjs/google-fonts',
   ],
 
-  // webpackOptimisations: {
-  //   // hard source is the riskiest, if you have issues don't enable it
-  //   // hardSourcePlugin: process.env.NODE_ENV === 'development',
-  //   // parallelPlugin: process.env.NODE_ENV === 'development',
-  //   // measure: true,
-  // },
-
-  // googleFonts: {
-  //   families: {
-  //     Roboto: [300, 400, 500],
-  //   },
-  //   display: 'swap',
-  // },
-
-  // webVitals: {
-  //   // provider: '', // auto detectd
-  //   debug: false,
-  //   disabled: false
-  // },
+  webpackOptimisations: {
+    // hard source is the riskiest, if you have issues don't enable it
+    features: {
+      hardSourcePlugin: process.env.NODE_ENV === 'development',
+      parallelPlugin: process.env.NODE_ENV === 'development',
+    },
+    measure: true,
+  },
 
   /*
    ** Nuxt.js modules
@@ -148,21 +145,6 @@ export default {
       prefix: process.env.AUTH_PREFIX,
     },
     strategies: {
-      laravelSanctum: {
-        provider: 'laravel/sanctum',
-        url: '/',
-        endpoints: {
-          login: {
-            url: '/api/auth/login',
-          },
-          logout: {
-            url: '/api/auth/logout',
-          },
-          user: {
-            url: '/api/auth/user',
-          },
-        },
-      },
       local: {
         scheme: 'refresh',
         token: {
@@ -253,5 +235,11 @@ export default {
    ** Build configuration
    ** See https://nuxtjs.org/api/configuration-build/
    */
-  build: {},
+   build: {
+    // analyze: true,
+    // parallel: true,
+    // hardSource: true,
+    // cache: true,
+    // transpile: ['@visable-vue', 'vee-validate/dist/rules', 'v-tooltip'],
+  },
 }

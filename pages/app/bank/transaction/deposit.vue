@@ -2,8 +2,8 @@
   <div>
     <DocumentTableDocument
       ref="tableDocument"
-      type-document="BL"
-      form-url="/app/form/purchase/invoice"
+      type-document="CE"
+      form-url="/app/form/purchase/payment"
       table-url="/api/transactions"
       :header-table="[
         { text: 'Number', value: 'transaction_no', cellClass: 'disable-wrap' },
@@ -65,13 +65,13 @@ export default {
 
   head() {
     return {
-      title: this.$t('A/P Invoice'),
+      title: this.$t('Outgoing Payment'),
     }
   },
 
   activated() {
     this.$nuxt.$emit('extensionActive', {
-      active: 3,
+      active:1,
     })
   },
 

@@ -32,69 +32,28 @@
         </v-col>
 
         <v-col cols="12" md="2" sm="4">
-          <v-menu
-            ref="menu"
-            v-model="menu"
-            :close-on-content-click="false"
-            transition="scale-transition"
-            offset-y
-            min-width="290px"
-          >
-            <template #activator="{ on, attrs }">
-              <v-text-field
-                v-model="form.issued_at"
-                label="Transaction Date"
-                prepend-icon="mdi-calendar"
-                readonly
-                persistent-hint
-                outlined
-                dense
-                hide-details="auto"
-                v-bind="attrs"
-                v-on="on"
-              ></v-text-field>
-            </template>
-
-            <v-date-picker
-              v-model="form.issued_at"
-              no-title
-              @input="menu = false"
-            >
-            </v-date-picker>
-          </v-menu>
+          <v-text-field
+            v-model="form.transaction_date"
+            label="Transaction Date"
+            persistent-hint
+            outlined
+            dense
+            hide-details="auto"
+            type="date"
+            @change="changePaymentTerm"
+          ></v-text-field>
         </v-col>
 
         <v-col cols="12" md="2" sm="4">
-          <v-menu
-            ref="menu3"
-            v-model="menu3"
-            :close-on-content-click="false"
-            transition="scale-transition"
-            offset-y
-            min-width="290px"
-          >
-            <template #activator="{ on, attrs }">
-              <v-text-field
-                v-model="form.due_at"
-                label="Due Date"
-                prepend-icon="mdi-calendar"
-                readonly
-                persistent-hint
-                outlined
-                dense
-                hide-details="auto"
-                v-bind="attrs"
-                v-on="on"
-              ></v-text-field>
-            </template>
-
-            <v-date-picker
-              v-model="form.due_at"
-              no-title
-              @input="menu3 = false"
-            >
-            </v-date-picker>
-          </v-menu>
+          <v-text-field
+            v-model="form.due_date"
+            label="Due Date"
+            persistent-hint
+            outlined
+            dense
+            type="date"
+            hide-details="auto"
+          ></v-text-field>
         </v-col>
         <!-- <v-col cols="12" md="2"></v-col> -->
 
@@ -366,7 +325,7 @@
             <v-col cols="12" md="4" class="text-right pa-1">
               <span class="font-weight-bold subtitle-1">
                 {{
-                  isNaN(form.amount) ? 0 : $formatter.formatPrice(form.amount)
+                  isNaN(form.main_account_amount) ? 0 : $formatter.formatPrice(form.main_account_amount)
                 }}
               </span>
             </v-col>
@@ -614,6 +573,12 @@ export default {
     },
   },
 
+  activated() {
+    this.$nextTick(() => {
+      this.$nuxt.$loading.start()
+    })
+  },
+
   // The above code is calling the methods that are defined in the methods section of the Vue instance.
   mounted() {
     this.getMasterData()
@@ -630,8 +595,8 @@ export default {
         this.form.sub_total = data.subTotal
         this.form.tax_details = this.reduceArrayTax(data.taxDetail)
         this.taxDetails = data.taxDetail
-        this.form.amount = data.amount + this.tempTotalTax
-        this.form.balance_due = this.form.amount
+        this.form.main_account_amount = data.amount + this.tempTotalTax
+        this.form.balance_due = this.form.main_account_amount
         this.subTotalMinDiscount =
           parseFloat(this.form.sub_total) -
           parseFloat(this.form.discount_per_line)
@@ -688,14 +653,14 @@ export default {
       }
 
       // calculate total amount
-      this.form.amount =
+      this.form.main_account_amount =
         parseFloat(this.form.sub_total) -
         parseFloat(this.form.discount_per_line) -
         parseFloat(this.form.discount_amount) +
         parseFloat(this.taxAmount)
 
       // calculate amount before tax for tax withholding
-      this.amountBeforeTax = this.form.amount - this.taxAmount
+      this.amountBeforeTax = this.form.main_account_amount - this.taxAmount
 
       // calculate tax withholding
       if (this.form.withholding_type === 'Percent') {
@@ -708,7 +673,7 @@ export default {
       }
 
       this.form.balance_due =
-        this.form.amount -
+        this.form.main_account_amount -
         this.form.deposit_amount -
         this.form.withholding_amount -
         parseFloat(this.form.shipping_fee)
@@ -777,13 +742,13 @@ export default {
           [
             {
               item_number: null,
-              description: null,
+              narration: null,
               qty: null,
               unit: null,
             },
             {
               item_number: null,
-              description: null,
+              narration: null,
               qty: null,
               unit: null,
             },
@@ -885,10 +850,11 @@ export default {
             return date
           }
           // Add 7 Days
-          const date = new Date(this.form.issued_at)
-          this.form.due_at = this.formatDate(
-            date.addDays(res.data.data.rows.value)
-          )
+          const start = this.$moment(this.form.transaction_date)
+          // const date = new Date(this.form.transaction_date)
+          this.form.due_date = start
+            .add(res.data.data.rows.value, 'days')
+            .format('YYYY-MM-DD')
         })
     },
 
@@ -936,7 +902,7 @@ export default {
         if (!vm.$refs.childDetails.checkIfEmptyRow(key)) details[key] = item
       })
 
-      this.form.items = details
+      this.form.line_items = details
       return this.form
     },
 

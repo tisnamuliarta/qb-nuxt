@@ -2,13 +2,8 @@
   <v-layout>
     <v-flex sm12>
       <div class="mt-0">
-        <!--        <v-skeleton-loader-->
-        <!--          v-show="loading"-->
-        <!--          type="table"-->
-        <!--          class="mx-auto"-->
-        <!--        >-->
-        <!--        </v-skeleton-loader>-->
         <v-data-table
+          item-key="menu_name"
           :mobile-breakpoint="0"
           :headers="headers"
           :items="allData"
@@ -23,7 +18,7 @@
           :footer-props="{ 'items-per-page-options': [20, 50, 100, -1] }"
           dense
         >
-          <template v-slot:top>
+          <template #top>
             <div class="pl-4 pt-2">
               <span class="font-weight-medium text-h6">Permissions</span>
             </div>
@@ -584,7 +579,6 @@ export default {
     },
 
     save(type = 'all', row = null) {
-      const vm = this
       const form = this.form
       const status = this.statusProcessing
 

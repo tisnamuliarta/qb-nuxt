@@ -4,10 +4,10 @@
       ref="tableDocument"
       type-document="PY"
       form-url="/app/form/purchase/payment"
-      :item-multiple="itemMultiple"
+      table-url="/api/transactions"
       :header-table="[
-        { text: 'Number', value: 'document_number', cellClass: 'disable-wrap' },
-        { text: 'Customer', value: 'contact_name', cellClass: 'disable-wrap' },
+        { text: 'Number', value: 'transaction_no', cellClass: 'disable-wrap' },
+        { text: 'Customer', value: 'contact.name', cellClass: 'disable-wrap' },
         {
           text: 'Date',
           value: 'issued_at',
@@ -40,7 +40,7 @@
         },
         {
           text: 'Total',
-          value: 'amount',
+          value: 'main_account_amount',
           align: 'right',
           cellClass: 'disable-wrap',
           sortable: false,
@@ -71,7 +71,7 @@ export default {
 
   activated() {
     this.$nuxt.$emit('extensionActive', {
-      active: 5,
+      active: 3,
     })
   },
 

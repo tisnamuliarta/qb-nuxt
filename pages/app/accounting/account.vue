@@ -34,6 +34,7 @@
             new-data-text="New Account"
             @emitData="emitData"
             @newData="newData"
+            @getDataFromApi="getDataFromApi"
           />
         </template>
         <template #[`item.id`]="{ item }">

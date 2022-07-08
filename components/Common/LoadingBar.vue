@@ -1,7 +1,11 @@
 <template>
   <div>
     <v-overlay :value="loading">
-      <v-progress-circular indeterminate size="64"></v-progress-circular>
+      <v-progress-circular
+        indeterminate
+        color="green"
+        size="64"
+      ></v-progress-circular>
     </v-overlay>
   </div>
 </template>
@@ -10,7 +14,7 @@
 export default {
   data() {
     return {
-      loading: false
+      loading: false,
     }
   },
 
@@ -21,7 +25,7 @@ export default {
 
     finish() {
       this.loading = false
-    }
-  }
+    },
+  },
 }
 </script>

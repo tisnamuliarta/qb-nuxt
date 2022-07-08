@@ -18,10 +18,6 @@ export default {
     this.$nuxt.$emit('extensionSetting', {
       tabs: [
         {
-          title: this.$t('Sales Overview'),
-          route: '/app/sales/list/',
-        },
-        {
           title: this.$t('Sales Quotations'),
           route: '/app/sales/list/quotation',
         },
@@ -36,10 +32,6 @@ export default {
         {
           title: this.$t('A/R Invoice'),
           route: '/app/sales/list/invoice',
-        },
-        {
-          title: this.$t('Incoming Payment'),
-          route: '/app/sales/list/payment',
         },
         {
           title: this.$t('Sales Return'),

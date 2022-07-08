@@ -66,36 +66,16 @@
                     <v-tab-item value="tab-1">
                       <v-row dense class="mt-2">
                         <v-col cols="12" md="5">
-                          <v-menu
-                            ref="menu3"
-                            v-model="menu3"
-                            :close-on-content-click="false"
-                            transition="scale-transition"
-                            offset-y
-                            min-width="290px"
-                          >
-                            <template #activator="{ on, attrs }">
-                              <v-text-field
-                                v-model="form.birth_date"
-                                label="Birth Date"
-                                prepend-icon="mdi-calendar"
-                                readonly
-                                persistent-hint
-                                outlined
-                                dense
-                                hide-details="auto"
-                                v-bind="attrs"
-                                v-on="on"
-                              ></v-text-field>
-                            </template>
-
-                            <v-date-picker
-                              v-model="form.birth_date"
-                              no-title
-                              @input="menu3 = false"
-                            >
-                            </v-date-picker>
-                          </v-menu>
+                          <v-text-field
+                            v-model="form.birth_date"
+                            label="Birth Date"
+                            prepend-icon="mdi-calendar"
+                            type="date"
+                            persistent-hint
+                            outlined
+                            dense
+                            hide-details="auto"
+                          ></v-text-field>
                         </v-col>
 
                         <v-col cols="12" md="5">
@@ -232,36 +212,16 @@
                     <v-tab-item value="tab-3">
                       <v-row dense class="mt-2">
                         <v-col cols="12" md="7">
-                          <v-menu
-                            ref="menu4"
-                            v-model="menu4"
-                            :close-on-content-click="false"
-                            transition="scale-transition"
-                            offset-y
-                            min-width="290px"
-                          >
-                            <template #activator="{ on, attrs }">
-                              <v-text-field
-                                v-model="form.hire_date"
-                                label="Hire Date"
-                                prepend-icon="mdi-calendar"
-                                readonly
-                                persistent-hint
-                                outlined
-                                dense
-                                hide-details="auto"
-                                v-bind="attrs"
-                                v-on="on"
-                              ></v-text-field>
-                            </template>
-
-                            <v-date-picker
-                              v-model="form.hire_date"
-                              no-title
-                              @input="menu4 = false"
-                            >
-                            </v-date-picker>
-                          </v-menu>
+                          <v-text-field
+                            v-model="form.hire_date"
+                            label="Hire Date"
+                            prepend-icon="mdi-calendar"
+                            type="date"
+                            persistent-hint
+                            outlined
+                            dense
+                            hide-details="auto"
+                          ></v-text-field>
                         </v-col>
 
                         <v-col cols="12" md="7">

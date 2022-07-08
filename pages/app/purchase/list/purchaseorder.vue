@@ -4,7 +4,6 @@
       ref="tableDocument"
       type-document="PO"
       form-url="/app/form/purchase/order"
-      :item-multiple="itemMultiple"
       :header-table="[
         { text: 'Number', value: 'document_number', cellClass: 'disable-wrap' },
         { text: 'Customer', value: 'contact_name', cellClass: 'disable-wrap' },
@@ -40,7 +39,7 @@
         },
         {
           text: 'Total',
-          value: 'amount',
+          value: 'main_account_amount',
           align: 'right',
           cellClass: 'disable-wrap',
           sortable: false,
@@ -72,7 +71,7 @@ export default {
 
   activated() {
     this.$nuxt.$emit('extensionActive', {
-      active: 2,
+      active: 1,
     })
   },
 

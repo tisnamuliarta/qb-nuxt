@@ -1,32 +1,75 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" md="3">
-        <v-card class="mx-auto">
-          <v-card-text>
-            <div class="subtitle-1">SHORTCUTS</div>
-          </v-card-text>
-          <v-card-text>
-            <v-container>
-              <v-row>
-                <v-col cols="12" sm="6">
-                  <v-btn icon>
-                    <v-icon x-large>mdi-receipt</v-icon>
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-card-text>
-        </v-card>
-      </v-col>
+      <v-col cols="12" lg="9">
+        <v-row>
+          <v-col cols="12" md="4">
+            <v-card class="mx-auto">
+              <v-card-text>
+                <div class="subtitle-1">SHORTCUTS</div>
+              </v-card-text>
+              <v-card-text>
+                <LazyChartBarChart></LazyChartBarChart>
+              </v-card-text>
+            </v-card>
+          </v-col>
 
-      <v-col cols="12" md="3">
-        <v-card class="mx-auto">
-          <v-card-text>
-            <div class="subtitle-1">SHORTCUTS</div>
-          </v-card-text>
-          <v-card-text></v-card-text>
-        </v-card>
+
+          <v-col cols="12" md="4">
+            <v-card class="mx-auto">
+              <v-card-text>
+                <div class="subtitle-1">SHORTCUTS</div>
+              </v-card-text>
+              <v-card-text>
+                <LazyChartBarChart></LazyChartBarChart>
+              </v-card-text>
+            </v-card>
+          </v-col>
+
+          <v-col cols="12" md="4">
+            <v-card class="mx-auto">
+              <v-card-text>
+                <div class="subtitle-1">SHORTCUTS</div>
+              </v-card-text>
+              <v-card-text>
+                <LazyChartLineChart></LazyChartLineChart>
+              </v-card-text>
+            </v-card>
+          </v-col>
+
+          <v-col cols="12" md="4">
+            <v-card class="mx-auto">
+              <v-card-text>
+                <div class="subtitle-1">SHORTCUTS</div>
+              </v-card-text>
+              <v-card-text>
+                <LazyChartLineChart></LazyChartLineChart>
+              </v-card-text>
+            </v-card>
+          </v-col>
+
+          <v-col cols="12" md="4">
+            <v-card class="mx-auto">
+              <v-card-text>
+                <div class="subtitle-1">SHORTCUTS</div>
+              </v-card-text>
+              <v-card-text>
+                <LazyChartPieChart></LazyChartPieChart>
+              </v-card-text>
+            </v-card>
+          </v-col>
+
+          <v-col cols="12" md="4">
+            <v-card class="mx-auto">
+              <v-card-text>
+                <div class="subtitle-1">SHORTCUTS</div>
+              </v-card-text>
+              <v-card-text>
+                <LazyChartDoughnutChart></LazyChartDoughnutChart>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </v-container>

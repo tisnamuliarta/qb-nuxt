@@ -34,7 +34,7 @@ import {
   PersistentState,
   HiddenColumns,
   HiddenRows,
-  DropdownMenu ,
+  DropdownMenu,
   AutoColumnSize,
 } from 'handsontable/plugins'
 
@@ -74,7 +74,7 @@ registerRenderer(
       })
 
       // dom.empty(td)
-      td.innerText = '';
+      td.innerText = ''
       td.appendChild(button)
       return td
     }
@@ -101,7 +101,7 @@ registerRenderer(
       })
 
       // dom.empty(td)
-      td.innerText = '';
+      td.innerText = ''
       td.appendChild(button)
     }
     return td
@@ -137,6 +137,20 @@ export default {
           copyPasteEnabled: false,
           indicator: false,
           columns: [1, 2, 3],
+        },
+        dataSchema: {
+          id: null,
+          item_id: null,
+          sku: null,
+          name: null,
+          description: null,
+          quantity: 0,
+          unit: null,
+          default_currency_symbol: null,
+          price: 0,
+          discount_rate: 0,
+          tax_name: '',
+          total: 0,
         },
         colHeaders: [
           '#',
@@ -182,7 +196,7 @@ export default {
             wordWrap: false,
           },
           {
-            data: 'description',
+            data: 'narration',
             width: 350,
             wordWrap: false,
           },
@@ -242,7 +256,7 @@ export default {
             allowInvalid: false,
           },
           {
-            data: 'total',
+            data: 'amount',
             width: 100,
             wordWrap: false,
             type: 'numeric',
@@ -257,14 +271,9 @@ export default {
             renderer: 'ButtonDeleteRenderer',
           },
         ],
-        beforeRender(isForced) {
-          const vm = window.details
-          vm.$nuxt.$loading.start()
-        },
 
-        afterRender(isForced) {
-          const vm = window.details
-          vm.$nuxt.$loading.finish()
+        beforeRefreshDimensions() {
+          return false
         },
       },
       detailsRoot: 'detailsRoot',
@@ -344,6 +353,18 @@ export default {
             })
           }
         },
+
+        beforeRender(isForced) {
+          const vm = window.details
+          vm.$nuxt.$loading.start()
+        },
+
+        afterRender: (isForced) => {
+          const vm = window.details
+          vm.$nuxt.$loading.finish()
+        },
+
+        afterLoadData: (sourceData, initialLoad, source) => {},
       })
     },
 
@@ -384,8 +405,9 @@ export default {
       this.form = form
       this.$refs.details.hotInstance.batch(() => {
         this.updateTableSettings()
-        const items = form.items.length > 0 ? form.items : data
+        const items = form.line_items.length > 0 ? form.line_items : data
         vm.$refs.details.hotInstance.loadData(items)
+        // vm.calculateTotal()
         const countRows = this.$refs.details.hotInstance.countRows()
         for (let i = 0; i < countRows; i++) {
           this.$refs.details.hotInstance.setDataAtRowProp(
@@ -394,6 +416,7 @@ export default {
             vm.form.default_currency_symbol
           )
         }
+        this.$nuxt.$loading.finish()
       })
       // setTimeout(() => {
       //   vm.$refs.details.hotInstance.loadData(data)
@@ -402,6 +425,7 @@ export default {
 
     calculateTotal() {
       const countRows = this.$refs.details.hotInstance.countRows()
+      // console.log(countRows)
       let subTotal = 0
       let discountAmount = 0
       const taxDetail = []
@@ -459,7 +483,7 @@ export default {
 
             this.$refs.details.hotInstance.setDataAtRowProp(
               i,
-              'total',
+              'amount',
               amountRow
             )
           })

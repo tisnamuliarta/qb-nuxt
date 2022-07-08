@@ -26,6 +26,7 @@
           v-model="activeExtension"
           align-with-title
           color="black"
+          slider-color="green"
           slider-size="4"
         >
           <v-tab
@@ -218,7 +219,6 @@ export default {
   mounted() {
     // enable using draggable dialogs
     // this.activateMultipleDraggableDialogs()
-
     this.drawer = !this.$vuetify.breakpoint.mdAndDown
     this.drawer =
       this.$route.name === 'dashboard-documents-form' ? false : this.drawer

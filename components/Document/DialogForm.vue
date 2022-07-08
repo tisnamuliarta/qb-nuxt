@@ -94,20 +94,24 @@ export default {
   },
 
   activated() {
+    this.$nextTick(() => {
+      this.$nuxt.$loading.start()
+    })
     setTimeout(() => {
-      this.$refs.dialogForm.openDialog()
+      // this.$refs.dialogForm.openDialog()
       this.$refs.dialogForm.openDialog()
       this.getDataFromApi()
     }, 300)
   },
 
-  mounted() {
-    setTimeout(() => {
-      this.$refs.dialogForm.openDialog()
-      this.$refs.dialogForm.openDialog()
-      this.getDataFromApi()
-    }, 300)
-  },
+  // mounted() {
+
+  //   setTimeout(() => {
+  //     this.$refs.dialogForm.openDialog()
+  //     this.$refs.dialogForm.openDialog()
+  //     this.getDataFromApi()
+  //   }, 300)
+  // },
 
   methods: {
     // A method that is called when the dialog is closed.
@@ -152,7 +156,6 @@ export default {
 
     getDataFromApi(copyFromId) {
       // this.dialogLoading = true
-      this.$nuxt.$loading.start()
       const type = this.formType
       this.$axios
         .get(this.url + '/' + this.$route.query.document, {
@@ -175,7 +178,12 @@ export default {
           this.form = Object.assign({}, form)
           this.defaultItem = Object.assign({}, form)
 
-          this.title = this.dialogTitle + ' #' + this.form.document_number
+          if (this.form.transaction_no) {
+            this.title = this.dialogTitle + ' #' + this.form.transaction_no
+          } else {
+            this.title = this.dialogTitle + ' #' + this.form.document_number
+          }
+
           this.$refs.dialogForm.setTitle(this.title)
 
           this.$refs.formDocument.setData(this.form)

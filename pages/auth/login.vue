@@ -1,16 +1,10 @@
 <template>
   <v-row no-gutters align="center" align-content="center" justify="center">
-    <v-col cols="12" sm="8" md="8" lg="7" xl="5" align-self="center">
-      <v-skeleton-loader
-        v-if="loadImage"
-        type="article, actions"
-        class="mx-auto"
-      >
-      </v-skeleton-loader>
-      <v-form v-else @keyup.native.enter="login">
+    <v-col cols="12" sm="6" md="5" lg="4" xl="3" align-self="center">
+      <v-form @keyup.native.enter="login">
         <v-card class="mt-3 rounded-lg" elevation="0" rounded="lg" tile>
           <v-row no-gutters>
-            <v-col cols="12" md="6">
+            <v-col cols="12" md="12">
               <v-card-text class="pb-0 mt-4">
                 <v-row no-gutters>
                   <v-col cols="7">
@@ -91,10 +85,10 @@
               </v-card-actions>
             </v-col>
 
-            <v-col cols="12" md="6" class="d-sm-none d-none d-md-flex">
+            <!-- <v-col cols="12" md="6" class="d-sm-none d-none d-md-flex">
               <v-divider vertical></v-divider>
               <v-img :src="bgLogin"></v-img>
-            </v-col>
+            </v-col> -->
           </v-row>
         </v-card>
       </v-form>
@@ -168,17 +162,21 @@ export default {
   },
 
   mounted() {
+    this.$nextTick(() => {
+      this.$nuxt.$loading.start()
+    })
     this.getLogo()
   },
 
   methods: {
     getLogo() {
-      this.loadImage = true
       this.$axios.get(`/api/logo`).then((res) => {
         this.logo = res.data.data.default
         this.bgLogin = res.data.data.bgLogin
-        this.loadImage = false
       })
+        .finally(() => {
+          this.$nuxt.$loading.finish()
+        })
     },
 
     clear() {
