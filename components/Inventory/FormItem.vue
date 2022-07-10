@@ -470,7 +470,7 @@ export default {
           },
         })
         .then((res) => {
-          this.itemCategory = res.data.data.rows
+          this.itemCategory = res.data.data
         })
         .catch((err) => {
           this.$swal({
@@ -489,7 +489,7 @@ export default {
           },
         })
         .then((res) => {
-          this.itemTax = res.data.data.rows
+          this.itemTax = res.data.data
         })
         .catch((err) => {
           this.$swal({
@@ -508,7 +508,7 @@ export default {
           },
         })
         .then((res) => {
-          this.itemContact = res.data.data.rows
+          this.itemContact = res.data.data
         })
         .catch((err) => {
           this.$swal({
@@ -527,7 +527,7 @@ export default {
           },
         })
         .then((res) => {
-          this.itemUnit = res.data.data.rows
+          this.itemUnit = res.data.data
         })
         .catch((err) => {
           this.$swal({
@@ -546,7 +546,7 @@ export default {
           },
         })
         .then((res) => {
-          this.itemAccounts = res.data.data.rows
+          this.itemAccounts = res.data.data
         })
         .catch((err) => {
           this.$swal({
@@ -609,8 +609,8 @@ export default {
           },
         })
         .then((res) => {
-          vm.images = res.data.data.rows
-          vm.total = res.data.data.total
+          vm.images = res.data.data
+          vm.total = res.data.total
           vm.showLoadingAttachment = false
         })
         .catch((err) => {

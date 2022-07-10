@@ -2,6 +2,7 @@
   <v-dialog
     v-model="dialogPermission"
     persistent
+    no-click-animation
     max-width="1000px"
     transition="dialog-bottom-transition"
   >
@@ -22,7 +23,7 @@
         </v-btn>
       </v-card-title>
       <v-card-text>
-        <div class="scroll-container">
+        <div>
           <LazyMasterPermissionList
             ref="childDetails"
           ></LazyMasterPermissionList>
@@ -77,9 +78,9 @@ export default {
   methods: {
     getPermissionList() {
       this.$axios.get(`/api/master/permissions`).then((res) => {
-        this.$auth.$storage.setLocalStorage(
+        this.$auth.$storage.setState(
           'permission_list',
-          res.data.data.simple
+          res.data.simple
         )
       })
     },
@@ -104,7 +105,7 @@ export default {
           },
         })
         .then((res) => {
-          this.$refs.childDetails.setDataToDetails(res.data.data.rows)
+          this.$refs.childDetails.setDataToDetails(res.data.data)
         })
         .finally((res) => {
           this.loadingPermission = false
@@ -139,7 +140,7 @@ export default {
           },
         })
         .then((res) => {
-          vm.$refs.childDetails.setDataToDetails(res.data.data.rows)
+          vm.$refs.childDetails.setDataToDetails(res.data.data)
           this.loadingPermission = false
         })
         .finally((res) => {
@@ -154,7 +155,7 @@ export default {
           form: val,
         })
         .then((res) => {
-          this.$refs.childDetails.setDataToDetails(res.data.data.rows)
+          this.$refs.childDetails.setDataToDetails(res.data.data)
         })
         .finally((res) => {
           this.loadingPermission = false
@@ -167,7 +168,7 @@ export default {
           item,
         })
         .then((res) => {
-          this.$refs.childDetails.setDataToDetails(res.data.data.rows)
+          this.$refs.childDetails.setDataToDetails(res.data.data)
         })
         .finally((res) => {
           this.loadingPermission = false
@@ -180,7 +181,7 @@ export default {
           form: this.form,
         })
         .then((res) => {
-          this.$refs.childDetails.setDataToDetails(res.data.data.rows)
+          this.$refs.childDetails.setDataToDetails(res.data.data)
         })
         .finally((res) => {
           this.loadingPermission = false

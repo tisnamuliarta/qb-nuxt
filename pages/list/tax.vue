@@ -2,10 +2,7 @@
   <v-layout>
     <v-flex sm12>
       <div class="mt-0">
-        <v-skeleton-loader v-show="loading" type="table" class="mx-auto">
-        </v-skeleton-loader>
         <v-data-table
-          v-show="!loading"
           :mobile-breakpoint="0"
           :headers="headers"
           :items="allData"
@@ -18,6 +15,10 @@
           :footer-props="{ 'items-per-page-options': [20, 50, 100, -1] }"
         >
           <template #top>
+            <div class="pl-4 pt-2">
+              <span class="font-weight-medium text-h6">Master VAT</span>
+            </div>
+
             <LazyMainToolbar
               title="Taxes"
               show-new-data
@@ -25,6 +26,7 @@
               new-data-text="New Tax"
               @emitData="emitData"
               @newData="newData"
+              @getDataFromApi="getDataFromApi"
             />
           </template>
           <template #[`item.ACTIONS`]="{ item }">
@@ -175,19 +177,29 @@ export default {
   },
 
   methods: {
+    emitData(data) {
+      this.documentStatus = data.documentStatus
+      this.itemSearch = data.itemSearch
+      this.searchStatus = data.searchStatus
+      this.searchItem = data.searchItem
+      this.search = data.search
+      this.filters = data.filters
+      this.getDataFromApi()
+    },
+
     getDataFromApi() {
       this.loading = true
       const vm = this
       this.$axios
         .get(this.url, {
           params: {
-            options: vm.options,
+            ...vm.options,
           },
         })
         .then((res) => {
           this.loading = false
-          this.allData = res.data.data.rows
-          this.totalData = res.data.data.total
+          this.allData = res.data.data
+          this.totalData = res.data.total
         })
         .catch((err) => {
           this.loading = false
@@ -207,7 +219,7 @@ export default {
           },
         })
         .then((res) => {
-          this.itemAccounts = res.data.data.rows
+          this.itemAccounts = res.data.data
         })
         .catch((err) => {
           this.$swal({

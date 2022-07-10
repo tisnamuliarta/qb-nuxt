@@ -2,10 +2,7 @@
   <v-layout>
     <v-flex sm12>
       <div class="mt-0">
-        <v-skeleton-loader v-show="loading" type="table" class="mx-auto">
-        </v-skeleton-loader>
         <v-data-table
-          v-show="!loading"
           :mobile-breakpoint="0"
           :headers="headers"
           :items="allData"
@@ -121,7 +118,7 @@ export default {
       options: {},
       headers: [
         { text: 'Name', value: 'name' },
-        { text: 'Action', value: 'ACTIONS', align: 'center' },
+        { text: 'Action', value: 'ACTIONS', align: 'right' },
       ],
     }
   },
@@ -159,8 +156,8 @@ export default {
         })
         .then((res) => {
           this.loading = false
-          this.allData = res.data.data.rows
-          this.totalData = res.data.data.total
+          this.allData = res.data.data
+          this.totalData = res.data.total
         })
         .catch((err) => {
           this.loading = false
@@ -180,7 +177,7 @@ export default {
           },
         })
         .then((res) => {
-          this.itemAccounts = res.data.data.rows
+          this.itemAccounts = res.data.data
         })
         .catch((err) => {
           this.$swal({

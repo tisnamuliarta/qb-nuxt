@@ -21,8 +21,8 @@
               </v-col>
               <v-col cols="12" class="pr-1 pl-1 pb-1 pt-1 mt-1">
                 <v-text-field
-                  v-model="form.code"
-                  label="Number"
+                  v-model="form.type"
+                  label="Type"
                   outlined
                   dense
                   hide-details="auto"

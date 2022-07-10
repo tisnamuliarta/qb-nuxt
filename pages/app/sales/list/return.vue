@@ -8,15 +8,15 @@
         { text: 'Number', value: 'document_number', cellClass: 'disable-wrap' },
         { text: 'Customer', value: 'contact_name', cellClass: 'disable-wrap' },
         {
-          text: 'Date',
-          value: 'issued_at',
+          text: 'Transaction Date',
+          value: 'transaction_date',
           cellClass: 'disable-wrap',
           sortable: false,
           filterable: false,
         },
         {
           text: 'Due Date',
-          value: 'due_at',
+          value: 'due_date',
           cellClass: 'disable-wrap',
           sortable: false,
           filterable: false,

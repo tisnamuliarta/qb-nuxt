@@ -7,17 +7,17 @@
       table-url="/api/transactions"
       :header-table="[
         { text: 'Number', value: 'transaction_no', cellClass: 'disable-wrap' },
-        { text: 'Customer', value: 'contact.name', cellClass: 'disable-wrap' },
+        { text: 'Vendor', value: 'contact.name', cellClass: 'disable-wrap' },
         {
-          text: 'Date',
-          value: 'issued_at',
+          text: 'Transaction Date',
+          value: 'transaction_date',
           cellClass: 'disable-wrap',
           sortable: false,
           filterable: false,
         },
         {
           text: 'Due Date',
-          value: 'due_at',
+          value: 'due_date',
           cellClass: 'disable-wrap',
           sortable: false,
           filterable: false,

@@ -46,7 +46,7 @@
           <template #[`item.ACTIONS`]="{ item }">
             <v-btn
               color="secondary"
-              class="font-weight-bold text-right"
+              class="font-weight-bold text-right mr-0"
               text
               small
               @click="actions(itemAction, item)"
@@ -225,7 +225,7 @@ export default {
       this.$axios
         .get(`/api/inventory/items`, {
           params: {
-            options: vm.options,
+            ...vm.options,
             searchItem: vm.searchItem,
             documentStatus: vm.documentStatus,
             searchStatus: vm.searchStatus,
@@ -234,12 +234,12 @@ export default {
         })
         .then((res) => {
           this.loading = false
-          this.allData = res.data.data.rows
-          this.totalData = res.data.data.total
+          this.allData = res.data.data
+          this.totalData = res.data.total
           this.itemSearch = res.data.filter
-          this.form = Object.assign({}, res.data.data.form)
-          this.defaultItem = Object.assign({}, res.data.data.form)
-          this.url = res.data.data.url
+          this.form = Object.assign({}, res.data.form)
+          this.defaultItem = Object.assign({}, res.data.form)
+          this.url = res.data.url
         })
         .catch((err) => {
           this.loading = false
@@ -331,6 +331,7 @@ export default {
             text: 'Action',
             value: 'ACTIONS',
             align: 'center',
+            cellClass: 'disable-wrap',
             sortable: false,
             filterable: false,
           },

@@ -1,10 +1,11 @@
 <template>
-  <div>
+  <div id="parentContainer" class="scroll-container-min">
     <hot-table
       ref="details"
       :root="detailsRoot"
       :settings="settings"
     ></hot-table>
+
     <LazyInventoryDialogItem
       ref="dialogItem"
       :view-data="true"
@@ -108,6 +109,8 @@ registerRenderer(
   }
 )
 
+// const listVat = $auth.$storage.getState('tax_row')
+
 export default {
   name: 'TableDetail',
 
@@ -130,7 +133,8 @@ export default {
         colWidths: 80,
         persistentState: true,
         width: '100%',
-        height: '28vh',
+        height: 'auto',
+        // height: '28vh',
         stretchH: 'all',
         // preventOverflow: 'horizontal',
         hiddenColumns: {
@@ -211,13 +215,13 @@ export default {
           },
           {
             data: 'unit',
-            width: 100,
+            width: 60,
             readOnly: true,
             wordWrap: false,
           },
           {
             data: 'default_currency_symbol',
-            width: 100,
+            width: 60,
             readOnly: true,
             wordWrap: false,
             align: 'right',
@@ -240,6 +244,21 @@ export default {
               pattern: '0,0.00',
             },
           },
+          // {
+          //   type: 'handsontable',
+          //   handsontable: {
+          //     colHeaders: ['Name', 'Rate'],
+          //     autoColumnSize: true,
+          //     data: listVat,
+          //     getValue() {
+          //       const selection = this.getSelectedLast()
+
+          //       // Get the manufacturer name of the clicked row and ignore header
+          //       // coordinates (negative values)
+          //       return this.getSourceDataAtRow(Math.max(selection[0], 0)).name
+          //     },
+          //   },
+          // },
           {
             data: 'tax_name',
             width: 100,
@@ -248,9 +267,10 @@ export default {
             wordWrap: false,
             source(query, process) {
               const vm = window.details
-              const data = vm.$auth.$storage.getLocalStorage('tax')
+              const data = vm.$auth.$storage.getState('tax')
               process(data)
             },
+            visibleRows: 5,
             strict: true,
             filter: false,
             allowInvalid: false,
@@ -271,10 +291,6 @@ export default {
             renderer: 'ButtonDeleteRenderer',
           },
         ],
-
-        beforeRefreshDimensions() {
-          return false
-        },
       },
       detailsRoot: 'detailsRoot',
       colHeaders: [],
@@ -301,8 +317,13 @@ export default {
     },
 
     updateTableSettings(header) {
+      // const listVat = this.$auth.$storage.getState('tax_row')
       this.$refs.details.hotInstance.updateSettings({
         licenseKey: 'non-commercial-and-evaluation',
+        height: 'auto',
+        beforeRefreshDimensions() {
+          return false
+        },
         afterRemoveRow: (index, amount, physicalRow, source) => {
           const vm = window.details
           vm.calculateTotal()
@@ -373,18 +394,21 @@ export default {
       const selected = data.selected
       const type = this.form.type
       const vm = this
+      // const purchase = ['PQ', 'PO', 'GR', 'BL','PY', 'DN', 'GN'];
+      const sales = ['SQ', 'SO', 'SD', 'IN', 'RC', 'CN', 'SR']
       this.$refs.details.hotInstance.batch(() => {
         selected.forEach(function (item, index) {
-          const price =
-            type.substr(0, 1) === 'S' ? item.sale_price : item.purchase_price
-          const taxName =
-            type.substr(0, 1) === 'S' ? item.sell_tax_name : item.buy_tax_name
+          const salesTax = item.sales_tax != null ? item.sales_tax.name : null
+          const price = sales.includes(type)
+            ? item.sale_price
+            : item.purchase_price
+          // const taxName = sales.includes(type) ? salesTax : null
 
           vm.$refs.details.hotInstance.setDataAtRowProp([
             [rowData, 'name', item.name],
             [rowData, 'sku', item.code],
             [rowData, 'unit', item.unit],
-            [rowData, 'description', item.description],
+            [rowData, 'narration', item.description],
             [
               rowData,
               'default_currency_symbol',
@@ -392,7 +416,7 @@ export default {
             ],
             [rowData, 'item_id', item.id],
             [rowData, 'price', price],
-            [rowData, 'tax_name', taxName],
+            [rowData, 'tax_name', salesTax],
             [rowData, 'quantity', 1],
           ])
           rowData++
@@ -465,7 +489,7 @@ export default {
             if (tax) {
               let taxRate = 0
               this.$auth.$storage
-                .getLocalStorage('tax_row')
+                .getState('tax_row')
                 .forEach(function (item, index) {
                   if (item.name === tax) {
                     taxRate = parseFloat(item.rate)

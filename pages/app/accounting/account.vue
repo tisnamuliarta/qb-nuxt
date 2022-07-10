@@ -5,21 +5,22 @@
         :mobile-breakpoint="0"
         :headers="headers"
         :items="allData"
-        :items-per-page="20"
+        :items-per-page="150"
         :options.sync="options"
         :server-items-length="totalData"
         :loading="loading"
-        hide-default-footer
         class="elevation-1"
         show-select
         fixed-header
-        height="76vh"
+        height="70vh"
         dense
-        :footer-props="{ 'items-per-page-options': [20, 50, 100, -1] }"
+        :footer-props="{ 'items-per-page-options': [150, 250, 500, -1] }"
       >
         <template #top>
           <div class="pl-4 pt-2">
-            <span class="font-weight-medium text-h6">{{ $t('Chart Of Accounts') }} </span>
+            <span class="font-weight-medium text-h6"
+              >{{ $t('Chart Of Accounts') }}
+            </span>
           </div>
 
           <LazyMainToolbar
@@ -105,7 +106,7 @@ export default {
       itemAction: 'edit',
       url: '/api/financial/accounts',
       headers: [
-        { text: 'Account Code', value: 'code'},
+        { text: 'Account Code', value: 'code' },
         { text: 'Account Name', value: 'name', cellClass: 'disable-wrap' },
         {
           text: 'Account Type',
@@ -229,23 +230,29 @@ export default {
     getDataFromApi() {
       this.loading = true
       const vm = this
+
+      const search = {
+        searchItem: vm.searchItem,
+        documentStatus: vm.documentStatus,
+        searchStatus: vm.searchStatus,
+        search: vm.search,
+      }
       this.$axios
         .get(this.url, {
           params: {
-            options: vm.options,
-            searchItem: vm.searchItem,
-            documentStatus: vm.documentStatus,
-            searchStatus: vm.searchStatus,
-            search: vm.search,
+            ...vm.options,
+            ...search
           },
         })
         .then((res) => {
           this.loading = false
-          this.allData = res.data.data.rows
-          this.totalData = res.data.data.total
-          this.itemSearch = res.data.filter
-          this.form = Object.assign({}, res.data.data.form)
-          this.defaultItem = Object.assign({}, res.data.data.form)
+          const data = res.data
+
+          this.allData = data.data
+          this.totalData = data.total
+          this.itemSearch = data.filter
+          this.form = Object.assign({}, data.form)
+          this.defaultItem = Object.assign({}, data.form)
         })
         .catch((err) => {
           this.loading = false

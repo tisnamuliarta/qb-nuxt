@@ -14,7 +14,27 @@
       <v-divider dark vertical></v-divider>
       <v-btn text small dark>Make recurring</v-btn>
       <v-divider dark vertical></v-divider>
-      <v-btn text small dark>More</v-btn>
+      <v-btn text small dark>
+        More
+        <v-menu transition="slide-y-transition" bottom>
+          <template #activator="{ on, attrs }">
+            <v-btn dark icon v-bind="attrs" v-on="on">
+              <v-icon>mdi-menu-down</v-icon>
+            </v-btn>
+          </template>
+          <v-list link>
+            <v-list-item
+              v-for="(value, i) in itemAction"
+              :key="i"
+              @click="actionItem(value.action)"
+            >
+              <v-list-item-content>
+                <v-list-item-title>{{ value.text }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-btn>
 
       <v-spacer />
       <v-btn
@@ -23,13 +43,20 @@
         class="mr-3"
         dark
         :loading="loading"
-        @click="actionSave('saveNew')"
+        :disabled="form.status === 'closed'"
+        @click="actionSave('save')"
       >
-        Save and new
+        Save
 
         <v-menu transition="slide-y-transition" bottom>
           <template #activator="{ on, attrs }">
-            <v-btn dark icon v-bind="attrs" v-on="on">
+            <v-btn
+              dark
+              icon
+              :disabled="form.status === 'closed'"
+              v-bind="attrs"
+              v-on="on"
+            >
               <v-icon>mdi-menu-down</v-icon>
             </v-btn>
           </template>
@@ -77,8 +104,14 @@ export default {
     return {
       title: this.dialogTitle,
       items: [
-        { text: 'Save and send', action: 'saveSend' },
         { text: 'Save and close', action: 'saveClose' },
+        { text: 'Save and new', action: 'saveNew' },
+        { text: 'Save and send', action: 'saveSend' },
+      ],
+      itemAction: [
+        { text: 'Copy', action: 'copy' },
+        { text: 'Cancel', action: 'cancel' },
+        { text: 'Audit History', action: 'history' },
       ],
       breadcrumb: [],
       form: {},
@@ -88,12 +121,14 @@ export default {
       showLoading: false,
       dialog: true,
       loading: false,
-      itemAction: [],
       actionName: 'Save',
+      actionOnSave: 'save',
+      countRouter: -1,
     }
   },
 
   activated() {
+    this.itemAction = this.appendItemAction(this.formType)
     this.$nextTick(() => {
       this.$nuxt.$loading.start()
     })
@@ -116,11 +151,178 @@ export default {
   methods: {
     // A method that is called when the dialog is closed.
     close() {
-      this.$router.back()
       this.$emit('getDataFromApi')
     },
+
     checkDisable() {
       return this.form.status === 'closed' || this.form.status === 'cancel'
+    },
+
+    appendItemAction(type) {
+      let action = []
+      switch (type) {
+        case 'PQ':
+          action = [
+            {
+              text: 'Copy to ' + this.$t('Purchase Order'),
+              action: 'PO',
+              type: 'document',
+            },
+            {
+              text: 'Copy to ' + this.$t('Goods Receipt PO'),
+              action: 'GR',
+              type: 'document',
+            },
+            {
+              text: 'Copy to ' + this.$t('A/P Invoice'),
+              action: 'BL',
+              type: 'transaction',
+            },
+          ]
+          break
+
+        case 'PO':
+          action = [
+            {
+              text: 'Copy to ' + this.$t('Goods Receipt PO'),
+              action: 'GR',
+              type: 'document',
+            },
+            {
+              text: 'Copy to ' + this.$t('A/P Invoice'),
+              action: 'BL',
+              type: 'transaction',
+            },
+          ]
+          break
+
+        case 'GR':
+          action = [
+            {
+              text: 'Copy to ' + this.$t('A/P Invoice'),
+              action: 'BL',
+              type: 'transaction',
+            },
+            {
+              text: 'Copy to ' + this.$t('Goods Return'),
+              action: 'BL',
+              type: 'document',
+            },
+          ]
+          break
+
+        case 'BL':
+          action = [
+            {
+              text: 'Copy to ' + this.$t('Outgoing Payment'),
+              action: 'PY',
+              type: 'transaction',
+            },
+          ]
+          break
+
+        case 'PY':
+          action = [
+            {
+              text: 'Copy to ' + this.$t('A/P Credit Memo'),
+              action: 'DN',
+              type: 'transaction',
+            },
+          ]
+          break
+
+        case 'DN':
+          action = [
+            {
+              text: 'Copy to ' + this.$t('Goods Return'),
+              action: 'GN',
+              type: 'document',
+            },
+          ]
+          break
+
+        case 'SQ':
+          action = [
+            {
+              text: 'Copy to ' + this.$t('Sales Order'),
+              action: 'SO',
+              type: 'document',
+            },
+            {
+              text: 'Copy to ' + this.$t('Sales Delivery'),
+              action: 'SD',
+              type: 'document',
+            },
+            {
+              text: 'Copy to ' + this.$t('A/R Invoice'),
+              action: 'IN',
+              type: 'transaction',
+            },
+          ]
+          break
+
+        case 'SO':
+          action = [
+            {
+              text: 'Copy to ' + this.$t('Sales Delivery'),
+              action: 'SD',
+              type: 'document',
+            },
+            {
+              text: 'Copy to ' + this.$t('A/R Invoice'),
+              action: 'IN',
+              type: 'transaction',
+            },
+          ]
+          break
+
+        case 'SD':
+          action = [
+            {
+              text: 'Copy to ' + this.$t('A/R Invoice'),
+              action: 'IN',
+              type: 'transaction',
+            },
+            {
+              text: 'Copy to ' + this.$t('Sales Return'),
+              action: 'SR',
+              type: 'document',
+            },
+          ]
+          break
+
+        case 'IN':
+          action = [
+            {
+              text: 'Copy to ' + this.$t('Incoming Payment'),
+              action: 'RC',
+              type: 'transaction',
+            },
+          ]
+          break
+
+        case 'RC':
+          action = [
+            {
+              text: 'Copy to ' + this.$t('A/R Credit Memo'),
+              action: 'CN',
+              type: 'transaction',
+            },
+          ]
+          break
+
+        case 'CN':
+          action = [
+            {
+              text: 'Copy to ' + this.$t('Sales Return'),
+              action: 'SR',
+              type: 'document',
+            },
+          ]
+          break
+      }
+
+      return [...action, ...this.itemAction]
     },
 
     arrowLink(status, type) {
@@ -136,7 +338,7 @@ export default {
           this.$router.push({
             path: '/dashboard/documents',
             query: {
-              document: res.data.data.id,
+              document: res.data.id,
               type,
             },
           })
@@ -166,13 +368,13 @@ export default {
         })
         .then((res) => {
           let form = ''
-          this.audits = res.data.data.audits
-          if (res.data.data.count > 0) {
-            form = res.data.data.rows
-            this.actionName = 'Update'
-          } else {
-            form = res.data.data.form
+          this.audits = res.data.audits
+          if (res.data.count === 0) {
+            form = res.data.form
             this.actionName = 'Save'
+          } else {
+            form = res.data.data
+            this.actionName = 'Update'
           }
 
           this.form = Object.assign({}, form)
@@ -200,6 +402,25 @@ export default {
         .finally((res) => {
           this.$nuxt.$loading.finish()
         })
+    },
+
+    actionItem(action) {
+      const vm = this
+      switch (action) {
+        case 'copy':
+          this.$router.push({
+            path: vm.formUrl,
+            query: {
+              document: 0,
+            },
+          })
+          this.form.status = 'open'
+          this.$refs.formDocument.setData(this.form)
+          break
+
+        default:
+          break
+      }
     },
 
     actionDocument(action) {
@@ -314,6 +535,7 @@ export default {
     },
 
     actionSave(action) {
+      this.actionOnSave = action
       const docId = this.$route.query.document
       const url = docId === '0' ? this.url : this.url + '/' + docId
       const method = docId === '0' ? 'post' : 'patch'
@@ -322,16 +544,37 @@ export default {
       this.loading = true
       this.$axios({ method, url, data })
         .then((res) => {
-          this.$router.push({
-            path: vm.formUrl,
-            query: {
-              document: res.data.data.id,
-            },
-          })
-          this.$nuxt.$emit('snackbar', res.data.message)
-          setTimeout(() => {
-            this.getDataFromApi()
-          }, 50)
+          this.$nuxt.$emit('snackbar', this.title + ' saved!')
+
+          switch (this.actionOnSave) {
+            case 'save':
+              this.$router.push({
+                path: vm.formUrl,
+                query: {
+                  document: res.data.id,
+                },
+              })
+              setTimeout(() => {
+                this.getDataFromApi()
+              }, 50)
+              break
+
+            case 'saveNew':
+              this.$router.push({
+                path: vm.formUrl,
+                query: {
+                  document: 0,
+                },
+              })
+              setTimeout(() => {
+                this.getDataFromApi()
+              }, 50)
+              break
+
+            case 'saveClose':
+              this.$refs.dialogForm.closeDialog()
+              break
+          }
         })
         .catch((err) => {
           this.$swal({

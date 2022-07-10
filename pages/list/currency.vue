@@ -2,14 +2,7 @@
   <v-layout>
     <v-flex sm12>
       <div class="mt-0">
-        <v-skeleton-loader
-          v-show="loading"
-          type="table"
-          class="mx-auto"
-        >
-        </v-skeleton-loader>
         <v-data-table
-          v-show="!loading"
           :mobile-breakpoint="0"
           :headers="headers"
           :items="allData"
@@ -29,6 +22,7 @@
               new-data-text="New Currency"
               @emitData="emitData"
               @newData="newData"
+              @getDataFromApi="getDataFromApi"
             />
           </template>
           <template #[`item.ACTIONS`]="{ item }">
@@ -69,6 +63,16 @@
               <v-text-field
                 v-model="form.currency_code"
                 label="Code"
+                outlined
+                dense
+                hide-details="auto"
+              ></v-text-field>
+            </v-col>
+
+            <v-col cols="12" class="pr-1 pl-1 pb-1 pt-1 mt-1">
+              <v-text-field
+                v-model="form.currency_symbol"
+                label="Symbol"
                 outlined
                 dense
                 hide-details="auto"
@@ -143,6 +147,7 @@ export default {
       headers: [
         { text: 'Name', value: 'name' },
         { text: 'Code', value: 'currency_code' },
+        { text: 'Symbol', value: 'currency_symbol' },
         { text: 'Action', value: 'ACTIONS', align: 'center' },
       ],
     }
@@ -186,15 +191,15 @@ export default {
       this.$axios
         .get(this.url, {
           params: {
-            options: vm.options,
+            ...vm.options,
           },
         })
         .then((res) => {
           this.loading = false
-          this.allData = res.data.data.rows
-          this.totalData = res.data.data.total
-          this.form = res.data.data.form
-          this.defaultItem = res.data.data.form
+          this.allData = res.data.data
+          this.totalData = res.data.total
+          this.form = res.data.form
+          this.defaultItem = res.data.form
         })
         .catch((err) => {
           this.loading = false
@@ -213,7 +218,7 @@ export default {
         }
       })
         .then((res) => {
-          this.itemAccounts = res.data.data.rows
+          this.itemAccounts = res.data.data
         })
         .catch((err) => {
           this.$swal({

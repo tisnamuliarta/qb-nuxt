@@ -129,7 +129,7 @@ export default {
         .then((res) => {
           this.loading = true
           this.tabValue = page
-          this.form = res.data.data.form
+          this.form = res.data.form
           // this.$router.push({
           //   path: '/dashboard/settings/setup',
           //   query: {
@@ -140,7 +140,7 @@ export default {
             this.loading = false
             this.showAction = action === undefined ? true : action
             if (this.$refs.setupForm) {
-              this.$refs.setupForm.changeTab(this.form, res.data.data.url, page)
+              this.$refs.setupForm.changeTab(this.form, res.data.url, page)
             }
           }, 800)
         })

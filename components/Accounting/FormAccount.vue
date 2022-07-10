@@ -241,7 +241,7 @@ export default {
           },
         })
         .then((res) => {
-          this.itemAllCurrency = res.data.data.rows
+          this.itemAllCurrency = res.data.data
         })
         .catch((err) => {
           this.$swal({

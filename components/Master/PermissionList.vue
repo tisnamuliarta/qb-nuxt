@@ -10,6 +10,7 @@ import {
   NumericCellType,
   CheckboxCellType,
   HandsontableCellType,
+  AutocompleteCellType,
 } from 'handsontable/cellTypes'
 
 import {
@@ -29,6 +30,7 @@ registerCellType(DropdownCellType)
 registerCellType(HandsontableCellType)
 registerCellType(NumericCellType)
 registerCellType(CheckboxCellType)
+registerCellType(AutocompleteCellType)
 
 registerPlugin(ManualColumnResize)
 registerPlugin(CopyPaste)
@@ -82,6 +84,7 @@ export default {
         dropdownMenu: true,
         persistentState: true,
         width: '100%',
+        height: 'auto',
         stretchH: 'all',
         columns: [
           {
@@ -93,7 +96,7 @@ export default {
             height: 26,
             wordWrap: false,
             source(query, process) {
-              const data = vm.$auth.$storage.getLocalStorage('permission_list')
+              const data = vm.$auth.$storage.getState('permission_list')
               process(data)
             },
           },

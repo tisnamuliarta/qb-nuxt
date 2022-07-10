@@ -19,7 +19,7 @@
         >
           <template #top>
             <div class="pl-4 pt-2">
-              <span class="font-weight-medium text-h6">Users</span>
+              <span class="font-weight-medium text-h6">Master Roles</span>
             </div>
 
             <LazyMainToolbar
@@ -162,6 +162,12 @@ export default {
       itemText: '',
       itemAction: '',
 
+      documentStatus: [],
+      itemSearch: [],
+      searchStatus: '',
+      searchItem: '',
+      search: '',
+
       loadingPermission: true,
       allData: [],
       department: {},
@@ -226,19 +232,29 @@ export default {
       }
     },
 
+    emitData(data) {
+      this.documentStatus = data.documentStatus
+      this.itemSearch = data.itemSearch
+      this.searchStatus = data.searchStatus
+      this.searchItem = data.searchItem
+      this.search = data.search
+      this.filters = data.filters
+      this.getDataFromApi()
+    },
+
     getDataFromApi() {
       this.loading = true
       const vm = this
       this.$axios
         .get(`/api/master/roles`, {
           params: {
-            options: vm.options,
+            ...vm.options,
           },
         })
         .then((res) => {
           this.loading = false
-          this.allData = res.data.data.rows
-          this.totalData = res.data.data.total
+          this.allData = res.data.data
+          this.totalData = res.data.total
         })
         .catch((err) => {
           this.loading = false

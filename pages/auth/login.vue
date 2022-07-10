@@ -47,7 +47,7 @@
 
                   <v-col cols="12" class="mb-1">
                     <v-select
-                      v-model="form.locale"
+                      v-model="form.localeApp"
                       label="Language"
                       :items="language"
                       item-text="text"
@@ -122,14 +122,14 @@ export default {
         username: '',
         password: '',
         remember: false,
-        locale: 'en',
+        localeApp: 'en',
         app_name: process.env.appName,
       },
       defaultForm: {
         username: '',
         password: '',
         remember: false,
-        locale: 'en',
+        localeApp: 'en',
         app_name: process.env.appName,
       },
       language: [
@@ -171,8 +171,8 @@ export default {
   methods: {
     getLogo() {
       this.$axios.get(`/api/logo`).then((res) => {
-        this.logo = res.data.data.default
-        this.bgLogin = res.data.data.bgLogin
+        this.logo = res.data.default
+        this.bgLogin = res.data.bgLogin
       })
         .finally(() => {
           this.$nuxt.$loading.finish()
@@ -191,7 +191,7 @@ export default {
         })
         .then((response) => {
           this.loading = false
-          this.$i18n.setLocale(this.form.locale)
+          this.$i18n.setLocale(this.form.localeApp)
           // this.$router.push('/dashboard')
         })
         .catch((err) => {

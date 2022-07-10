@@ -2,10 +2,7 @@
   <v-layout>
     <v-flex sm12>
       <div class="mt-0">
-        <v-skeleton-loader v-show="loading" type="table" class="mx-auto">
-        </v-skeleton-loader>
         <v-data-table
-          v-show="!loading"
           :mobile-breakpoint="0"
           :headers="headers"
           :items="allData"
@@ -94,7 +91,7 @@ export default {
 
   head() {
     return {
-      title: 'Account Category',
+      title: 'Reporting Period',
     }
   },
 
@@ -143,7 +140,7 @@ export default {
       this.$axios
         .get(this.url, {
           params: {
-            options: vm.options,
+            ...vm.options,
             searchItem: vm.searchItem,
             documentStatus: vm.documentStatus,
             searchStatus: vm.searchStatus,
@@ -152,11 +149,11 @@ export default {
         })
         .then((res) => {
           this.loading = false
-          this.allData = res.data.data.rows
-          this.totalData = res.data.data.total
+          this.allData = res.data.data
+          this.totalData = res.data.total
           this.itemSearch = res.data.filter
-          this.form = Object.assign({}, res.data.data.form)
-          this.defaultItem = Object.assign({}, res.data.data.form)
+          this.form = Object.assign({}, res.data.form)
+          this.defaultItem = Object.assign({}, res.data.form)
         })
         .catch((err) => {
           this.loading = false

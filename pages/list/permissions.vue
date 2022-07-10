@@ -76,6 +76,7 @@
     <v-dialog
       v-model="dialog"
       persistent
+      no-click-animation
       max-width="600px"
       transition="dialog-top-transition"
     >
@@ -388,10 +389,28 @@ export default {
       },
       options: {},
       headers: [
-        { text: 'Name', value: 'menu_name' },
-        { text: 'Parent Name', value: 'parent_name' },
+        {
+          text: 'Name',
+          value: 'menu_name',
+          cellClass: 'disable-wrap',
+          sortable: false,
+          filterable: false,
+        },
+        {
+          text: 'Parent Name',
+          value: 'parent_name',
+          cellClass: 'disable-wrap',
+          sortable: false,
+          filterable: false,
+        },
         // { text: 'Icon', value: 'icon' },
-        { text: 'Route', value: 'route_name' },
+        {
+          text: 'Route',
+          value: 'route_name',
+          cellClass: 'disable-wrap',
+          sortable: false,
+          filterable: false,
+        },
         { text: 'Has Child', value: 'has_child' },
         // { text: 'Has Route', value: 'has_route' },
         { text: 'Is CRUD', value: 'is_crud' },
@@ -400,7 +419,14 @@ export default {
         // { text: 'Store', value: 'store', align: 'center' },
         // { text: 'Edits', value: 'edits', align: 'center' },
         // { text: 'Erase', value: 'erase', align: 'center' },
-        { text: 'Action', value: 'ACTIONS', align: 'center' },
+        {
+          text: 'Action',
+          value: 'ACTIONS',
+          align: 'center',
+          cellClass: 'disable-wrap',
+          sortable: false,
+          filterable: false,
+        },
       ],
     }
   },
@@ -436,7 +462,7 @@ export default {
   methods: {
     getRole() {
       this.$axios.get(`/api/master/roles`).then((res) => {
-        this.itemRole = res.data.data.simple
+        this.itemRole = res.data.simple
       })
     },
 
@@ -456,14 +482,14 @@ export default {
       this.$axios
         .get(`/api/master/permissions`, {
           params: {
-            options: vm.options,
+            ...vm.options,
           },
         })
         .then((res) => {
           this.loading = false
-          this.allData = res.data.data.rows
-          this.totalData = res.data.data.total
-          this.dataParent = res.data.data.parent
+          this.allData = res.data.data
+          this.totalData = res.data.total
+          this.dataParent = res.data.parent
         })
         .catch((err) => {
           this.loading = false
@@ -510,9 +536,9 @@ export default {
           },
         })
         .then((res) => {
-          const form = Object.assign({}, res.data.data.rows)
-          form.old_name = res.data.data.rows.menu_name
-          form.role = JSON.parse(res.data.data.rows.role_name)
+          const form = Object.assign({}, res.data.data)
+          form.old_name = res.data.data.menu_name
+          form.role = JSON.parse(res.data.data.role_name)
           setTimeout(() => (this.form = Object.assign({}, form)), 150)
         })
       this.dialog = true

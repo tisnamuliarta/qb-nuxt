@@ -188,7 +188,7 @@ export default {
       this.$axios
         .get(this.url, {
           params: {
-            options: vm.options,
+            ...vm.options,
             searchItem: vm.searchItem,
             documentStatus: vm.documentStatus,
             searchStatus: vm.searchStatus,
@@ -197,12 +197,12 @@ export default {
         })
         .then((res) => {
           this.loading = false
-          this.allData = res.data.data.rows
-          this.totalData = res.data.data.total
+          this.allData = res.data.data
+          this.totalData = res.data.total
           this.itemSearch = res.data.filter
-          this.form = Object.assign({}, res.data.data.form)
-          this.defaultItem = Object.assign({}, res.data.data.form)
-          this.itemCategoryType = res.data.data.category_type_list
+          this.form = Object.assign({}, res.data.form)
+          this.defaultItem = Object.assign({}, res.data.form)
+          this.itemCategoryType = res.data.category_type_list
         })
         .catch((err) => {
           this.loading = false

@@ -51,10 +51,9 @@
         </template>
 
         <template #[`item.status`]="{ item }">
-          <v-btn text small>
-            <v-icon :color="statusColor(item)" left> mdi-circle </v-icon>
+          <v-chip label small dark :color="statusColor(item)">
             {{ item.status }}
-          </v-btn>
+          </v-chip>
         </template>
 
         <template #[`item.balance_due`]="{ item }">
@@ -71,13 +70,24 @@
 
         <template #[`item.actions`]="{ item }">
           <v-btn
+            v-if="item.status === 'open'"
             color="secondary"
             class="font-weight-bold text-right pr-0"
             text
             small
-            @click="actions(itemAction, item)"
+            @click="actions('edit', item)"
           >
-            {{ itemText }}
+            Edit
+          </v-btn>
+          <v-btn
+            v-if="item.status === 'closed'"
+            color="secondary"
+            class="font-weight-bold text-right pr-0"
+            text
+            small
+            @click="actions('view', item)"
+          >
+            View
           </v-btn>
           <v-menu transition="slide-y-transition" bottom>
             <template #activator="{ on, attrs }">
@@ -132,8 +142,8 @@ export default {
       type: Array,
       default() {
         return [
-          { text: 'Edit', action: 'edit' },
-          { text: 'Delete', action: 'delete' },
+          { text: 'Closed', action: 'closed' },
+          { text: 'Cancel', action: 'cancel' },
         ]
       },
     },
@@ -208,7 +218,6 @@ export default {
         path: this.formUrl,
         query: {
           document: this.form.id,
-          type: this.typeDocument,
         },
       })
     },
@@ -216,8 +225,9 @@ export default {
     statusColor(item) {
       switch (item.status) {
         case 'open':
+          return 'blue darken-3'
         case 'partial':
-          return 'warning'
+          return 'orange'
         case 'paid':
           return 'green'
         case 'closed':
@@ -247,7 +257,6 @@ export default {
           },
         })
       }
-
     },
 
     mappingAction(type) {
@@ -284,10 +293,20 @@ export default {
     },
 
     actions(action, item) {
-      if (action === 'edit') {
-        this.editItem(item)
-      } else {
-        this.deleteItem(item)
+      switch (action) {
+        case 'edit':
+        case 'view':
+          this.editItem(item)
+          break;
+
+        case 'delete':
+          this.deleteItem(item)
+          break;
+
+        case 'closed':
+        case 'cancel':
+          this.closeItem(item, action)
+          break;
       }
     },
 
@@ -297,6 +316,27 @@ export default {
         .then((res) => {
           this.getDataFromApi()
           this.$nuxt.$emit('getMenu', 'nice payload')
+        })
+    },
+
+    closeItem(item, action) {
+      this.$nuxt.$loading.start()
+      this.$axios.put(this.tableUrl + '/' + item.id, {
+        updateStatus: action,
+        ...item
+      })
+        .then((res) => {
+          this.getDataFromApi()
+        })
+        .catch((err) => {
+          this.$swal({
+            type: 'error',
+            title: 'Error',
+            text: err.response.data.message,
+          })
+        })
+        .finally(() => {
+          this.$nuxt.$loading.finish()
         })
     },
 
@@ -317,24 +357,27 @@ export default {
     getDataFromApi() {
       this.loading = true
       const vm = this
+      const status = {
+        searchItem: vm.searchItem,
+        documentStatus: vm.documentStatus,
+        searchStatus: vm.searchStatus,
+        search: vm.search,
+        type: this.typeDocument,
+      }
       this.$axios
         .get(this.tableUrl, {
           params: {
-            options: vm.options,
-            searchItem: vm.searchItem,
-            documentStatus: vm.documentStatus,
-            searchStatus: vm.searchStatus,
-            search: vm.search,
-            type: this.typeDocument,
+            ...vm.options,
+            ...status
           },
         })
         .then((res) => {
           this.loading = false
-          this.allData = res.data.data.rows
-          this.totalData = res.data.data.total
+          this.allData = res.data.data
+          this.totalData = res.data.total
           this.itemSearch = res.data.filter
-          this.form = Object.assign({}, res.data.data.form)
-          this.defaultItem = Object.assign({}, res.data.data.form)
+          this.form = Object.assign({}, res.data.form)
+          this.defaultItem = Object.assign({}, res.data.form)
           this.company = this.$auth.$storage.getState('company')
         })
         .catch((err) => {

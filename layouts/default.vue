@@ -167,11 +167,11 @@
       </v-container>
     </v-main>
 
-    <v-snackbar v-model="snackbar" top color="primary" right elevation="24">
+    <v-snackbar v-model="snackbar" top centered color="primary" elevation="24">
       {{ message }}
       <template #action="{ attrs }">
         <v-btn color="pink" small icon v-bind="attrs" @click="snackbar = false">
-          <v-icon>mdi-close-thick</v-icon>
+          <v-icon>mdi-close</v-icon>
         </v-btn>
       </template>
     </v-snackbar>
@@ -299,7 +299,7 @@ export default {
     getLogo() {
       this.loadImage = true
       this.$axios.get(`/api/logo`).then((res) => {
-        this.logo = res.data.data.logo
+        this.logo = res.data.logo
         // this.$refs.navDrawer.setLogo(this.logo)
         this.loadImage = false
       })
@@ -313,9 +313,9 @@ export default {
           },
         })
         .then((res) => {
-          this.$auth.$storage.setState('company', res.data.data.form)
+          this.$auth.$storage.setState('company', res.data.form)
           this.company = this.$auth.$storage.getState('company')
-          this.companyName = res.data.data.form.company_name
+          this.companyName = res.data.form.company_name
         })
     },
 
@@ -348,7 +348,7 @@ export default {
           },
         })
         .then((res) => {
-          this.items = res.data.data.menus
+          this.items = res.data.menus
           // this.$refs.navDrawer.setItems(this.items)
         })
         .catch((err) => {

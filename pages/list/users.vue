@@ -216,7 +216,7 @@ export default {
 
       allData: [],
       itemRole: [],
-      itemEntity: {},
+      itemEntity: [],
       itemSearch: [],
       documentStatus: [],
       options: {},
@@ -302,7 +302,7 @@ export default {
       this.$axios
         .get(`/api/master/roles`)
         .then((res) => {
-          this.itemRole = res.data.data.simple
+          this.itemRole = res.data.simple
         })
         .catch((err) => {
           this.$swal({
@@ -317,7 +317,7 @@ export default {
       this.$axios
         .get(`/api/entities`)
         .then((res) => {
-          this.itemEntity = res.data.data.simple
+          this.itemEntity = res.data.simple
         })
         .catch((err) => {
           this.$swal({
@@ -334,7 +334,7 @@ export default {
       this.$axios
         .get(`/api/master/users`, {
           params: {
-            options: vm.options,
+            ...vm.options,
             searchItem: vm.searchItem,
             documentStatus: vm.documentStatus,
             searchStatus: vm.searchStatus,
@@ -343,11 +343,11 @@ export default {
         })
         .then((res) => {
           this.loading = false
-          this.allData = res.data.data.rows
-          this.totalData = res.data.data.total
-          this.itemSearch = res.data.data.filter
-          this.form = Object.assign({}, res.data.data.form)
-          this.defaultForm = Object.assign({}, res.data.data.form)
+          this.allData = res.data.data
+          this.totalData = res.data.total
+          this.itemSearch = res.data.filter
+          this.form = Object.assign({}, res.data.form)
+          this.defaultForm = Object.assign({}, res.data.form)
         })
         .catch((err) => {
           this.loading = false

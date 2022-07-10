@@ -120,6 +120,13 @@
             }}
           </span>
         </v-col>
+
+        <v-col cols="12">
+          <v-chip label :color="statusColor(form.status)" dark>
+            {{ form.status }}</v-chip
+          >
+        </v-col>
+
         <v-col cols="12">
           <v-autocomplete
             v-model="form.sales_person"
@@ -325,7 +332,9 @@
             <v-col cols="12" md="4" class="text-right pa-1">
               <span class="font-weight-bold subtitle-1">
                 {{
-                  isNaN(form.main_account_amount) ? 0 : $formatter.formatPrice(form.main_account_amount)
+                  isNaN(form.main_account_amount)
+                    ? 0
+                    : $formatter.formatPrice(form.main_account_amount)
                 }}
               </span>
             </v-col>
@@ -589,6 +598,23 @@ export default {
       return this.form.status === 'closed' || this.form.status === 'cancel'
     },
 
+    statusColor(status) {
+      switch (status) {
+        case 'open':
+          return 'blue darken-3'
+        case 'partial':
+          return 'orange'
+        case 'paid':
+          return 'green'
+        case 'closed':
+          return 'green'
+        case 'overdue':
+          return 'red'
+        case 'cancel':
+          return 'red'
+      }
+    },
+
     calcTotal(data) {
       try {
         this.form.discount_per_line = data.discountAmount
@@ -609,6 +635,7 @@ export default {
 
         this.changeCalculation(data)
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.log(e)
       }
     },
@@ -758,6 +785,11 @@ export default {
       }, 500)
 
       this.form = Object.assign({}, form)
+
+      if (this.form.tax_details) {
+        this.form.tax_details = this.reduceArrayTax(this.form.tax_details)
+      }
+
       this.moneyOptionTotal.prefix = this.form.default_currency_symbol
       this.moneyOptionTotalDiscount.prefix = this.form.default_currency_symbol
       this.moneyOptions.prefix = this.form.default_currency_symbol
@@ -818,18 +850,15 @@ export default {
           },
         })
 
-        this.itemCategory = resItemCategory.data.data.simple
-        this.itemUnit = resItemUnit.data.data.simple
-        this.itemAccounts = resAccount.data.data.rows
-        this.itemContact = resContact.data.data.rows
-        this.itemPaymentTerm = resPaymentTerm.data.data.auto_complete
-        this.$auth.$storage.setLocalStorage('tax', resTax.data.data.simple)
-        this.$auth.$storage.setLocalStorage('tax_row', resTax.data.data.rows)
-        this.$auth.$storage.setLocalStorage(
-          'salesPerson',
-          resEmployee.data.data.rows
-        )
-        this.itemSalesPersons = resEmployee.data.data.rows
+        this.itemCategory = resItemCategory.data.simple
+        this.itemUnit = resItemUnit.data.simple
+        this.itemAccounts = resAccount.data.data
+        this.itemContact = resContact.data.data
+        this.itemPaymentTerm = resPaymentTerm.data.auto_complete
+        this.$auth.$storage.setState('tax', resTax.data.simple)
+        this.$auth.$storage.setState('tax_row', resTax.data.data)
+        this.$auth.$storage.setState('salesPerson', resEmployee.data.data)
+        this.itemSalesPersons = resEmployee.data.data
       } catch (err) {
         this.$swal({
           type: 'error',
@@ -853,7 +882,7 @@ export default {
           const start = this.$moment(this.form.transaction_date)
           // const date = new Date(this.form.transaction_date)
           this.form.due_date = start
-            .add(res.data.data.rows.value, 'days')
+            .add(res.data.data.value, 'days')
             .format('YYYY-MM-DD')
         })
     },

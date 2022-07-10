@@ -138,9 +138,10 @@ export default {
   },
 
   auth: {
-    localStorage: {
-      prefix: process.env.AUTH_PREFIX,
-    },
+    // localStorage: {
+    //   prefix: process.env.AUTH_PREFIX,
+    // },
+    localStorage: false,
     cookie: {
       prefix: process.env.AUTH_PREFIX,
     },
