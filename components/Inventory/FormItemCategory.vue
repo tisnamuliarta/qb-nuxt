@@ -9,8 +9,8 @@
       <template #content>
         <v-form class="pt-2">
           <v-container>
-            <v-row no-gutters>
-              <v-col cols="12" class="pr-1 pl-1 pb-1 pt-1 mt-1">
+            <v-row dense>
+              <v-col cols="12">
                 <v-text-field
                   v-model="form.name"
                   label="Name"
@@ -19,7 +19,7 @@
                   hide-details="auto"
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" class="pr-1 pl-1 pb-1 pt-1 mt-1">
+              <v-col cols="12">
                 <v-text-field
                   v-model="form.type"
                   label="Type"
@@ -28,6 +28,58 @@
                   hide-details="auto"
                 ></v-text-field>
               </v-col>
+
+              <v-col cols="12" md="12">
+              <v-autocomplete
+                v-model="form.inventory_account_id"
+                :items="itemAccounts"
+                item-text="name"
+                item-value="id"
+                label="Inventory Account"
+                outlined
+                dense
+                hide-details="auto"
+              ></v-autocomplete>
+            </v-col>
+
+            <v-col cols="12" md="12">
+              <v-autocomplete
+                v-model="form.cogs_account_id"
+                :items="itemAccounts"
+                item-text="name"
+                item-value="id"
+                label="COGS Account"
+                outlined
+                dense
+                hide-details="auto"
+              ></v-autocomplete>
+            </v-col>
+
+            <v-col cols="12" md="12">
+              <v-autocomplete
+                v-model="form.allocation_account_id"
+                :items="itemAccounts"
+                item-text="name"
+                item-value="id"
+                label="Allocation Account"
+                outlined
+                dense
+                hide-details="auto"
+              ></v-autocomplete>
+            </v-col>
+
+            <v-col cols="12" md="12">
+              <v-autocomplete
+                v-model="form.price_diff_account_id"
+                :items="itemAccounts"
+                item-text="name"
+                item-value="id"
+                label="Price Diff Account"
+                outlined
+                dense
+                hide-details="auto"
+              ></v-autocomplete>
+            </v-col>
             </v-row>
           </v-container>
         </v-form>
@@ -80,11 +132,34 @@ export default {
       itemCategory: [],
       itemBank: [],
       itemTax: [],
+      itemAccounts: [],
       statusProcessing: 'insert',
     }
   },
 
+  activated() {
+    this.loadData()
+  },
+
   methods: {
+    async loadData() {
+      try {
+        const resAccount = await this.$axios.get(`/api/financial/accounts`, {
+          params: {
+            type: 'All',
+          },
+        })
+        this.itemAccounts = resAccount.data.data
+
+      } catch (err) {
+        this.$swal({
+          type: 'error',
+          title: 'Error',
+          text: err.response.data.error,
+        })
+      }
+    },
+
     newData(item, categoryType) {
       this.$refs.dialogForm.openDialog()
       this.statusProcessing = 'insert'

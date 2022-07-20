@@ -139,6 +139,12 @@ export default {
         precision: 0
       },
 
+      documentStatus: [],
+      itemSearch: [],
+      searchStatus: '',
+      searchItem: '',
+      search: '',
+
       itemAccounts: [],
       allData: [],
       form: {},
@@ -188,10 +194,17 @@ export default {
     getDataFromApi() {
       this.loading = true
       const vm = this
+      const status = {
+        searchItem: vm.searchItem,
+        documentStatus: vm.documentStatus,
+        searchStatus: vm.searchStatus,
+        search: vm.search,
+      }
       this.$axios
         .get(this.url, {
           params: {
             ...vm.options,
+            ...status
           },
         })
         .then((res) => {

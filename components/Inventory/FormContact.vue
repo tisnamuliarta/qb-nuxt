@@ -2,7 +2,7 @@
   <div>
     <DialogForm
       ref="dialogForm"
-      max-width="800px"
+      max-width="700px"
       :dialog-title="formTitle"
       :button-title="$t('Save')"
     >
@@ -10,7 +10,7 @@
         <v-form class="pt-2">
           <v-container>
             <v-row dense>
-              <v-col cols="12" md="4" class="">
+              <v-col cols="12" md="4">
                 <v-select
                   v-model="form.type"
                   :items="['Vendor', 'Customer', 'Other']"
@@ -33,7 +33,7 @@
                 ></v-text-field>
               </v-col>
 
-              <!-- <v-col cols="12" class="">
+              <!-- <v-col cols="12">
                 <v-checkbox
                   v-model="form.can_login"
                   dense
@@ -42,7 +42,7 @@
                 ></v-checkbox>
               </v-col> -->
 
-              <!-- <v-col v-if="form.can_login" cols="12" md="6" class="">
+              <!-- <v-col v-if="form.can_login" cols="12" md="6">
                 <v-text-field
                   v-model="form.email"
                   label="Email"
@@ -53,7 +53,7 @@
                 ></v-text-field>
               </v-col> -->
 
-              <!-- <v-col v-if="form.can_login" cols="12" md="6" class="">
+              <!-- <v-col v-if="form.can_login" cols="12" md="6">
                 <v-text-field
                   v-model="form.password"
                   label="Password"
@@ -65,11 +65,9 @@
                 ></v-text-field>
               </v-col> -->
 
-              <v-col cols="12" class="">
+              <v-col cols="12">
                 <v-card flat>
-                  <v-tabs
-                    v-model="tab"
-                  >
+                  <v-tabs v-model="tab">
                     <v-tab
                       v-for="item in items"
                       :key="item.tab"
@@ -82,7 +80,7 @@
                   <v-tabs-items v-model="tab">
                     <v-tab-item value="tab-1">
                       <v-row dense class="mt-2">
-                        <v-col cols="12" md="3" class="">
+                        <v-col cols="12" md="3">
                           <v-select
                             v-model="form.identify"
                             :items="['Mr.', 'Ms.']"
@@ -92,7 +90,7 @@
                             hide-details="auto"
                           ></v-select>
                         </v-col>
-                        <v-col cols="12" md="3" class="">
+                        <v-col cols="12" md="3">
                           <v-text-field
                             v-model="form.first_name"
                             label="First Name"
@@ -101,7 +99,7 @@
                             hide-details="auto"
                           ></v-text-field>
                         </v-col>
-                        <v-col cols="12" md="3" class="">
+                        <v-col cols="12" md="3">
                           <v-text-field
                             v-model="form.middle_name"
                             label="Middle Name"
@@ -110,7 +108,7 @@
                             hide-details="auto"
                           ></v-text-field>
                         </v-col>
-                        <v-col cols="12" md="3" class="">
+                        <v-col cols="12" md="3">
                           <v-text-field
                             v-model="form.last_name"
                             label="Last Name"
@@ -120,10 +118,14 @@
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="3" class="">
+                        <v-col cols="12" md="3">
                           <v-select
                             v-model="form.identify_by"
-                            :items="['Driver License', 'National ID', 'Passport']"
+                            :items="[
+                              'Driver License',
+                              'National ID',
+                              'Passport',
+                            ]"
                             label="Identify By"
                             outlined
                             dense
@@ -131,7 +133,7 @@
                           ></v-select>
                         </v-col>
 
-                        <v-col cols="12" md="9" class="">
+                        <v-col cols="12" md="9">
                           <v-text-field
                             v-model="form.identify_number"
                             label="Identify Number"
@@ -141,7 +143,7 @@
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="6" class="">
+                        <v-col cols="12" md="6">
                           <v-text-field
                             v-model="form.company_name"
                             label="Company Name"
@@ -151,7 +153,7 @@
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="6" class="">
+                        <v-col cols="12" md="6">
                           <v-text-field
                             v-model="form.phone"
                             label="Handphone"
@@ -161,7 +163,7 @@
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="6" class="">
+                        <v-col cols="12" md="6">
                           <v-text-field
                             v-model="form.fax"
                             label="Fax"
@@ -171,7 +173,7 @@
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="6" class="">
+                        <v-col cols="12" md="6">
                           <v-text-field
                             v-model="form.tax_number"
                             label="Tax Number"
@@ -181,7 +183,7 @@
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="12" class="">
+                        <v-col cols="12" md="12">
                           <v-textarea
                             v-model="form.address"
                             rows="3"
@@ -192,7 +194,7 @@
                           ></v-textarea>
                         </v-col>
 
-                        <v-col cols="12" md="12" class="">
+                        <v-col cols="12" md="12">
                           <v-textarea
                             v-model="form.shipping_address"
                             rows="3"
@@ -211,21 +213,12 @@
                         :key="index"
                         dense
                       >
-                        <v-col
-                          cols="11"
-                          class=""
-                        >
-                          <v-col
-                            cols="12"
-                            class=""
-                          >
+                        <v-col cols="11">
+                          <v-col cols="12">
                             <span>Bank Account</span>
-                            <hr>
+                            <hr />
                           </v-col>
-                          <v-col
-                            cols="12"
-                            class=""
-                          >
+                          <v-col cols="12">
                             <v-autocomplete
                               v-model="item.name"
                               :items="itemBank"
@@ -236,10 +229,7 @@
                             ></v-autocomplete>
                           </v-col>
 
-                          <v-col
-                            cols="12"
-                            class=""
-                          >
+                          <v-col cols="12">
                             <v-text-field
                               v-model="item.branch"
                               label="Bank Branch"
@@ -249,10 +239,7 @@
                             ></v-text-field>
                           </v-col>
 
-                          <v-col
-                            cols="12"
-                            class=""
-                          >
+                          <v-col cols="12">
                             <v-text-field
                               v-model="item.contact_account_name"
                               label="Bank Holder Name"
@@ -262,10 +249,7 @@
                             ></v-text-field>
                           </v-col>
 
-                          <v-col
-                            cols="12"
-                            class=""
-                          >
+                          <v-col cols="12">
                             <v-text-field
                               v-model="item.contact_account_number"
                               label="Bank Holder Account"
@@ -276,7 +260,7 @@
                           </v-col>
                         </v-col>
 
-                        <v-col cols="1" class="">
+                        <v-col cols="1">
                           <v-btn
                             color="red darken-1"
                             dark
@@ -284,14 +268,12 @@
                             icon
                             @click="removeLine(index, 'bank', item)"
                           >
-                            <v-icon>
-                              mdi-delete
-                            </v-icon>
+                            <v-icon> mdi-delete </v-icon>
                           </v-btn>
                         </v-col>
                       </v-row>
 
-                      <v-col cols="12" class="">
+                      <v-col cols="12">
                         <v-btn
                           color="green darken-1"
                           dark
@@ -304,68 +286,70 @@
                     </v-tab-item>
 
                     <v-tab-item value="tab-3">
-                      <v-col cols="12" class="pr-1 pl-1 pb-1 pt-1 mt-2">
-                        <v-autocomplete
-                          v-model="form.receivable_account_id"
-                          :items="itemAccounts"
-                          item-text="name"
-                          item-value="id"
-                          label="Account Receivable"
-                          clearable
-                          outlined
-                          dense
-                          hide-details="auto"
-                        ></v-autocomplete>
-                      </v-col>
-
-                      <v-col cols="12" class="">
-                        <v-autocomplete
-                          v-model="form.payable_account_id"
-                          :items="itemAccounts"
-                          item-text="name"
-                          item-value="id"
-                          label="Account Payable"
-                          clearable
-                          outlined
-                          dense
-                          hide-details="auto"
-                        ></v-autocomplete>
-                      </v-col>
-
-                      <v-col cols="12" class="">
-                        <v-checkbox
-                          v-model="form.active_max_payable"
-                          dense
-                          hide-details
-                          label="Active Max Payable"
-                        ></v-checkbox>
-                      </v-col>
-
-                      <v-col v-if="form.active_max_payable" cols="12" class="">
-                        <vuetify-money
-                          v-model="form.max_payable"
-                          :value-when-is-empty="valueWhenIsEmpty"
-                          :options="moneyOptions"
-                          label="Max Payable"
-                          outlined
-                          dense
-                          hide-details="auto"
-                        ></vuetify-money>
-                      </v-col>
-
-                      <v-col cols="12" class="">
-                        <v-autocomplete
-                          v-model="form.payment_term_id"
-                          :items="itemPaymentTerm"
-                          item-text="name"
-                          item-value="id"
-                          label="Default Payment Term"
-                          clearable
-                          outlined
-                          dense
-                          hide-details="auto"
-                        ></v-autocomplete>
-                      </v-col>
+                      <v-row dense>
+                        <v-col cols="12">
+                          <v-autocomplete
+                            v-model="form.receivable_account_id"
+                            :items="itemAccounts"
+                            item-text="name"
+                            item-value="id"
+                            label="Account Receivable"
+                            clearable
+                            outlined
+                            dense
+                            hide-details="auto"
+                          ></v-autocomplete>
+                        </v-col>
+  
+                        <v-col cols="12">
+                          <v-autocomplete
+                            v-model="form.payable_account_id"
+                            :items="itemAccounts"
+                            item-text="name"
+                            item-value="id"
+                            label="Account Payable"
+                            clearable
+                            outlined
+                            dense
+                            hide-details="auto"
+                          ></v-autocomplete>
+                        </v-col>
+  
+                        <v-col cols="12">
+                          <v-checkbox
+                            v-model="form.active_max_payable"
+                            dense
+                            hide-details
+                            label="Active Max Payable"
+                          ></v-checkbox>
+                        </v-col>
+  
+                        <v-col v-if="form.active_max_payable" cols="12">
+                          <vuetify-money
+                            v-model="form.max_payable"
+                            :value-when-is-empty="valueWhenIsEmpty"
+                            :options="moneyOptions"
+                            label="Max Payable"
+                            outlined
+                            dense
+                            hide-details="auto"
+                          ></vuetify-money>
+                        </v-col>
+  
+                        <v-col cols="12">
+                          <v-autocomplete
+                            v-model="form.payment_term_id"
+                            :items="itemPaymentTerm"
+                            item-text="name"
+                            item-value="id"
+                            label="Default Payment Term"
+                            clearable
+                            outlined
+                            dense
+                            hide-details="auto"
+                          ></v-autocomplete>
+                        </v-col>
+                      </v-row>
                     </v-tab-item>
 
                     <v-tab-item value="tab-4">
@@ -375,10 +359,7 @@
                         dense
                         class="mt-2"
                       >
-                        <v-col
-                          cols="11"
-                          class=""
-                        >
+                        <v-col cols="11">
                           <v-text-field
                             v-model="item.email"
                             label="Email"
@@ -388,7 +369,7 @@
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="1" class="">
+                        <v-col cols="1">
                           <v-btn
                             color="red darken-1"
                             dark
@@ -396,14 +377,12 @@
                             icon
                             @click="removeLine(index, 'email', item)"
                           >
-                            <v-icon>
-                              mdi-delete
-                            </v-icon>
+                            <v-icon> mdi-delete </v-icon>
                           </v-btn>
                         </v-col>
                       </v-row>
 
-                      <v-col cols="12" class="">
+                      <v-col cols="12">
                         <v-btn
                           color="green darken-1"
                           dark
@@ -414,7 +393,6 @@
                         </v-btn>
                       </v-col>
                     </v-tab-item>
-
                   </v-tabs-items>
                 </v-card>
               </v-col>
@@ -438,7 +416,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'FormContact',
 
@@ -475,16 +452,16 @@ export default {
       valueWhenIsEmpty: '0',
       url: '/api/bp/contacts',
       moneyOptions: {
-        suffix: "",
+        suffix: '',
         length: 11,
-        precision: 2
+        precision: 2,
       },
       tab: null,
       items: [
-        {tab: 'General Information', href: '#tab-1'},
-        {tab: 'List Of Bank', href: '#tab-2'},
-        {tab: 'Account Mapping', href: '#tab-3'},
-        {tab: 'Email', href: '#tab-4'},
+        { tab: 'General Information', href: '#tab-1' },
+        { tab: 'List Of Bank', href: '#tab-2' },
+        { tab: 'Account Mapping', href: '#tab-3' },
+        { tab: 'Email', href: '#tab-4' },
       ],
     }
   },
@@ -534,13 +511,14 @@ export default {
     },
 
     getAccounts() {
-      this.$axios.get(`/api/financial/accounts`, {
-        params: {
-          type: "All"
-        }
-      })
+      this.$axios
+        .get(`/api/financial/accounts`, {
+          params: {
+            type: 'All',
+          },
+        })
         .then((res) => {
-          this.itemAccounts = res.data.data.rows
+          this.itemAccounts = res.data.data
         })
         .catch((err) => {
           this.$swal({
@@ -552,13 +530,14 @@ export default {
     },
 
     getPaymentTerms() {
-      this.$axios.get(`/api/financial/payment-terms`, {
-        params: {
-          type: "All"
-        }
-      })
+      this.$axios
+        .get(`/api/financial/payment-terms`, {
+          params: {
+            type: 'All',
+          },
+        })
         .then((res) => {
-          this.itemPaymentTerm = res.data.data.auto_complete
+          this.itemPaymentTerm = res.data.auto_complete
         })
         .catch((err) => {
           this.$swal({
@@ -570,13 +549,14 @@ export default {
     },
 
     getBanks() {
-      this.$axios.get(`/api/master/banks`, {
-        params: {
-          type: "All"
-        }
-      })
+      this.$axios
+        .get(`/api/master/banks`, {
+          params: {
+            type: 'All',
+          },
+        })
         .then((res) => {
-          this.itemBank = res.data.data.simple
+          this.itemBank = res.data.simple
         })
         .catch((err) => {
           this.$swal({
@@ -619,7 +599,7 @@ export default {
     store(method, url, data) {
       const vm = this
       vm.submitLoad = true
-      this.$axios({method, url, data})
+      this.$axios({ method, url, data })
         .then((res) => {
           this.$refs.dialogForm.closeDialog()
           this.$emit('getDataFromApi')

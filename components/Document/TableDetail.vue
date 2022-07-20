@@ -27,6 +27,12 @@ import {
   HandsontableCellType,
 } from 'handsontable/cellTypes'
 
+// editor modules
+import {
+  registerEditor, // editors' registering function
+  SelectEditor,
+} from 'handsontable/editors'
+
 // choose plugins you want to use and import them
 import {
   registerPlugin,
@@ -48,6 +54,8 @@ registerCellType(DropdownCellType)
 registerCellType(HandsontableCellType)
 registerCellType(NumericCellType)
 registerCellType(CheckboxCellType)
+
+registerEditor(SelectEditor)
 
 registerPlugin(ManualColumnResize)
 registerPlugin(CopyPaste)
@@ -109,6 +117,15 @@ registerRenderer(
   }
 )
 
+// Deselect column after click on input.
+const doNotSelectColumn = function (event, coords) {
+  if (coords.row === -1 && event.target.nodeName === 'TD') {
+    event.stopImmediatePropagation()
+    event.stopPropagation()
+    this.deselectCell()
+  }
+}
+
 // const listVat = $auth.$storage.getState('tax_row')
 
 export default {
@@ -142,6 +159,7 @@ export default {
           indicator: false,
           columns: [1, 2, 3],
         },
+        beforeOnCellMouseDown: doNotSelectColumn,
         dataSchema: {
           id: null,
           item_id: null,
@@ -161,7 +179,7 @@ export default {
           'Id',
           'Item ID',
           'Item Code',
-          'Item Name',
+          'Item Code',
           'Description',
           'Qty',
           'Units',
@@ -169,6 +187,7 @@ export default {
           'Unit Price',
           'Discount',
           'Tax',
+          'Warehouse',
           'Amount',
           '',
         ],
@@ -188,20 +207,20 @@ export default {
             wordWrap: false,
           },
           {
-            data: 'sku',
+            data: 'base_line_id',
             width: 150,
             readOnly: true,
             wordWrap: false,
           },
           {
-            data: 'name',
-            width: 140,
+            data: 'code',
+            width: 120,
             readOnly: true,
             wordWrap: false,
           },
           {
             data: 'narration',
-            width: 350,
+            width: 250,
             wordWrap: false,
           },
           {
@@ -215,6 +234,7 @@ export default {
           },
           {
             data: 'unit',
+            className: 'htCenter',
             width: 60,
             readOnly: true,
             wordWrap: false,
@@ -262,13 +282,35 @@ export default {
           {
             data: 'tax_name',
             width: 100,
-            type: 'dropdown',
+            // type: 'dropdown',
             height: 26,
             wordWrap: false,
-            source(query, process) {
+            editor: 'select',
+            className: 'htCenter',
+            selectOptions: () => {
               const vm = window.details
-              const data = vm.$auth.$storage.getState('tax')
-              process(data)
+              return vm.$auth.$storage.getState('tax')
+            },
+            // source(query, process) {
+            //   const vm = window.details
+            //   const data = vm.$auth.$storage.getState('tax')
+            //   process(data)
+            // },
+            visibleRows: 5,
+            strict: true,
+            filter: false,
+            allowInvalid: false,
+          },
+          {
+            data: 'whs_name',
+            width: 100,
+            height: 26,
+            wordWrap: false,
+            editor: 'select',
+            className: 'htCenter',
+            selectOptions: () => {
+              const vm = window.details
+              return vm.$auth.$storage.getState('warehouse')
             },
             visibleRows: 5,
             strict: true,
@@ -324,6 +366,7 @@ export default {
         beforeRefreshDimensions() {
           return false
         },
+        beforeOnCellMouseDown: doNotSelectColumn,
         afterRemoveRow: (index, amount, physicalRow, source) => {
           const vm = window.details
           vm.calculateTotal()
@@ -392,7 +435,7 @@ export default {
     selectItems(data) {
       let rowData = data.row
       const selected = data.selected
-      const type = this.form.type
+      const type = this.form.transaction_type
       const vm = this
       // const purchase = ['PQ', 'PO', 'GR', 'BL','PY', 'DN', 'GN'];
       const sales = ['SQ', 'SO', 'SD', 'IN', 'RC', 'CN', 'SR']
@@ -402,21 +445,24 @@ export default {
           const price = sales.includes(type)
             ? item.sale_price
             : item.purchase_price
+
+          const narration = (item.description) ? item.description : item.name
           // const taxName = sales.includes(type) ? salesTax : null
 
           vm.$refs.details.hotInstance.setDataAtRowProp([
-            [rowData, 'name', item.name],
-            [rowData, 'sku', item.code],
+            [rowData, 'code', item.code],
+            [rowData, 'base_line_id', 0],
             [rowData, 'unit', item.unit],
-            [rowData, 'narration', item.description],
+            [rowData, 'narration', narration],
             [
               rowData,
               'default_currency_symbol',
-              vm.form.default_currency_symbol,
+              vm.form.default_currency_code,
             ],
             [rowData, 'item_id', item.id],
             [rowData, 'price', price],
             [rowData, 'tax_name', salesTax],
+            [rowData, 'whs_name', item.whs_name],
             [rowData, 'quantity', 1],
           ])
           rowData++

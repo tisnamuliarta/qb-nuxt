@@ -3,6 +3,7 @@
     v-model="dialogPermission"
     persistent
     no-click-animation
+    scrollable
     max-width="1000px"
     transition="dialog-bottom-transition"
   >

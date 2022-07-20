@@ -12,7 +12,8 @@ export default {
   },
 
   publicRuntimeConfig: {
-    myPublicVariable: process.env.BASE_API,
+    baseApi: process.env.BASE_API,
+    nodeEnv: 'dev',
   },
   /*
    ** Headers of the page
@@ -86,7 +87,7 @@ export default {
     '@nuxtjs/eslint-module',
     '@nuxtjs/vuetify',
     'nuxt-compress',
-    'nuxt-webpack-optimisations',
+    // 'nuxt-webpack-optimisations',
     '@nuxtjs/moment',
     // 'nuxt-vite',
     // '@nuxtjs/web-vitals',
@@ -94,14 +95,13 @@ export default {
     // '@nuxtjs/google-fonts',
   ],
 
-  webpackOptimisations: {
-    // hard source is the riskiest, if you have issues don't enable it
-    features: {
-      hardSourcePlugin: process.env.NODE_ENV === 'development',
-      parallelPlugin: process.env.NODE_ENV === 'development',
-    },
-    measure: true,
-  },
+  // webpackOptimisations: {
+  //   features: {
+  //     hardSourcePlugin: process.env.NODE_ENV === 'development',
+  //     parallelPlugin: process.env.NODE_ENV === 'development',
+  //   },
+  //   measure: true,
+  // },
 
   /*
    ** Nuxt.js modules
@@ -238,9 +238,11 @@ export default {
    */
    build: {
     // analyze: true,
-    // parallel: true,
-    // hardSource: true,
-    // cache: true,
+    parallel: true,
+    hardSource: true,
+    cache: true,
+    devtools: true,
+    corejs: 'auto',
     // transpile: ['@visable-vue', 'vee-validate/dist/rules', 'v-tooltip'],
   },
 }

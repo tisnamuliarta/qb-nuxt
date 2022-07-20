@@ -45,10 +45,10 @@ export default {
       dialog: false,
       itemCompany: [
         { text: 'Account and Settings', type: 'SETTING', action: 'setting' },
-        { text: 'Manage User', route: '/users', action: 'page' },
+        { text: 'Manage User', route: '/list/users', action: 'page' },
         {
           text: 'Chart Of Account',
-          route: '/financial/account',
+          route: '/app/accounting/account',
           action: 'page',
         },
       ],
@@ -61,7 +61,7 @@ export default {
         },
         {
           text: 'Product and Services',
-          route: '/inventory/item',
+          route: '/app/item/list',
           action: 'page',
         },
         {
@@ -76,7 +76,7 @@ export default {
         },
         {
           text: 'Currencies',
-          route: '/financial/currency',
+          route: '/list/currency',
           action: 'page',
         },
         { text: 'Tags', type: 'page', action: 'page' },
@@ -88,7 +88,11 @@ export default {
       ],
 
       itemTool: [
-        { text: 'Reclasify transaction', route: '/users/currenct', action: 'page' },
+        {
+          text: 'Reclassify transaction',
+          route: '/app/accounting/reclassify',
+          action: 'page',
+        },
         {
           text: 'Import Data',
           route: '/tools/import',
@@ -101,12 +105,12 @@ export default {
         },
         {
           text: 'Reconcile',
-          route: '/financial/reconcile',
+          route: '/app/accounting/reconcile',
           action: 'page',
         },
         {
           text: 'Budgeting',
-          route: '/financial/budgeting',
+          route: '/app/accounting/budgeting',
           action: 'page',
         },
         { text: 'Audit Log', route: '/tools/audit', action: 'page' },

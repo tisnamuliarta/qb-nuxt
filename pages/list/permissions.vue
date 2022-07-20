@@ -479,10 +479,18 @@ export default {
     getDataFromApi() {
       this.loading = true
       const vm = this
+      const status = {
+        searchItem: vm.searchItem,
+        documentStatus: vm.documentStatus,
+        searchStatus: vm.searchStatus,
+        search: vm.search,
+        type: this.typeDocument,
+      }
       this.$axios
         .get(`/api/master/permissions`, {
           params: {
             ...vm.options,
+            ...status
           },
         })
         .then((res) => {

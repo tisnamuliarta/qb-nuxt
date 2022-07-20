@@ -1,12 +1,18 @@
 <template>
   <div>
-    <InventoryTableContact></InventoryTableContact>
+    <InventoryTableItem></InventoryTableItem>
   </div>
 </template>
 
 <script>
 export default {
-  name: "CustomerDetail",
+  name: 'ItemMaster',
+
+  head() {
+    return {
+      title: this.$t('Item Master Data')
+    }
+  },
 
   activated() {
     this.$nuxt.$emit('extensionSetting', {

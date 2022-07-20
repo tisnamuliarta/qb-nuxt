@@ -6,6 +6,7 @@
       <v-list-item
         v-for="(item, i) in items"
         :key="i"
+        @click.native.stop
         @click="processAction(item)"
       >
         <v-list-item-content>

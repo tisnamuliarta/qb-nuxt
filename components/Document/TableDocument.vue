@@ -57,15 +57,27 @@
         </template>
 
         <template #[`item.balance_due`]="{ item }">
-          {{ $formatter.formatPrice(item.balance_due) }}
+          {{
+            $auth.user.entity.currency.currency_symbol +
+            ' ' +
+            $formatter.formatPrice(item.balance_due)
+          }}
         </template>
 
         <template #[`item.amount`]="{ item }">
-          {{ $formatter.formatPrice(item.amount) }}
+          {{
+            $auth.user.entity.currency.currency_symbol +
+            ' ' +
+            $formatter.formatPrice(item.amount)
+          }}
         </template>
 
         <template #[`item.main_account_amount`]="{ item }">
-          {{ $formatter.formatPrice(item.main_account_amount) }}
+          {{
+            $auth.user.entity.currency.currency_symbol +
+            ' ' +
+            $formatter.formatPrice(item.main_account_amount)
+          }}
         </template>
 
         <template #[`item.actions`]="{ item }">
@@ -75,17 +87,17 @@
             class="font-weight-bold text-right pr-0"
             text
             small
-            @click="actions('edit', item)"
+            @click.stop="actions('edit', item)"
           >
             Edit
           </v-btn>
           <v-btn
-            v-if="item.status === 'closed'"
+            v-if="item.status === 'closed' || item.status === 'canceled'"
             color="secondary"
             class="font-weight-bold text-right pr-0"
             text
             small
-            @click="actions('view', item)"
+            @click.stop="actions('view', item)"
           >
             View
           </v-btn>
@@ -99,7 +111,7 @@
               <v-list-item
                 v-for="(value, i) in items"
                 :key="i"
-                @click="actions(value.action, item)"
+                @click.stop="actions(value.action, item)"
               >
                 <v-list-item-content>
                   <v-list-item-title>{{ value.text }}</v-list-item-title>
@@ -143,7 +155,8 @@ export default {
       default() {
         return [
           { text: 'Closed', action: 'closed' },
-          { text: 'Cancel', action: 'cancel' },
+          { text: 'Cancel', action: 'canceled' },
+          { text: 'Delete', action: 'delete' },
         ]
       },
     },
@@ -234,29 +247,18 @@ export default {
           return 'green'
         case 'overdue':
           return 'red'
-        case 'cancel':
+        case 'canceled':
           return 'red'
       }
     },
 
     editItem(item) {
-      if (item.transaction_type) {
-        this.$router.push({
-          path: this.mappingAction(item.transaction_type),
-          query: {
-            document: item.id,
-            type: item.transaction_type,
-          },
-        })
-      } else {
-        this.$router.push({
-          path: this.mappingAction(item.type),
-          query: {
-            document: item.id,
-            type: item.type,
-          },
-        })
-      }
+      this.$router.push({
+        path: this.mappingAction(item.transaction_type),
+        query: {
+          document: item.id,
+        },
+      })
     },
 
     mappingAction(type) {
@@ -297,34 +299,45 @@ export default {
         case 'edit':
         case 'view':
           this.editItem(item)
-          break;
+          break
 
         case 'delete':
           this.deleteItem(item)
-          break;
+          break
 
         case 'closed':
-        case 'cancel':
+        case 'canceled':
           this.closeItem(item, action)
-          break;
+          break
       }
     },
 
     deleteItem(item) {
+      this.$nuxt.$loading.start()
       this.$axios
-        .delete(`/api/master/permissions/` + item.menu_name)
+        .delete(this.tableUrl + '/' + item.id)
         .then((res) => {
           this.getDataFromApi()
-          this.$nuxt.$emit('getMenu', 'nice payload')
+        })
+        .catch((err) => {
+          this.$swal({
+            type: 'error',
+            title: 'Error',
+            text: err.response.data.message,
+          })
+        })
+        .finally(() => {
+          this.$nuxt.$loading.finish()
         })
     },
 
     closeItem(item, action) {
       this.$nuxt.$loading.start()
-      this.$axios.put(this.tableUrl + '/' + item.id, {
-        updateStatus: action,
-        ...item
-      })
+      this.$axios
+        .put(this.tableUrl + '/' + item.id, {
+          updateStatus: action,
+          ...item,
+        })
         .then((res) => {
           this.getDataFromApi()
         })
@@ -368,7 +381,7 @@ export default {
         .get(this.tableUrl, {
           params: {
             ...vm.options,
-            ...status
+            ...status,
           },
         })
         .then((res) => {

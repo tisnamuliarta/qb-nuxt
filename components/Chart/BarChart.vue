@@ -63,12 +63,12 @@ export default {
   data() {
     return {
       chartData: {
-        labels: ['January', 'February', 'March'],
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
         datasets: [
-          { 
+          {
             label: 'Data One',
             backgroundColor: '#f87979',
-            data: [40, 20, 12] 
+            data: [40, 20, 12, 40, 30, 50, 70]
           }
         ],
       },

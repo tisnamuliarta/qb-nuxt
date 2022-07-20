@@ -17,7 +17,7 @@
           ></v-autocomplete>
         </v-col>
 
-        <v-col cols="12" md="2" sm="6">
+        <v-col cols="12" lg="2" md="2" sm="6">
           <v-select
             v-model="form.payment_term_id"
             :items="itemPaymentTerm"
@@ -31,7 +31,7 @@
           ></v-select>
         </v-col>
 
-        <v-col cols="12" md="2" sm="4">
+        <v-col cols="12" lg="2" md="2" sm="6">
           <v-text-field
             v-model="form.transaction_date"
             label="Transaction Date"
@@ -44,7 +44,7 @@
           ></v-text-field>
         </v-col>
 
-        <v-col cols="12" md="2" sm="4">
+        <v-col cols="12" lg="2" md="2" sm="6">
           <v-text-field
             v-model="form.due_date"
             label="Due Date"
@@ -57,18 +57,7 @@
         </v-col>
         <!-- <v-col cols="12" md="2"></v-col> -->
 
-        <v-col cols="12" md="4">
-          <v-textarea
-            v-model="form.contact_address"
-            rows="2"
-            label="Billing Address"
-            outlined
-            dense
-            hide-details="auto"
-          ></v-textarea>
-        </v-col>
-
-        <v-col cols="12" md="4">
+        <v-col cols="12" md="4" sm="6">
           <v-text-field
             v-model="form.reference_no"
             label="No Contract"
@@ -78,7 +67,7 @@
           ></v-text-field>
         </v-col>
 
-        <v-col cols="12" md="8">
+        <v-col cols="12" md="6">
           <v-combobox
             v-model="form.tags"
             :items="itemTag"
@@ -104,6 +93,22 @@
             </template>
           </v-combobox>
         </v-col>
+
+        <v-col cols="12" md="4">
+          <v-autocomplete
+            v-model="form.sales_person"
+            :items="itemSalesPersons"
+            item-value="user_id"
+            item-text="first_name"
+            label="Sales Person"
+            outlined
+            dense
+            multiple
+            persistent-hint
+            small-chips
+            hide-details="auto"
+          ></v-autocomplete>
+        </v-col>
       </v-row>
     </v-col>
 
@@ -126,39 +131,53 @@
             {{ form.status }}</v-chip
           >
         </v-col>
-
-        <v-col cols="12">
-          <v-autocomplete
-            v-model="form.sales_person"
-            :items="itemSalesPersons"
-            item-value="user_id"
-            item-text="first_name"
-            label="Sales Person"
-            outlined
-            dense
-            multiple
-            persistent-hint
-            small-chips
-            hide-details="auto"
-          ></v-autocomplete>
-        </v-col>
       </v-row>
     </v-col>
 
-    <v-col cols="12">
+    <v-col cols="12" class="mt-n5">
       <v-card flat>
-        <!-- <LazyFormAgGrid ref="agGrid"></LazyFormAgGrid> -->
-        <!-- <lazyTabulator ref="tabulator" /> -->
-        <LazyDocumentTableDetail
-          ref="childDetails"
-          @calcTotal="calcTotal"
-        ></LazyDocumentTableDetail>
-        <!-- <div class="scroll-container-min">
-          <LazyDocumentTableDetail
-            ref="childDetails"
-            @calcTotal="calcTotal"
-          ></LazyDocumentTableDetail>
-        </div> -->
+        <v-tabs
+          v-model="tab"
+          align-with-title
+          color="black"
+          slider-color="green"
+          slider-size="4"
+        >
+          <v-tab href="#tab-1"> Content </v-tab>
+
+          <v-tab href="#tab-2"> Details </v-tab>
+        </v-tabs>
+
+        <v-tabs-items v-model="tab">
+          <v-tab-item :value="'tab-1'">
+            <!-- <LazyFormAgGrid ref="agGrid"></LazyFormAgGrid> -->
+            <!-- <lazyTabulator ref="tabulator" /> -->
+            <!-- <LazyDocumentTableDetail
+              ref="childDetails"
+              @calcTotal="calcTotal"
+            ></LazyDocumentTableDetail> -->
+            <div class="scroll-container-min">
+              <LazyDocumentTableDetail
+                ref="childDetails"
+                @calcTotal="calcTotal"
+              ></LazyDocumentTableDetail>
+            </div>
+          </v-tab-item>
+
+          <v-tab-item :value="'tab-2'">
+            <v-col cols="12" md="4">
+              <v-textarea
+                v-model="form.contact_address"
+                rows="2"
+                label="Billing Address"
+                outlined
+                dense
+                hide-details="auto"
+              ></v-textarea>
+            </v-col>
+          </v-tab-item>
+        </v-tabs-items>
+
         <v-card-actions>
           <v-btn
             small
@@ -465,6 +484,7 @@ export default {
 
   data() {
     return {
+      tab: null,
       menu: '',
       menu2: '',
       menu3: '',
@@ -812,11 +832,8 @@ export default {
             },
           }
         )
-        const resItemUnit = await this.$axios.get(`/api/inventory/item-units`, {
-          params: {
-            type: 'Item Category',
-          },
-        })
+        const resItemUnit = await this.$axios.get(`/api/inventory/item-units`)
+        const resWarehouse = await this.$axios.get(`/api/inventory/warehouse`)
         const resAccount = await this.$axios.get(`/api/financial/accounts`, {
           params: {
             type: 'All',
@@ -830,19 +847,10 @@ export default {
         })
 
         const resPaymentTerm = await this.$axios.get(
-          `/api/financial/payment-terms`,
-          {
-            params: {
-              type: 'All',
-            },
-          }
+          `/api/financial/payment-terms`
         )
 
-        const resTax = await this.$axios.get(`/api/financial/taxes`, {
-          params: {
-            type: 'All',
-          },
-        })
+        const resTax = await this.$axios.get(`/api/financial/taxes`)
 
         const resEmployee = await this.$axios.get(`/api/payroll/employees`, {
           params: {
@@ -855,7 +863,10 @@ export default {
         this.itemAccounts = resAccount.data.data
         this.itemContact = resContact.data.data
         this.itemPaymentTerm = resPaymentTerm.data.auto_complete
+        this.$auth.$storage.removeState('tax')
         this.$auth.$storage.setState('tax', resTax.data.simple)
+        this.$auth.$storage.removeState('warehouse')
+        this.$auth.$storage.setState('warehouse', resWarehouse.data.simple)
         this.$auth.$storage.setState('tax_row', resTax.data.data)
         this.$auth.$storage.setState('salesPerson', resEmployee.data.data)
         this.itemSalesPersons = resEmployee.data.data

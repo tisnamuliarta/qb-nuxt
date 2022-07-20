@@ -2,7 +2,6 @@
   <v-layout>
     <v-flex sm12>
       <div class="mt-0">
-        </v-skeleton-loader>
         <v-data-table
           :mobile-breakpoint="0"
           :headers="headers"
@@ -203,9 +202,10 @@ export default {
       loadingSync: false,
 
       searchItem: '',
-      searchRole: '',
+      documentStatus: [],
       search: '',
       searchStatus: '',
+      searchRole: '',
       items: [
         { text: 'Edit', action: 'edit' },
         { text: 'Copy', action: 'copy' },
@@ -218,10 +218,9 @@ export default {
       itemRole: [],
       itemEntity: [],
       itemSearch: [],
-      documentStatus: [],
       options: {},
       sub_id: {},
-      url: '',
+      url: '/api/master/users',
       form: {},
       defaultForm: {},
 
@@ -331,14 +330,17 @@ export default {
     getDataFromApi() {
       this.loading = true
       const vm = this
+      const status = {
+        searchItem: vm.searchItem,
+        documentStatus: vm.documentStatus,
+        searchStatus: vm.searchStatus,
+        search: vm.search,
+      }
       this.$axios
-        .get(`/api/master/users`, {
+        .get(this.url, {
           params: {
             ...vm.options,
-            searchItem: vm.searchItem,
-            documentStatus: vm.documentStatus,
-            searchStatus: vm.searchStatus,
-            search: vm.search,
+            ...status
           },
         })
         .then((res) => {

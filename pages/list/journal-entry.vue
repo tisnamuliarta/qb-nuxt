@@ -21,7 +21,7 @@
           dense
           :footer-props="{ 'items-per-page-options': [20, 50, 100, -1] }"
         >
-          <template v-slot:top>
+          <template #top>
             <LazyMainToolbar
               :document-status="documentStatus"
               :search-status="searchStatus"

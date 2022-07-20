@@ -7,8 +7,9 @@
     transition="dialog-top-transition"
     scrollable
     no-click-animation
+    :retain-focus="false"
   >
-    <v-card tile>
+    <v-card tile :loading="loading">
       <v-card-title>
         <v-toolbar-title>
           <v-btn icon>
@@ -45,12 +46,21 @@ export default {
   data() {
     return {
       dialog: false,
+      loading: false,
       title: '',
       countRouter: -1,
     }
   },
 
   methods: {
+    showLoading() {
+      this.loading = true
+    },
+
+    finishLoading() {
+      this.loading = false
+    },
+
     openDialog() {
       this.dialog = true
     },
@@ -60,8 +70,14 @@ export default {
     },
 
     closeDialog() {
-      this.$router.back()
-      this.$emit('getDataFromApi')
+      if (!this.$auth.$storage.getState('basePath')) {
+        this.$router.back()
+      } else {
+        this.$router.push({
+          path: this.$auth.$storage.getState('basePath')
+        })
+      }
+      // this.$emit('getDataFromApi')
       this.$nuxt.$emit('getDataFromApi')
     },
   },

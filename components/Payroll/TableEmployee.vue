@@ -38,32 +38,25 @@
             @getDataFromApi="getDataFromApi"
           />
         </template>
-        <template #[`item.document_number`]="{ item }">
+        <template #[`item.first_name`]="{ item }">
           <a @click="editItem(item)">
-            <strong v-text="item.document_number"></strong>
+            <strong v-text="item.first_name + ' ' + item.last_name"></strong>
           </a>
         </template>
 
         <template #[`item.status`]="{ item }">
-          <v-btn text small>
-            <v-icon :color="statusColor(item)" left> mdi-circle </v-icon>
+          <v-chip label small dark :color="statusColor(item)">
             {{ item.status }}
-          </v-btn>
+          </v-chip>
         </template>
 
-        <template #[`item.balance_due`]="{ item }">
-          {{
-            form.default_currency_symbol +
-            ' ' +
-            $formatter.formatPrice(item.balance_due)
-          }}
+        <template #[`item.salary`]="{ item }">
+          {{ $formatter.formatPrice(item.salary) }}
         </template>
 
-        <template #[`item.amount`]="{ item }">
+        <template #[`item.payment_method`]="{ item }">
           {{
-            form.default_currency_symbol +
-            ' ' +
-            $formatter.formatPrice(item.amount)
+            (item.payment_method === 1 ) ? 'Cash' : 'Direct Deposit'
           }}
         </template>
 
@@ -73,9 +66,9 @@
             class="font-weight-bold text-right pr-0"
             text
             small
-            @click="actions(itemAction, item)"
+            @click="actions('edit', item)"
           >
-            {{ itemText }}
+            Edit
           </v-btn>
           <v-menu transition="slide-y-transition" bottom>
             <template #activator="{ on, attrs }">
@@ -134,10 +127,7 @@ export default {
     items: {
       type: Array,
       default() {
-        return [
-          { text: 'Edit', action: 'edit' },
-          { text: 'Delete', action: 'delete' },
-        ]
+        return [{ text: 'Delete', action: 'delete' }]
       },
     },
     headerTable: {
@@ -196,7 +186,6 @@ export default {
     },
   },
 
-
   activated() {
     this.itemText = this.items[0].text
     this.itemAction = this.items[0].action
@@ -213,7 +202,7 @@ export default {
         case 'open':
         case 'partial':
           return 'warning'
-        case 'paid':
+        case 'active':
           return 'green'
         case 'closed':
           return 'green'
@@ -260,26 +249,31 @@ export default {
     getDataFromApi() {
       this.loading = true
       const vm = this
+      const status = {
+        searchItem: vm.searchItem,
+        documentStatus: vm.documentStatus,
+        searchStatus: vm.searchStatus,
+        search: vm.search,
+        type: this.typeDocument,
+      }
       this.$axios
         .get(`/api/payroll/employees`, {
           params: {
-            options: vm.options,
-            searchItem: vm.searchItem,
-            documentStatus: vm.documentStatus,
-            searchStatus: vm.searchStatus,
-            search: vm.search,
-            type: this.typeDocument,
+            ...vm.options,
+            ...status,
           },
         })
         .then((res) => {
           this.loading = false
-          this.allData = res.data.data.rows
-          this.totalData = res.data.data.total
+          this.allData = res.data.data
+          this.totalData = res.data.total
           this.itemSearch = res.data.filter
-          this.form = Object.assign({}, res.data.data.form)
-          this.defaultItem = Object.assign({}, res.data.data.form)
-          this.$refs.formData.setItemGender(res.data.data.itemGender)
-          this.$refs.formData.setPaymentMethod(res.data.data.paymentMethod)
+          this.form = Object.assign({}, res.data.form)
+          this.defaultItem = Object.assign({}, res.data.form)
+          this.$refs.formData.setItemGender(res.data.itemGender)
+          this.$refs.formData.setPaymentMethod(res.data.paymentMethod)
+          this.$refs.formData.setPayFrequency(res.data.payFrequency)
+          this.$refs.formData.setPayType(res.data.payType)
         })
         .catch((err) => {
           this.loading = false

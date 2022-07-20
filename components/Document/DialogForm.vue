@@ -3,38 +3,44 @@
     <v-overlay :value="showLoading">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
     </v-overlay>
+
     <template #content>
       <LazyDocumentFormDocument
         ref="formDocument"
         :form-type="formType"
       ></LazyDocumentFormDocument>
     </template>
+
     <template #actions>
-      <v-btn text small dark>Print or Preview</v-btn>
-      <v-divider dark vertical></v-divider>
-      <v-btn text small dark>Make recurring</v-btn>
-      <v-divider dark vertical></v-divider>
-      <v-btn text small dark>
-        More
-        <v-menu transition="slide-y-transition" bottom>
-          <template #activator="{ on, attrs }">
-            <v-btn dark icon v-bind="attrs" v-on="on">
-              <v-icon>mdi-menu-down</v-icon>
-            </v-btn>
-          </template>
-          <v-list link>
-            <v-list-item
-              v-for="(value, i) in itemAction"
-              :key="i"
-              @click="actionItem(value.action)"
-            >
-              <v-list-item-content>
-                <v-list-item-title>{{ value.text }}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-      </v-btn>
+      <span v-if="actionName === 'Update'">
+        <v-btn text small dark @click="printAction('preview')"
+          >Print or Preview</v-btn
+        >
+        <v-divider dark vertical></v-divider>
+        <v-btn text small dark>Make recurring</v-btn>
+        <v-divider dark vertical></v-divider>
+        <v-btn text small dark>
+          More
+          <v-menu transition="slide-y-transition" bottom>
+            <template #activator="{ on, attrs }">
+              <v-btn dark icon v-bind="attrs" v-on="on">
+                <v-icon>mdi-menu-down</v-icon>
+              </v-btn>
+            </template>
+            <v-list link>
+              <v-list-item
+                v-for="(value, i) in itemAction"
+                :key="i"
+                @click="actionItem(value.action)"
+              >
+                <v-list-item-content>
+                  <v-list-item-title>{{ value.text }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-btn>
+      </span>
 
       <v-spacer />
       <v-btn
@@ -46,7 +52,7 @@
         :disabled="form.status === 'closed'"
         @click="actionSave('save')"
       >
-        Save
+        {{ actionName }}
 
         <v-menu transition="slide-y-transition" bottom>
           <template #activator="{ on, attrs }">
@@ -108,17 +114,14 @@ export default {
         { text: 'Save and new', action: 'saveNew' },
         { text: 'Save and send', action: 'saveSend' },
       ],
-      itemAction: [
-        { text: 'Copy', action: 'copy' },
-        { text: 'Cancel', action: 'cancel' },
-        { text: 'Audit History', action: 'history' },
-      ],
+      itemAction: [],
+      action: [],
       breadcrumb: [],
       form: {},
       audits: {},
       defaultItem: {},
       dialogLoading: false,
-      showLoading: false,
+      showLoading: true,
       dialog: true,
       loading: false,
       actionName: 'Save',
@@ -128,11 +131,17 @@ export default {
   },
 
   activated() {
-    this.itemAction = this.appendItemAction(this.formType)
     this.$nextTick(() => {
       this.$nuxt.$loading.start()
     })
     setTimeout(() => {
+      this.action = []
+      this.itemAction = [
+        { text: 'Copy', action: 'copy' },
+        { text: 'Cancel', action: 'cancel' },
+        { text: 'Audit History', action: 'history' },
+      ]
+      this.itemAction = this.appendItemAction(this.formType)
       // this.$refs.dialogForm.openDialog()
       this.$refs.dialogForm.openDialog()
       this.getDataFromApi()
@@ -159,10 +168,10 @@ export default {
     },
 
     appendItemAction(type) {
-      let action = []
+      this.action = []
       switch (type) {
         case 'PQ':
-          action = [
+          this.action = [
             {
               text: 'Copy to ' + this.$t('Purchase Order'),
               action: 'PO',
@@ -182,7 +191,7 @@ export default {
           break
 
         case 'PO':
-          action = [
+          this.action = [
             {
               text: 'Copy to ' + this.$t('Goods Receipt PO'),
               action: 'GR',
@@ -197,7 +206,7 @@ export default {
           break
 
         case 'GR':
-          action = [
+          this.action = [
             {
               text: 'Copy to ' + this.$t('A/P Invoice'),
               action: 'BL',
@@ -212,7 +221,7 @@ export default {
           break
 
         case 'BL':
-          action = [
+          this.action = [
             {
               text: 'Copy to ' + this.$t('Outgoing Payment'),
               action: 'PY',
@@ -222,7 +231,7 @@ export default {
           break
 
         case 'PY':
-          action = [
+          this.action = [
             {
               text: 'Copy to ' + this.$t('A/P Credit Memo'),
               action: 'DN',
@@ -232,7 +241,7 @@ export default {
           break
 
         case 'DN':
-          action = [
+          this.action = [
             {
               text: 'Copy to ' + this.$t('Goods Return'),
               action: 'GN',
@@ -242,7 +251,7 @@ export default {
           break
 
         case 'SQ':
-          action = [
+          this.action = [
             {
               text: 'Copy to ' + this.$t('Sales Order'),
               action: 'SO',
@@ -262,7 +271,7 @@ export default {
           break
 
         case 'SO':
-          action = [
+          this.action = [
             {
               text: 'Copy to ' + this.$t('Sales Delivery'),
               action: 'SD',
@@ -277,7 +286,7 @@ export default {
           break
 
         case 'SD':
-          action = [
+          this.action = [
             {
               text: 'Copy to ' + this.$t('A/R Invoice'),
               action: 'IN',
@@ -292,7 +301,7 @@ export default {
           break
 
         case 'IN':
-          action = [
+          this.action = [
             {
               text: 'Copy to ' + this.$t('Incoming Payment'),
               action: 'RC',
@@ -302,7 +311,7 @@ export default {
           break
 
         case 'RC':
-          action = [
+          this.action = [
             {
               text: 'Copy to ' + this.$t('A/R Credit Memo'),
               action: 'CN',
@@ -312,7 +321,7 @@ export default {
           break
 
         case 'CN':
-          action = [
+          this.action = [
             {
               text: 'Copy to ' + this.$t('Sales Return'),
               action: 'SR',
@@ -322,7 +331,7 @@ export default {
           break
       }
 
-      return [...action, ...this.itemAction]
+      return [...this.action, ...this.itemAction]
     },
 
     arrowLink(status, type) {
@@ -356,54 +365,69 @@ export default {
         })
     },
 
-    getDataFromApi(copyFromId) {
-      // this.dialogLoading = true
-      const type = this.formType
-      this.$axios
-        .get(this.url + '/' + this.$route.query.document, {
-          params: {
-            type,
-            copyFromId,
-          },
-        })
-        .then((res) => {
-          let form = ''
-          this.audits = res.data.audits
-          if (res.data.count === 0) {
-            form = res.data.form
-            this.actionName = 'Save'
-          } else {
-            form = res.data.data
-            this.actionName = 'Update'
-          }
+    async getDataFromApi(copyFromId) {
+      this.showLoading = true
+      try {
+        // this.dialogLoading = true
+        const type = this.formType
+        const copyFrom = this.$route.query.copyFrom
+        let res = ''
+        if (copyFrom) {
+          res = await this.$axios.get(`/api/document/copy/` + copyFrom)
+        } else {
+          res = await this.$axios.get(
+            this.url + '/' + this.$route.query.document,
+            {
+              params: {
+                type,
+                copyFromId,
+              },
+            }
+          )
+        }
 
-          this.form = Object.assign({}, form)
-          this.defaultItem = Object.assign({}, form)
+        let form = ''
+        this.audits = res.data.audits
+        if (res.data.count === 0) {
+          form = res.data.form
+          this.actionName = 'Save'
+        } else {
+          form = res.data.data
+          this.actionName = 'Update'
+        }
 
-          if (this.form.transaction_no) {
-            this.title = this.dialogTitle + ' #' + this.form.transaction_no
-          } else {
-            this.title = this.dialogTitle + ' #' + this.form.document_number
-          }
+        this.form = Object.assign({}, form)
+        this.defaultItem = Object.assign({}, form)
 
-          this.$refs.dialogForm.setTitle(this.title)
+        if (copyFrom) {
+          this.form.status = 'open'
+          this.form.base_id = this.form.id
+          this.form.base_type = this.form.transaction_type
+          this.form.base_num = this.form.transaction_no
+          this.form.transaction_type = this.formType
+        }
 
-          this.$refs.formDocument.setData(this.form)
+        this.title = this.dialogTitle + ' #' + this.form.transaction_no
+
+        this.$refs.dialogForm.setTitle(this.title)
+
+        this.$refs.formDocument.setData(this.form)
+
+        this.showLoading = false
+      } catch (err) {
+        // this.showLoading = false
+
+        const message =
+          err.response !== undefined ? err.response.data.message : err
+        this.$swal({
+          type: 'error',
+          title: 'Error',
+          text: message,
         })
-        .catch((err) => {
-          const message =
-            err.response !== undefined ? err.response.data.message : err
-          this.$swal({
-            type: 'error',
-            title: 'Error',
-            text: message,
-          })
-        })
-        .finally((res) => {
-          this.$nuxt.$loading.finish()
-        })
+      }
     },
 
+    // A method that is called when a user clicks on an action button in the UI.
     actionItem(action) {
       const vm = this
       switch (action) {
@@ -419,7 +443,52 @@ export default {
           break
 
         default:
+          this.$router.push({
+            path: vm.mappingAction(action),
+            query: {
+              document: 0,
+              copyFrom: this.form.id,
+            },
+          })
+          this.form.status = 'open'
+          this.form.base_id = this.form.id
+          this.form.base_type = this.form.transaction_type
+          this.form.base_num = this.form.document_number
+          this.$refs.formDocument.setData(this.form)
           break
+      }
+    },
+
+    mappingAction(type) {
+      switch (type) {
+        case 'SQ':
+          return '/app/form/sales/quote'
+        case 'SO':
+          return '/app/form/sales/order'
+        case 'SD':
+          return '/app/form/sales/delivery'
+        case 'IN':
+          return '/app/form/sales/invoice'
+        case 'RC':
+          return '/app/form/sales/payment'
+        case 'CN':
+          return '/app/form/sales/creditmemo'
+        case 'SR':
+          return '/app/form/sales/return'
+        case 'PQ':
+          return '/app/form/purchase/quote'
+        case 'PO':
+          return '/app/form/purchase/order'
+        case 'GR':
+          return '/app/form/purchase/receipt'
+        case 'BL':
+          return '/app/form/purchase/invoice'
+        case 'PY':
+          return '/app/form/purchase/payment'
+        case 'DN':
+          return '/app/form/purchase/creditmemo'
+        case 'GN':
+          return '/app/form/purchase/return'
       }
     },
 
@@ -453,41 +522,6 @@ export default {
       }
     },
 
-    deleteDocument(document) {
-      const vm = this
-      this.$swal({
-        title: 'Are you sure?',
-        text: 'The data will be deleted',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!',
-      }).then((result) => {
-        if (result.value) {
-          this.$axios
-            .delete(this.url + '/' + document)
-            .then((res) => {
-              this.$swal({
-                type: 'success',
-                title: 'Success...',
-                text: 'Data Deleted!',
-              })
-              this.$router.push({
-                path: vm.$helper.mappingAction(vm.$route.query.type),
-              })
-            })
-            .catch((err) => {
-              this.$swal({
-                type: 'error',
-                title: 'Oops...',
-                text: err.response.data.message,
-              })
-            })
-        }
-      })
-    },
-
     printAction(action) {
       switch (action) {
         case 'preview':
@@ -505,27 +539,28 @@ export default {
 
     previewDocument() {
       const vm = this
-      this.dialogLoading = true
+      this.$refs.dialogForm.showLoading()
       this.$axios
-        .get(`/api/documents/print`, {
+        .get(`/api/document/print`, {
           params: {
             id: vm.form.id,
+            type: vm.form.transaction_type,
           },
           responseType: 'arraybuffer',
         })
         .then((response) => {
-          this.dialogLoading = false
+          this.$refs.dialogForm.finishLoading()
           const url = window.URL.createObjectURL(new Blob([response.data]))
           const link = document.createElement('a')
 
           link.href = url
-          link.setAttribute('download', vm.form.document_number + '.pdf') // set custom file name
+          link.setAttribute('download', vm.form.transaction_no + '.pdf') // set custom file name
           document.body.appendChild(link)
 
           link.click() // force download file without open new tab
         })
         .catch((err) => {
-          this.dialogLoading = false
+          this.$refs.dialogForm.finishLoading()
           this.$swal({
             type: 'error',
             title: 'Error',
@@ -542,6 +577,7 @@ export default {
       const data = this.$refs.formDocument.returnData(docId)
       const vm = this
       this.loading = true
+      this.showLoading = true
       this.$axios({ method, url, data })
         .then((res) => {
           this.$nuxt.$emit('snackbar', this.title + ' saved!')
@@ -584,6 +620,7 @@ export default {
           })
         })
         .finally((res) => {
+          this.showLoading = false
           this.loading = false
         })
     },

@@ -5,17 +5,17 @@
       type-document="GN"
       form-url="/app/form/purchase/return"
       :header-table="[
-        { text: 'Number', value: 'document_number', cellClass: 'disable-wrap' },
-        { text: 'Vendor', value: 'contact_name', cellClass: 'disable-wrap' },
+        { text: $t('Transaction No'), value: 'transaction_no', cellClass: 'disable-wrap' },
+        { text: 'Vendor', value: 'contact.name', cellClass: 'disable-wrap' },
         {
-          text: 'Transaction Date',
+          text: $t('Transaction Date'),
           value: 'transaction_date',
           cellClass: 'disable-wrap',
           sortable: false,
           filterable: false,
         },
         {
-          text: 'Due Date',
+          text: $t('Due Date'),
           value: 'due_date',
           cellClass: 'disable-wrap',
           sortable: false,

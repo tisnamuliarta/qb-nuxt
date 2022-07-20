@@ -6,17 +6,17 @@
       form-url="/app/form/sales/invoice"
       table-url="/api/transactions"
       :header-table="[
-        { text: 'Number', value: 'transaction_no', cellClass: 'disable-wrap' },
+        { text: $t('Transaction No'), value: 'transaction_no', cellClass: 'disable-wrap' },
         { text: 'Customer', value: 'contact.name', cellClass: 'disable-wrap' },
         {
-          text: 'Transaction Date',
+          text: $t('Transaction Date'),
           value: 'transaction_date',
           cellClass: 'disable-wrap',
           sortable: false,
           filterable: false,
         },
         {
-          text: 'Due Date',
+          text: $t('Due Date'),
           value: 'due_date',
           cellClass: 'disable-wrap',
           sortable: false,

@@ -1,53 +1,48 @@
 <template>
-<div>
-  <DialogForm
-    ref="dialogForm"
-    max-width="800px"
-    dialog-title="Item List"
-    button-title="Save"
-    original="top"
-  >
-    <template #content>
-      <InventoryTableItem
-        ref="tableItem"
-        :view-data="viewData"
-        :show-add-btn="showAddBtn"
-      ></InventoryTableItem>
-    </template>
+  <div>
+    <DialogForm
+      ref="dialogForm"
+      max-width="800px"
+      dialog-title="Item List"
+      button-title="Save"
+      original="top"
+    >
+      <template #content>
+        <InventoryTableItem
+          ref="tableItem"
+          :view-data="viewData"
+          :show-add-btn="showAddBtn"
+        ></InventoryTableItem>
+      </template>
 
-    <template #saveData>
-      <v-btn
-        color="green darken-1"
-        dark
-        small
-        @click="selectData"
-      >
-        Select Item
-        <v-icon>mdi-arrow-down-right</v-icon>
-      </v-btn>
-    </template>
-  </DialogForm>
-</div>
+      <template #saveData>
+        <v-btn color="green darken-1" dark small @click="selectData">
+          Select Item
+          <v-icon>mdi-arrow-down-right</v-icon>
+        </v-btn>
+      </template>
+    </DialogForm>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "DialogItem",
+  name: 'DialogItem',
 
   props: {
     viewData: {
       type: Boolean,
-      default: true
+      default: true,
     },
     showAddBtn: {
       type: Boolean,
-      default: true
+      default: true,
     },
   },
 
   data() {
     return {
-      row: null
+      row: null,
     }
   },
 
@@ -66,7 +61,7 @@ export default {
         selected: this.$refs.tableItem.returnSelected(),
       })
       this.$refs.dialogForm.closeDialog()
-    }
-  }
+    },
+  },
 }
 </script>

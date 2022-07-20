@@ -43,6 +43,7 @@
         <v-menu
           v-if="showExtensionButton"
           transition="slide-y-transition"
+          :close-on-content-click="false"
           offset-y
           bottom
         >

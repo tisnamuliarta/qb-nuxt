@@ -10,7 +10,7 @@
         <v-form class="pt-2">
           <v-container>
             <v-row dense>
-              <v-col cols="12" md="4">
+              <v-col cols="12" md="5">
                 <v-text-field
                   v-model="form.first_name"
                   label="First name"
@@ -20,7 +20,7 @@
                 ></v-text-field>
               </v-col>
 
-              <v-col cols="12" md="4">
+              <v-col cols="12" md="2">
                 <v-text-field
                   v-model="form.middle_name"
                   label="Middle name"
@@ -30,7 +30,7 @@
                 ></v-text-field>
               </v-col>
 
-              <v-col cols="12" md="4">
+              <v-col cols="12" md="5">
                 <v-text-field
                   v-model="form.last_name"
                   label="Last name"
@@ -101,7 +101,7 @@
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="7">
+                        <v-col cols="12" md="12">
                           <v-text-field
                             v-model="form.city"
                             label="City"
@@ -111,7 +111,7 @@
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="7">
+                        <v-col cols="12" md="12">
                           <v-text-field
                             v-model="form.zip_code"
                             label="Zip Code"
@@ -121,7 +121,7 @@
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="7">
+                        <v-col cols="12" md="12">
                           <v-text-field
                             v-model="form.home_phone"
                             label="Home Phone"
@@ -131,7 +131,7 @@
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="7">
+                        <v-col cols="12" md="12">
                           <v-text-field
                             v-model="form.work_phone"
                             label="Work Phone"
@@ -141,7 +141,7 @@
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="7">
+                        <v-col cols="12" md="12">
                           <v-text-field
                             v-model="form.mobile_phone"
                             label="Mobile Phone"
@@ -151,7 +151,7 @@
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="7">
+                        <v-col cols="12" md="12">
                           <v-text-field
                             v-model="form.national_id"
                             label="National ID"
@@ -166,8 +166,8 @@
                     <!-- payment  -->
                     <v-tab-item value="tab-2">
                       <v-row dense class="mt-2">
-                        <v-col cols="12" md="7">
-                          <v-select
+                        <v-col cols="12" md="12">
+                          <v-autocomplete
                             v-model="form.payment_method"
                             :items="itemPaymentMethod"
                             label="Payment Method"
@@ -176,7 +176,7 @@
                             outlined
                             dense
                             hide-details="auto"
-                          ></v-select>
+                          ></v-autocomplete>
                         </v-col>
 
                         <v-col
@@ -211,7 +211,7 @@
 
                     <v-tab-item value="tab-3">
                       <v-row dense class="mt-2">
-                        <v-col cols="12" md="7">
+                        <v-col cols="12" md="12">
                           <v-text-field
                             v-model="form.hire_date"
                             label="Hire Date"
@@ -224,17 +224,20 @@
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="7">
-                          <v-text-field
+                        <v-col cols="12" md="12">
+                          <v-select
                             v-model="form.work_location_id"
+                            :items="itemWorkLocation"
+                            item-text="name"
+                            item-value="id"
                             label="Work Location"
                             outlined
                             dense
                             hide-details="auto"
-                          ></v-text-field>
+                          ></v-select>
                         </v-col>
 
-                        <v-col cols="12" md="7">
+                        <v-col cols="12" md="12">
                           <v-text-field
                             v-model="form.employee_id"
                             label="Employee ID"
@@ -248,27 +251,29 @@
 
                     <v-tab-item value="tab-4">
                       <v-row dense class="mt-2">
-                        <v-col cols="12" md="7">
-                          <v-text-field
+                        <v-col cols="12" md="12">
+                          <v-autocomplete
                             v-model="form.pay_type"
+                            :items="itemPayType"
                             label="Pay Type"
                             outlined
                             dense
                             hide-details="auto"
-                          ></v-text-field>
+                          ></v-autocomplete>
                         </v-col>
 
-                        <v-col cols="12" md="7">
-                          <v-text-field
+                        <v-col cols="12" md="12">
+                          <v-autocomplete
                             v-model="form.pay_frequency"
+                            :items="itemPayFrequency"
                             label="Pay Frequency"
                             outlined
                             dense
                             hide-details="auto"
-                          ></v-text-field>
+                          ></v-autocomplete>
                         </v-col>
 
-                        <v-col cols="12" md="7">
+                        <v-col cols="12" md="12">
                           <v-text-field
                             v-model="form.salary"
                             label="Salary"
@@ -278,7 +283,7 @@
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="7">
+                        <v-col cols="12" md="12">
                           <v-text-field
                             v-model="form.per_hour_rate"
                             label="Per Hour Rate"
@@ -288,7 +293,7 @@
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="7">
+                        <v-col cols="12" md="12">
                           <v-text-field
                             v-model="form.hour_per_day"
                             label="Hour per day"
@@ -298,7 +303,7 @@
                           ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="7">
+                        <v-col cols="12" md="12">
                           <v-text-field
                             v-model="form.day_per_week"
                             label="Day per week"
@@ -363,11 +368,7 @@ export default {
       show: false,
       form: this.formData,
       defaultItem: this.formData,
-      itemCategory: [],
-      itemUnit: [],
-      itemAccounts: [],
-      itemBank: [],
-      itemPaymentTerm: [],
+      itemWorkLocation: [],
       statusProcessing: 'insert',
       menu3: '',
       menu4: '',
@@ -381,6 +382,8 @@ export default {
       tab: null,
       itemGender: [],
       itemPaymentMethod: [],
+      itemPayFrequency: [],
+      itemPayType: [],
       items: [
         { tab: 'Personal Info', href: '#tab-1' },
         { tab: 'Payment method', href: '#tab-2' },
@@ -391,18 +394,38 @@ export default {
   },
 
   mounted() {
-    this.getAccounts()
-    this.getPaymentTerms()
-    this.getBanks()
+    this.getMasterData()
   },
 
   methods: {
+    async getMasterData() {
+      try {
+        const resEmployee = await this.$axios.get(`/api/payroll/work-locations`)
+
+        this.itemWorkLocation = resEmployee.data.data
+      } catch (err) {
+        this.$swal({
+          type: 'error',
+          title: 'Error',
+          text: err.response.data.error,
+        })
+      }
+    },
+
     setItemGender(data) {
       this.itemGender = data
     },
 
     setPaymentMethod(data) {
       this.itemPaymentMethod = data
+    },
+
+    setPayFrequency(data) {
+      this.itemPayFrequency = data
+    },
+
+    setPayType(data) {
+      this.itemPayType = data
     },
 
     newData(form) {
@@ -439,71 +462,6 @@ export default {
       } else if (type === 'bank') {
         this.form.banks.splice(index, 1)
         this.$axios.delete(`/api/bp/delete-bank/` + item.id)
-      }
-    },
-
-    getAccounts() {
-      this.$axios
-        .get(`/api/financial/accounts`, {
-          params: {
-            type: 'All',
-          },
-        })
-        .then((res) => {
-          this.itemAccounts = res.data.data.rows
-        })
-        .catch((err) => {
-          this.$swal({
-            type: 'error',
-            title: 'Error',
-            text: err.response.data.message,
-          })
-        })
-    },
-
-    getPaymentTerms() {
-      this.$axios
-        .get(`/api/financial/payment-terms`, {
-          params: {
-            type: 'All',
-          },
-        })
-        .then((res) => {
-          this.itemPaymentTerm = res.data.data.auto_complete
-        })
-        .catch((err) => {
-          this.$swal({
-            type: 'error',
-            title: 'Error',
-            text: err.response.data.message,
-          })
-        })
-    },
-
-    getBanks() {
-      this.$axios
-        .get(`/api/master/banks`, {
-          params: {
-            type: 'All',
-          },
-        })
-        .then((res) => {
-          this.itemBank = res.data.data.simple
-        })
-        .catch((err) => {
-          this.$swal({
-            type: 'error',
-            title: 'Error',
-            text: err.response.data.message,
-          })
-        })
-    },
-
-    returnData(data) {
-      if (data.type === 'Item Category') {
-        this.itemCategory = data.item
-      } else if (data.type === 'Item Unit') {
-        this.itemUnit = data.item
       }
     },
 

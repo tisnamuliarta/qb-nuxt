@@ -86,12 +86,12 @@
                 </v-autocomplete>
               </v-col>
 
-              <!-- <v-col cols="12" md="6">
+              <v-col cols="12" md="4">
                 <v-autocomplete
-                  v-model="form.classification_id"
-                  :items="itemClassification"
-                  label="Classification"
-                  item-text="name"
+                  v-model="form.price_list_id"
+                  :items="itemPriceList"
+                  label="Price List"
+                  item-text="price_list_name"
                   item-value="id"
                   outlined
                   persistent-hint
@@ -99,9 +99,9 @@
                   hide-details="auto"
                 >
                 </v-autocomplete>
-              </v-col> -->
+              </v-col>
 
-              <v-col v-if="form.item_group_id === 1" cols="12" md="4">
+              <!-- <v-col cols="12" md="4">
                 <v-text-field
                   v-model="form.onhand"
                   type="number"
@@ -113,9 +113,9 @@
                   dense
                   hide-details="auto"
                 ></v-text-field>
-              </v-col>
+              </v-col> -->
 
-              <v-col v-if="form.item_group_id === 1" cols="12" md="4">
+              <!-- <v-col cols="12" md="4">
                 <v-menu
                   ref="menu"
                   v-model="menu"
@@ -146,34 +146,7 @@
                   >
                   </v-date-picker>
                 </v-menu>
-              </v-col>
-
-              <v-col v-if="form.item_group_id === 1" cols="12" md="4">
-                <v-text-field
-                  v-model="form.reorder_point"
-                  type="number"
-                  :value-when-is-empty="valueWhenIsEmpty"
-                  :options="moneyOptions"
-                  label="Reorder point"
-                  class="text-money"
-                  outlined
-                  dense
-                  hide-details="auto"
-                ></v-text-field>
-              </v-col>
-
-              <v-col v-if="form.item_group_id === 1" cols="12" md="12">
-                <v-autocomplete
-                  v-model="form.inventory_account"
-                  :items="itemAccounts"
-                  item-text="name"
-                  item-value="id"
-                  label="Default Inventory Account"
-                  outlined
-                  dense
-                  hide-details="auto"
-                ></v-autocomplete>
-              </v-col>
+              </v-col> -->
 
               <v-col cols="12" md="4">
                 <v-text-field
@@ -189,128 +162,253 @@
                 ></v-text-field>
               </v-col>
 
-              <v-col cols="12" md="12" class="pb-0 font-weight-bold">
-                <span>Sales Information</span>
-              </v-col>
+              <v-col cols="12">
+                <v-card flat>
+                  <v-tabs v-model="tab">
+                    <v-tab
+                      v-for="item in items"
+                      :key="item.tab"
+                      :href="item.href"
+                    >
+                      {{ item.tab }}
+                    </v-tab>
+                  </v-tabs>
 
-              <v-col cols="12" md="10">
-                <v-checkbox
-                  v-model="form.is_sell"
-                  hide-details="auto"
-                  label="I sell this product/service to customers"
-                ></v-checkbox>
-              </v-col>
+                  <v-tabs-items v-model="tab">
+                    <v-tab-item value="tab-1">
+                      <v-row dense class="mt-2">
+                        <v-col cols="12">
+                          <v-text-field
+                            v-model="form.description"
+                            label="Descriptions"
+                            outlined
+                            dense
+                            hide-details="auto"
+                          ></v-text-field>
+                        </v-col>
 
-              <v-col v-if="form.is_sell" cols="12">
-                <v-text-field
-                  v-model="form.description"
-                  label="Descriptions"
-                  outlined
-                  dense
-                  hide-details="auto"
-                ></v-text-field>
-              </v-col>
+                        <v-col cols="12" md="3">
+                          <v-text-field
+                            v-model="form.sale_price"
+                            type="number"
+                            :value-when-is-empty="valueWhenIsEmpty"
+                            :options="moneyOptions"
+                            label="Sales Price"
+                            class="text-money"
+                            outlined
+                            dense
+                            hide-details="auto"
+                          ></v-text-field>
+                        </v-col>
 
-              <v-col v-if="form.is_sell" cols="12" md="3">
-                <v-text-field
-                  v-model="form.sale_price"
-                  type="number"
-                  :value-when-is-empty="valueWhenIsEmpty"
-                  :options="moneyOptions"
-                  label="Sales Price"
-                  class="text-money"
-                  outlined
-                  dense
-                  hide-details="auto"
-                ></v-text-field>
-              </v-col>
+                        <v-col cols="12" md="9">
+                          <v-autocomplete
+                            v-model="form.revenue_account_id"
+                            :items="itemAccounts"
+                            item-text="name"
+                            item-value="id"
+                            label="Income Account"
+                            outlined
+                            dense
+                            hide-details="auto"
+                          ></v-autocomplete>
+                        </v-col>
 
-              <v-col v-if="form.is_sell" cols="12" md="9">
-                <v-autocomplete
-                  v-model="form.sell_account_id"
-                  :items="itemAccounts"
-                  item-text="name"
-                  item-value="id"
-                  label="Income Account"
-                  outlined
-                  dense
-                  hide-details="auto"
-                ></v-autocomplete>
-              </v-col>
+                        <v-col cols="12" md="3">
+                          <v-autocomplete
+                            v-model="form.sell_tax_id"
+                            :items="itemTax"
+                            item-text="name"
+                            item-value="id"
+                            label="Sales Tax"
+                            outlined
+                            dense
+                            hide-details="auto"
+                          ></v-autocomplete>
+                        </v-col>
+                      </v-row>
+                    </v-tab-item>
 
-              <v-col v-if="form.is_sell" cols="12" md="3">
-                <v-autocomplete
-                  v-model="form.sell_tax_id"
-                  :items="itemTax"
-                  item-text="name"
-                  item-value="id"
-                  label="Sales Tax"
-                  outlined
-                  dense
-                  hide-details="auto"
-                ></v-autocomplete>
-              </v-col>
+                    <v-tab-item value="tab-2">
+                      <v-row dense class="mt-2">
+                        <v-col cols="12">
+                          <v-text-field
+                            v-model="form.purchase_description"
+                            label="Descriptions"
+                            outlined
+                            dense
+                            hide-details="auto"
+                          ></v-text-field>
+                        </v-col>
 
-              <v-col cols="12" md="12" class="pb-0 pt-0 font-weight-bold">
-                <span>Purchase Information</span>
-              </v-col>
+                        <v-col cols="12" md="3">
+                          <v-text-field
+                            v-model="form.purchase_price"
+                            type="number"
+                            :value-when-is-empty="valueWhenIsEmpty"
+                            :options="moneyOptions"
+                            class="text-money"
+                            label="Cost"
+                            outlined
+                            dense
+                            hide-details="auto"
+                          ></v-text-field>
+                        </v-col>
 
-              <v-col cols="12" md="10">
-                <v-checkbox
-                  v-model="form.is_purchase"
-                  hide-details="auto"
-                  label="I purchase this product/service from vendor"
-                ></v-checkbox>
-              </v-col>
+                        <v-col cols="12" md="9">
+                          <v-autocomplete
+                            v-model="form.expense_account_id"
+                            :items="itemAccounts"
+                            item-text="name"
+                            item-value="id"
+                            label="Expense Account"
+                            outlined
+                            dense
+                            hide-details="auto"
+                          ></v-autocomplete>
+                        </v-col>
 
-              <v-col v-if="form.is_purchase" cols="12">
-                <v-text-field
-                  v-model="form.purchase_description"
-                  label="Descriptions"
-                  outlined
-                  dense
-                  hide-details="auto"
-                ></v-text-field>
-              </v-col>
+                        <v-col cols="12" md="12">
+                          <v-autocomplete
+                            v-model="form.contact_id"
+                            :items="itemContact"
+                            item-text="name"
+                            item-value="id"
+                            label="Prefered Vendor"
+                            outlined
+                            dense
+                            hide-details="auto"
+                          ></v-autocomplete>
+                        </v-col>
+                      </v-row>
+                    </v-tab-item>
 
-              <v-col v-if="form.is_purchase" cols="12" md="3">
-                <v-text-field
-                  v-model="form.purchase_price"
-                  type="number"
-                  :value-when-is-empty="valueWhenIsEmpty"
-                  :options="moneyOptions"
-                  class="text-money"
-                  label="Cost"
-                  outlined
-                  dense
-                  hide-details="auto"
-                ></v-text-field>
-              </v-col>
+                    <v-tab-item value="tab-3">
+                      <v-row dense class="mt-2">
+                        <!-- <v-col cols="12" md="4">
+                          <v-text-field
+                            v-model="form.reorder_point"
+                            type="number"
+                            :value-when-is-empty="valueWhenIsEmpty"
+                            :options="moneyOptions"
+                            label="Reorder point"
+                            class="text-money"
+                            outlined
+                            dense
+                            hide-details="auto"
+                          ></v-text-field>
+                        </v-col> -->
 
-              <v-col v-if="form.is_purchase" cols="12" md="9">
-                <v-autocomplete
-                  v-model="form.buy_account_id"
-                  :items="itemAccounts"
-                  item-text="name"
-                  item-value="id"
-                  label="Expense Account"
-                  outlined
-                  dense
-                  hide-details="auto"
-                ></v-autocomplete>
-              </v-col>
+                        <v-col cols="12" md="12">
+                          <v-autocomplete
+                            v-model="form.inventory_account"
+                            :items="itemAccounts"
+                            item-text="name"
+                            item-value="id"
+                            label="Default Inventory Account"
+                            outlined
+                            dense
+                            hide-details="auto"
+                          ></v-autocomplete>
+                        </v-col>
 
-              <v-col v-if="form.is_purchase" cols="12" md="12">
-                <v-autocomplete
-                  v-model="form.contact_id"
-                  :items="itemContact"
-                  item-text="name"
-                  item-value="id"
-                  label="Prefered Vendor"
-                  outlined
-                  dense
-                  hide-details="auto"
-                ></v-autocomplete>
+                        <v-col cols="12" md="12">
+                          <v-autocomplete
+                            v-model="form.warehouse_id"
+                            :items="itemWarehouse"
+                            item-text="name"
+                            item-value="id"
+                            label="Warehouse"
+                            outlined
+                            dense
+                            hide-details="auto"
+                          ></v-autocomplete>
+                        </v-col>
+
+                        <v-col cols="12" md="12">
+                          <v-autocomplete
+                            v-model="form.cogs_account_id"
+                            :items="itemAccounts"
+                            item-text="name"
+                            item-value="id"
+                            label="COGS Account"
+                            outlined
+                            dense
+                            hide-details="auto"
+                          ></v-autocomplete>
+                        </v-col>
+
+                        <v-col cols="12" md="12">
+                          <v-autocomplete
+                            v-model="form.allocation_account_id"
+                            :items="itemAccounts"
+                            item-text="name"
+                            item-value="id"
+                            label="Allocation Account"
+                            outlined
+                            dense
+                            hide-details="auto"
+                          ></v-autocomplete>
+                        </v-col>
+
+                        <v-col cols="12" md="12">
+                          <v-autocomplete
+                            v-model="form.price_diff_account_id"
+                            :items="itemAccounts"
+                            item-text="name"
+                            item-value="id"
+                            label="Price Diff Account"
+                            outlined
+                            dense
+                            hide-details="auto"
+                          ></v-autocomplete>
+                        </v-col>
+                      </v-row>
+                    </v-tab-item>
+
+                    <v-tab-item value="tab-4">
+                      <v-row dense class="mt-2">
+                        <v-col cols="12" md="12">
+                          <v-autocomplete
+                            v-model="form.issue_method"
+                            :items="['backflush', 'manual']"
+                            label="Issue Method"
+                            outlined
+                            dense
+                            hide-details="auto"
+                          ></v-autocomplete>
+                        </v-col>
+
+                        <v-col cols="12" md="12">
+                          <v-autocomplete
+                            v-model="form.material_type"
+                            :items="[
+                              'production',
+                              'sales',
+                              'assembly',
+                              'template',
+                            ]"
+                            label="Material Type"
+                            outlined
+                            dense
+                            hide-details="auto"
+                          ></v-autocomplete>
+                        </v-col>
+
+                        <v-col cols="12" md="12">
+                          <v-autocomplete
+                            v-model="form.valuation_method"
+                            :items="['moving average']"
+                            label="Valuation Method"
+                            outlined
+                            dense
+                            hide-details="auto"
+                          ></v-autocomplete>
+                        </v-col>
+                      </v-row>
+                    </v-tab-item>
+                  </v-tabs-items>
+                </v-card>
               </v-col>
             </v-row>
           </v-container>
@@ -366,13 +464,21 @@ export default {
     return {
       logo: '',
       dialog: false,
+      tab: null,
       submitLoad: false,
       form: this.formData,
       selectedItem: 1,
       itemCategory: [],
       itemUnit: [],
-      itemClassification: [],
+      itemPriceList: [],
       itemAccounts: [],
+      itemWarehouse: [],
+      items: [
+        { tab: 'Sales Data', href: '#tab-1' },
+        { tab: 'Purchase Data', href: '#tab-2' },
+        { tab: 'Inventory Data', href: '#tab-3' },
+        { tab: 'Production Data', href: '#tab-4' },
+      ],
       itemGroup: [
         {
           id: 1,
@@ -395,13 +501,13 @@ export default {
             'Service that you provide to customers, for example, landscaping or tax preparation services'
           ),
         },
-        {
-          id: 4,
-          name: 'Bundle',
-          desc: this.$t(
-            'A collection of products and/or services that you sell together, for example a gift basket of fruit, cheese, and whine'
-          ),
-        },
+        // {
+        //   id: 4,
+        //   name: 'Bundle',
+        //   desc: this.$t(
+        //     'A collection of products and/or services that you sell together, for example a gift basket of fruit, cheese, and whine'
+        //   ),
+        // },
       ],
       menu: '',
       itemTax: [],
@@ -433,17 +539,42 @@ export default {
     }
   },
 
-  activated() {
-    this.loadData()
-  },
+  // activated() {
+  //   this.loadData()
+  // },
 
   methods: {
-    loadData() {
-      this.getItemCategory()
-      this.getItemUnit()
-      this.getAccounts()
-      this.getTaxes()
-      this.getContacts()
+    async loadData() {
+      try {
+        const resItemCategory = await this.$axios.get(
+          `/api/inventory/item-category`
+        )
+
+        const resItemUnit = await this.$axios.get(`/api/inventory/item-units`)
+        const resAccount = await this.$axios.get(`/api/financial/accounts`, {
+          params: {
+            type: 'All',
+          },
+        })
+        const resVat = await this.$axios.get(`/api/financial/taxes`)
+        const resContact = await this.$axios.get(`/api/bp/contacts`)
+        const resWarehouse = await this.$axios.get(`/api/inventory/warehouse`)
+        const resPriceList = await this.$axios.get(`/api/inventory/price-list`)
+
+        this.itemCategory = resItemCategory.data.data
+        this.itemUnit = resItemUnit.data.data
+        this.itemAccounts = resAccount.data.data
+        this.itemTax = resVat.data.data
+        this.itemContact = resContact.data.data
+        this.itemWarehouse = resWarehouse.data.data
+        this.itemPriceList = resPriceList.data.data
+      } catch (err) {
+        this.$swal({
+          type: 'error',
+          title: 'Error',
+          text: err.response.data.error,
+        })
+      }
     },
 
     newData(form) {
@@ -451,6 +582,7 @@ export default {
       this.statusProcessing = 'insert'
       this.form = Object.assign({}, form)
       this.getFiles()
+      this.loadData()
     },
 
     editItem(item, url) {
@@ -460,101 +592,7 @@ export default {
       this.statusProcessing = 'update'
       this.$refs.dialogForm.openDialog()
       this.getFiles()
-    },
-
-    getItemCategory() {
-      this.$axios
-        .get(`/api/inventory/item-category`, {
-          params: {
-            type: 'Item Category',
-          },
-        })
-        .then((res) => {
-          this.itemCategory = res.data.data
-        })
-        .catch((err) => {
-          this.$swal({
-            type: 'error',
-            title: 'Error',
-            text: err.response.data.message,
-          })
-        })
-    },
-
-    getTaxes() {
-      this.$axios
-        .get(`/api/financial/taxes`, {
-          params: {
-            type: 'Item Category',
-          },
-        })
-        .then((res) => {
-          this.itemTax = res.data.data
-        })
-        .catch((err) => {
-          this.$swal({
-            type: 'error',
-            title: 'Error',
-            text: err.response.data.message,
-          })
-        })
-    },
-
-    getContacts() {
-      this.$axios
-        .get(`/api/bp/contacts`, {
-          params: {
-            type: 'Item Category',
-          },
-        })
-        .then((res) => {
-          this.itemContact = res.data.data
-        })
-        .catch((err) => {
-          this.$swal({
-            type: 'error',
-            title: 'Error',
-            text: err.response.data.message,
-          })
-        })
-    },
-
-    getItemUnit() {
-      this.$axios
-        .get(`/api/inventory/item-units`, {
-          params: {
-            type: 'Item Category',
-          },
-        })
-        .then((res) => {
-          this.itemUnit = res.data.data
-        })
-        .catch((err) => {
-          this.$swal({
-            type: 'error',
-            title: 'Error',
-            text: err.response.data.message,
-          })
-        })
-    },
-
-    getAccounts() {
-      this.$axios
-        .get(`/api/financial/accounts`, {
-          params: {
-            type: 'All',
-          },
-        })
-        .then((res) => {
-          this.itemAccounts = res.data.data
-        })
-        .catch((err) => {
-          this.$swal({
-            type: 'error',
-            title: 'Error',
-            text: err.response.data.message,
-          })
-        })
+      this.loadData()
     },
 
     sendingParams(file, xhr, formData) {

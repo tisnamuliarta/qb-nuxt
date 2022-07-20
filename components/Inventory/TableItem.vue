@@ -150,7 +150,9 @@ export default {
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? this.$t('New Item') : this.$t('Edit Item')
+      return this.editedIndex === -1
+        ? this.$t('New Item')
+        : this.$t('Edit Item')
     },
     buttonTitle() {
       return this.editedIndex === -1 ? this.$t('Save') : this.$t('Update')
@@ -164,6 +166,10 @@ export default {
       },
       deep: true,
     },
+  },
+
+  activated() {
+    this.getDataFromApi()
   },
 
   mounted() {
@@ -222,14 +228,17 @@ export default {
     getDataFromApi() {
       this.loading = true
       const vm = this
+      const status = {
+        searchItem: vm.searchItem,
+        documentStatus: vm.documentStatus,
+        searchStatus: vm.searchStatus,
+        search: vm.search,
+      }
       this.$axios
         .get(`/api/inventory/items`, {
           params: {
             ...vm.options,
-            searchItem: vm.searchItem,
-            documentStatus: vm.documentStatus,
-            searchStatus: vm.searchStatus,
-            search: vm.search,
+            ...status,
           },
         })
         .then((res) => {
@@ -305,28 +314,28 @@ export default {
             sortable: false,
             filterable: false,
           },
-          {
-            text: 'Reorder Point',
-            value: 'reorder_point',
-            align: 'right',
-            sortable: false,
-            filterable: false,
-          },
+          // {
+          //   text: 'Reorder Point',
+          //   value: 'reorder_point',
+          //   align: 'right',
+          //   sortable: false,
+          //   filterable: false,
+          // },
           { text: 'Unit', value: 'unit', sortable: false, filterable: false },
-          {
-            text: 'Buy Price',
-            value: 'purchase_price',
-            align: 'right',
-            sortable: false,
-            filterable: false,
-          },
-          {
-            text: 'Sell Price',
-            value: 'sale_price',
-            align: 'right',
-            sortable: false,
-            filterable: false,
-          },
+          // {
+          //   text: 'Buy Price',
+          //   value: 'purchase_price',
+          //   align: 'right',
+          //   sortable: false,
+          //   filterable: false,
+          // },
+          // {
+          //   text: 'Sell Price',
+          //   value: 'sale_price',
+          //   align: 'right',
+          //   sortable: false,
+          //   filterable: false,
+          // },
           {
             text: 'Action',
             value: 'ACTIONS',

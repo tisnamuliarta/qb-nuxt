@@ -159,9 +159,14 @@ export default {
           route: '/app/form/accounting/statements',
         },
         {
-          text: this.$t('Inventory Qty Adjustment'),
-          type: 'INVADJ',
-          route: '/app/invtoryqtyadjustment',
+          text: this.$t('Goods Receipt'),
+          type: 'GR',
+          route: '/app/form/inventory/receipt',
+        },
+        {
+          text: this.$t('Goods Issue'),
+          type: 'GI',
+          route: '/app/form/inventory/issue',
         },
         {
           text: this.$t('Expenses'),
@@ -178,6 +183,7 @@ export default {
     },
 
     openAction(data) {
+      this.$auth.$storage.setState('basePath', this.$route.path)
       this.$emit('openAction', {
         item: data.item,
       })

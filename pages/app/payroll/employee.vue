@@ -7,18 +7,18 @@
       form-url="/app/purchasereturn/form"
       :header-table="[
         { text: 'Name', value: 'first_name', cellClass: 'disable-wrap' },
-        { text: 'Pay Rate', value: 'contact_name', cellClass: 'disable-wrap' },
-        { text: 'Pay Method', value: 'type', cellClass: 'disable-wrap' },
+        { text: 'Pay Rate', value: 'salary', cellClass: 'disable-wrap' },
+        { text: 'Pay Method', value: 'payment_method', cellClass: 'disable-wrap' },
         {
-          text: 'Status',
-          value: 'issued_at',
+          text: 'Phone Number',
+          value: 'mobile_phone',
           cellClass: 'disable-wrap',
           sortable: false,
           filterable: false,
         },
         {
-          text: 'Phone Number',
-          value: 'due_at',
+          text: 'Status',
+          value: 'status',
           cellClass: 'disable-wrap',
           sortable: false,
           filterable: false,

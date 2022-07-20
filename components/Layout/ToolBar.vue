@@ -17,14 +17,24 @@
     <!--      </v-card>-->
     <!--    </v-menu>-->
 
-    <v-tooltip bottom>
+    <v-menu
+      transition="slide-y-transition"
+      bottom
+      offset-y
+      left
+      :close-on-content-click="false"
+      :nudge-width="400"
+    >
       <template #activator="{ on }">
         <v-btn small icon class="mr-2" v-on="on">
           <v-icon>mdi-magnify</v-icon>
         </v-btn>
       </template>
-      <span>Search</span>
-    </v-tooltip>
+
+      <v-card>
+        <LazyFormSearch ref="formSetting" @openAction="openAction" />
+      </v-card>
+    </v-menu>
 
     <v-tooltip bottom>
       <template #activator="{ on }">
@@ -63,7 +73,7 @@
       </v-card>
     </v-menu>
 
-    <v-menu offset-y left>
+    <v-menu offset-y left :nudge-width="150">
       <template #activator="{ on }">
         <v-btn
           x-small

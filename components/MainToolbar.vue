@@ -387,6 +387,7 @@ export default {
 
   methods: {
     newData() {
+      this.$auth.$storage.setState('basePath', this.$route.path)
       this.$emit('newData')
     },
 
