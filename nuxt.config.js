@@ -114,6 +114,7 @@ export default {
     'nuxt-sweetalert2',
     'cookie-universal-nuxt',
     '@nuxtjs/i18n',
+    // 'nuxt-lodash',
     // 'nuxt-seo-meta',
     // '@luxdamore/nuxt-prune-html',
     // 'nuxt-precompress',a

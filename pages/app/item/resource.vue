@@ -1,6 +1,6 @@
 <template>
   <div>
-    <InventoryTableItem></InventoryTableItem>
+    <InventoryTableResource></InventoryTableResource>
   </div>
 </template>
 
@@ -10,7 +10,7 @@ export default {
 
   head() {
     return {
-      title: this.$t('Item Master Data')
+      title: this.$t('Resources')
     }
   },
 

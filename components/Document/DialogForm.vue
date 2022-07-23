@@ -45,6 +45,16 @@
       <v-spacer />
       <v-btn
         small
+        class="mr-3"
+        :loading="loading"
+        :disabled="form.status === 'closed'"
+        @click="actionSave('saveDraft')"
+      >
+        Save draft
+      </v-btn>
+
+      <v-btn
+        small
         color="green darken-1"
         class="mr-3"
         dark
@@ -122,11 +132,12 @@ export default {
       defaultItem: {},
       dialogLoading: false,
       showLoading: true,
-      dialog: true,
+      dialog: false,
       loading: false,
       actionName: 'Save',
       actionOnSave: 'save',
       countRouter: -1,
+      showDraft: false,
     }
   },
 
@@ -570,11 +581,35 @@ export default {
     },
 
     actionSave(action) {
+      const type = ['IN', 'RC', 'CN', 'SR', 'BL', 'PY', 'DN', 'GN']
+      if (action === 'save' && type.includes(this.form.transaction_type)) {
+        this.$swal({
+          title: this.$t('Are you sure you want to run this action?'),
+          text: 'Data cannot be change after posted!',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Save',
+        }).then((result) => {
+          if (result.value) {
+            this.save(action)
+          }
+        })
+      } else {
+        this.save(action)
+      }
+    },
+
+    save(action) {
       this.actionOnSave = action
       const docId = this.$route.query.document
       const url = docId === '0' ? this.url : this.url + '/' + docId
       const method = docId === '0' ? 'post' : 'patch'
-      const data = this.$refs.formDocument.returnData(docId)
+      const data = {
+        ...this.$refs.formDocument.returnData(docId),
+        action,
+      }
       const vm = this
       this.loading = true
       this.showLoading = true
@@ -584,6 +619,7 @@ export default {
 
           switch (this.actionOnSave) {
             case 'save':
+            case 'saveDraft':
               this.$router.push({
                 path: vm.formUrl,
                 query: {

@@ -198,7 +198,6 @@ export default {
             { id: 815, name: 'Transaction List by Date', route: '' },
             { id: 816, name: 'Transaction List with Splits', route: '' },
             { id: 817, name: 'Trial Balance', route: '' },
-            { id: 818, name: 'Account Balance', route: '' },
           ],
         },
       ],

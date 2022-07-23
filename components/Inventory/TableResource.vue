@@ -23,7 +23,7 @@
           <template #top>
             <div v-if="!viewData" class="pl-4 pt-2">
               <span class="font-weight-medium text-h6">{{
-                $t('Goods Receipt')
+                $t('Resources')
               }}</span>
             </div>
 
@@ -96,13 +96,13 @@
       </div>
     </v-flex>
 
-    <LazyInventoryFormItem
+    <LazyInventoryFormResource
       ref="formData"
       :form-data="form"
       :form-title="formTitle"
       :button-title="buttonTitle"
       @getDataFromApi="getDataFromApi"
-    ></LazyInventoryFormItem>
+    ></LazyInventoryFormResource>
   </v-layout>
 </template>
 
@@ -110,9 +110,19 @@
 export default {
   name: 'ItemMaster',
 
+  props: {
+    viewData: {
+      type: Boolean,
+      default: false,
+    },
+    showAddBtn: {
+      type: Boolean,
+      default: true,
+    },
+  },
+
   data() {
     return {
-      viewData: false,
       selected: [],
       totalData: 0,
       url: '',
@@ -140,7 +150,7 @@ export default {
 
   head() {
     return {
-      title: this.$t('Goods Receipt')
+      title: this.$t('Resources')
     }
   },
 
@@ -235,7 +245,7 @@ export default {
         search: vm.search,
       }
       this.$axios
-        .get(`/api/inventory/items`, {
+        .get(`/api/inventory/resource`, {
           params: {
             ...vm.options,
             ...status,
@@ -281,19 +291,19 @@ export default {
           },
           {
             text: 'Item Type',
-            value: 'group_name',
+            value: 'resource_type',
             cellClass: 'disable-wrap',
             class: 'disable-wrap',
           },
           {
-            text: 'Item Category',
-            value: 'category.name',
+            text: 'Warehouse',
+            value: 'warehouse.code',
             cellClass: 'disable-wrap',
             class: 'disable-wrap',
           },
           {
-            text: 'Unit',
-            value: 'unit',
+            text: 'Status',
+            value: 'status',
             cellClass: 'disable-wrap',
             class: 'disable-wrap',
           },
@@ -304,13 +314,13 @@ export default {
           { text: 'Item Name', value: 'name', width: '150px' },
           {
             text: 'Item Type',
-            value: 'group_name',
+            value: 'resource_type',
             cellClass: 'disable-wrap',
             class: 'disable-wrap',
           },
           {
-            text: 'Item Category',
-            value: 'category.name',
+            text: 'Warehouse',
+            value: 'warehouse.code',
             sortable: false,
             filterable: false,
           },
@@ -321,7 +331,7 @@ export default {
           //   sortable: false,
           //   filterable: false,
           // },
-          { text: 'Unit', value: 'unit', sortable: false, filterable: false },
+          { text: 'Status', value: 'status', sortable: false, filterable: false },
           // {
           //   text: 'Buy Price',
           //   value: 'purchase_price',

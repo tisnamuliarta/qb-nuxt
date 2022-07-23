@@ -2,27 +2,43 @@
   <v-row>
     <v-col cols="12" class="mt-0">
       <v-data-table
-        v-model="selected"
         :mobile-breakpoint="0"
         :headers="headers"
         :items="allData"
-        :items-per-page="150"
+        :items-per-page="20"
         :options.sync="options"
         :server-items-length="totalData"
         :loading="loading"
-        :single-select="viewData"
-        :class="viewData ? 'elevation-0' : 'elevation-1'"
+        hide-default-footer
+        class="elevation-1"
         show-select
         fixed-header
-        :height="viewData ? '60vh' : '70vh'"
+        height="76vh"
         dense
-        :footer-props="{ 'items-per-page-options': [150, 250, 500, -1] }"
+        :footer-props="{ 'items-per-page-options': [20, 50, 100, -1] }"
       >
         <template #top>
-          <div v-if="!viewData" class="pl-4 pt-2">
+          <div class="pl-4 pt-2">
+            <v-chip
+              link
+              class="ma-2"
+              color="primary"
+              label
+              small
+              @click="$router.push({ path: '/app/accounting/account' })"
+            >
+              <v-icon left> mdi-arrow-left</v-icon>
+              All Accounts
+            </v-chip>
+
             <span class="font-weight-medium text-h6"
-              >{{ $t('Chart Of Accounts') }}
-            </span>
+              >{{ form.name }}:
+              {{
+                $auth.user.entity.currency.currency_symbol +
+                ' ' +
+                $formatter.formatPrice(form.balance)
+              }}</span
+            >
           </div>
 
           <LazyMainToolbar
@@ -33,26 +49,18 @@
             :search="search"
             title="Chart of Accounts"
             show-batch-action
-            show-new-data
-            new-data-text="New Account"
             @emitData="emitData"
             @newData="newData"
             @getDataFromApi="getDataFromApi"
           />
         </template>
 
-        <template #[`item.balance`]="{ item }">
+        <template #[`item.amount`]="{ item }">
           {{
-            item.currency.currency_code +
+            $auth.user.entity.currency.currency_symbol +
             ' ' +
-            $formatter.formatPrice(item.balance)
+            $formatter.formatPrice(item.amount)
           }}
-        </template>
-
-        <template #[`item.code`]="{ item }">
-          <a @click="viewItem(item)">
-            <strong v-text="item.code"></strong>
-          </a>
         </template>
 
         <template #[`item.id`]="{ item }">
@@ -100,18 +108,9 @@
 
 <script>
 export default {
-  name: 'ChartOfAccount',
-
-  props: {
-    viewData: {
-      type: Boolean,
-      default: false,
-    },
-  },
-
+  name: 'ReconcileList',
   data() {
     return {
-      selected: [],
       totalData: 0,
       editedIndex: -1,
       loading: true,
@@ -128,10 +127,38 @@ export default {
         { text: 'Edit', action: 'edit' },
         { text: 'Delete', action: 'delete' },
       ],
-      itemText: 'Edit',
-      itemAction: 'edit',
-      url: '/api/financial/accounts',
-      headers: [],
+      itemText: '',
+      itemAction: '',
+      url: '/api/financial/reconcile',
+      headers: [
+        {
+          text: 'Transaction No',
+          value: 'transaction_no',
+          cellClass: 'disable-wrap',
+        },
+        { text: 'Transaction Type', value: 'type', cellClass: 'disable-wrap' },
+        {
+          text: 'Transaction Date',
+          value: 'date',
+          cellClass: 'disable-wrap',
+        },
+        { text: 'Notes', value: 'narration', cellClass: 'disable-wrap' },
+        {
+          text: 'Amount',
+          value: 'amount',
+          cellClass: 'disable-wrap',
+          sortable: false,
+          filterable: false,
+        },
+        {
+          text: 'Actions',
+          value: 'id',
+          align: 'right',
+          cellClass: 'disable-wrap',
+          sortable: false,
+          filterable: false,
+        },
+      ],
       title: 'Chart Of Accounts',
     }
   },
@@ -160,28 +187,15 @@ export default {
     },
   },
 
-  mounted() {
-    this.mappingHeader()
+  activated() {
+    this.getDataFromApi()
+    this.$nuxt.$emit('extensionSetting', {
+      show: false,
+      showBtn: false,
+    })
   },
 
   methods: {
-    returnSelected() {
-      return this.selected
-    },
-
-    viewItem(item) {
-      this.$router.push({
-        path: '/app/accounting/detail',
-        query: {
-          id: item.id,
-        },
-      })
-    },
-
-    setEmptyToSelected() {
-      this.selected = []
-    },
-
     newData() {
       this.editedIndex = -1
       this.$refs.forms.newData(this.form)
@@ -243,72 +257,26 @@ export default {
       this.getDataFromApi()
     },
 
-    mappingHeader() {
-      if (this.viewData) {
-        this.headers = [
-          { text: 'Account Code', value: 'code' },
-          { text: 'Account Name', value: 'name', cellClass: 'disable-wrap' },
-          {
-            text: 'Account Type',
-            value: 'account_type',
-            cellClass: 'disable-wrap',
-          },
-        ]
-      } else {
-        this.headers = [
-          { text: 'Account Code', value: 'code' },
-          { text: 'Account Name', value: 'name', cellClass: 'disable-wrap' },
-          {
-            text: 'Account Type',
-            value: 'account_type',
-            cellClass: 'disable-wrap',
-          },
-          { text: 'Category', value: 'category.name' },
-          {
-            text: 'Balance',
-            value: 'balance',
-            cellClass: 'disable-wrap',
-            sortable: false,
-            filterable: false,
-          },
-          {
-            text: 'Actions',
-            value: 'id',
-            align: 'right',
-            cellClass: 'disable-wrap',
-            sortable: false,
-            filterable: false,
-          },
-        ]
-      }
-    },
-
     getDataFromApi() {
       this.loading = true
       const vm = this
-
-      const search = {
-        searchItem: vm.searchItem,
-        documentStatus: vm.documentStatus,
-        searchStatus: vm.searchStatus,
-        search: vm.search,
-      }
       this.$axios
-        .get(this.url, {
+        .get('/api/financial/accounts/' + this.$route.query.id, {
           params: {
-            ...vm.options,
-            ...search,
+            options: vm.options,
+            searchItem: vm.searchItem,
+            documentStatus: vm.documentStatus,
+            searchStatus: vm.searchStatus,
+            search: vm.search,
           },
         })
         .then((res) => {
           this.loading = false
-          const data = res.data
-
-          this.allData = data.data
-          this.totalData = data.total
-          this.itemSearch = data.filter
-          this.form = Object.assign({}, data.form)
-          this.defaultItem = Object.assign({}, data.form)
+          this.allData = res.data.transactions
+          this.totalData = res.data.total
+          this.itemSearch = res.data.filter
+          this.form = Object.assign({}, res.data.data)
+          this.defaultItem = Object.assign({}, res.data.form)
         })
         .catch((err) => {
           this.loading = false

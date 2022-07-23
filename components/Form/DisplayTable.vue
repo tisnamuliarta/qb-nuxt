@@ -92,24 +92,22 @@ registerRenderer(
   function (hotInstance, td, row, column, prop, value, cellProperties) {
     let button = null
     const vm = window.details
-    if (vm.form.status !== 'closed' && vm.form.status !== 'cancel') {
-      button = document.createElement('button')
-      button.type = 'button'
-      // button.innerText = '-'
-      button.innerHTML = '<span class="mdi mdi-delete"></span>'
-      // button.innerHTML = 'Delete'
-      button.className = 'btnDelete'
-      button.value = 'Details2'
+    button = document.createElement('button')
+    button.type = 'button'
+    // button.innerText = '-'
+    button.innerHTML = '<span class="mdi mdi-delete"></span>'
+    // button.innerHTML = 'Delete'
+    button.className = 'btnDelete'
+    button.value = 'Details2'
 
-      button.addEventListener('mousedown', (event) => {
-        event.preventDefault()
-        vm.removeRow(row)
-      })
+    button.addEventListener('mousedown', (event) => {
+      event.preventDefault()
+      vm.removeRow(row)
+    })
 
-      // dom.empty(td)
-      td.innerText = ''
-      td.appendChild(button)
-    }
+    // dom.empty(td)
+    td.innerText = ''
+    td.appendChild(button)
     return td
   }
 )
@@ -132,7 +130,7 @@ export default {
 
   data() {
     return {
-      detailsRoot: 'detailsRoot',
+      detailsRoot: 'detailsRoot22',
       settings: {
         licenseKey: 'non-commercial-and-evaluation',
       },
@@ -200,7 +198,7 @@ export default {
         beforeOnCellMouseDown: doNotSelectColumn,
         beforeRefreshDimensions() {
           return false
-        }
+        },
       })
     },
 
