@@ -141,7 +141,7 @@ export default {
         licenseKey: 'non-commercial-and-evaluation',
         currentRowClassName: 'currentRow',
         currentColClassName: 'currentCol',
-        startRows: 2,
+        startRows: 1,
         rowHeaders: true,
         manualColumnResize: true,
         rowHeights: 28,
@@ -264,21 +264,6 @@ export default {
               pattern: '0,0.00',
             },
           },
-          // {
-          //   type: 'handsontable',
-          //   handsontable: {
-          //     colHeaders: ['Name', 'Rate'],
-          //     autoColumnSize: true,
-          //     data: listVat,
-          //     getValue() {
-          //       const selection = this.getSelectedLast()
-
-          //       // Get the manufacturer name of the clicked row and ignore header
-          //       // coordinates (negative values)
-          //       return this.getSourceDataAtRow(Math.max(selection[0], 0)).name
-          //     },
-          //   },
-          // },
           {
             data: 'tax_name',
             width: 100,
@@ -291,11 +276,6 @@ export default {
               const vm = window.details
               return vm.$auth.$storage.getState('tax')
             },
-            // source(query, process) {
-            //   const vm = window.details
-            //   const data = vm.$auth.$storage.getState('tax')
-            //   process(data)
-            // },
             visibleRows: 5,
             strict: true,
             filter: false,
@@ -478,14 +458,14 @@ export default {
         const items = form.line_items.length > 0 ? form.line_items : data
         vm.$refs.details.hotInstance.loadData(items)
         // vm.calculateTotal()
-        const countRows = this.$refs.details.hotInstance.countRows()
-        for (let i = 0; i < countRows; i++) {
-          this.$refs.details.hotInstance.setDataAtRowProp(
-            i,
-            'default_currency_symbol',
-            vm.form.default_currency_symbol
-          )
-        }
+        // const countRows = this.$refs.details.hotInstance.countRows()
+        // for (let i = 0; i < countRows; i++) {
+        //   this.$refs.details.hotInstance.setDataAtRowProp(
+        //     i,
+        //     'default_currency_symbol',
+        //     vm.form.default_currency_code
+        //   )
+        // }
         this.$nuxt.$loading.finish()
       })
       // setTimeout(() => {

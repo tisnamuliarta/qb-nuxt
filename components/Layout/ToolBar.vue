@@ -18,6 +18,7 @@
     <!--    </v-menu>-->
 
     <v-menu
+      v-model="menu"
       transition="slide-y-transition"
       bottom
       offset-y
@@ -121,6 +122,7 @@ export default {
   data() {
     return {
       username: '',
+      menu: false,
     }
   },
 
@@ -130,6 +132,7 @@ export default {
 
   methods: {
     openAction(data) {
+      this.menu = false
       if (data.item.route) {
         this.$emit('openAction', data)
       } else {

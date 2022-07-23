@@ -106,10 +106,12 @@
         </NuxtLink>
 
         <v-menu
+          v-model="menu"
           transition="slide-y-transition"
           bottom
           offset-y
           left
+          :close-on-content-click="false"
           :nudge-width="700"
         >
           <template #activator="{ on }">
@@ -199,6 +201,7 @@ export default {
       clipped: false,
       drawer: false,
       fixed: false,
+      menu: false,
       dark: undefined,
       message: '',
       items: [],
@@ -265,6 +268,7 @@ export default {
     },
 
     openAction(data) {
+      this.menu = false
       if (data.item.route) {
         this.overlay = true
         this.$router.push({

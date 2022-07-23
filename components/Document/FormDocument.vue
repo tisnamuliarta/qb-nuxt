@@ -247,25 +247,6 @@
           </v-row>
         </v-col>
 
-        <!-- <v-col cols="12">
-          <v-row dense>
-            <v-spacer />
-            <v-col cols="12" md="4">
-              <vuetify-money
-                v-model="form.discount_per_line"
-                :value-when-is-empty="valueWhenIsEmpty"
-                :options="moneyOptionTotal"
-                readonly
-                label="Discount Per Lines"
-                outlined
-                dense
-                class="text-money"
-                hide-details="auto"
-              ></vuetify-money>
-            </v-col>
-          </v-row>
-        </v-col> -->
-
         <v-col cols="12">
           <v-row dense class="align-right">
             <v-spacer />
@@ -719,12 +700,6 @@ export default {
       setTimeout(() => {
         this.$refs.childDetails.setDataToDetails(
           [
-            {
-              item_number: null,
-              narration: null,
-              qty: null,
-              unit: null,
-            },
             {
               item_number: null,
               narration: null,
