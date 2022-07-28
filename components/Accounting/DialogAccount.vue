@@ -8,11 +8,13 @@
       original="top"
     >
       <template #content>
-        <AccountingTableAccount
-          ref="tableItem"
-          :view-data="viewData"
-          :show-add-btn="showAddBtn"
-        ></AccountingTableAccount>
+        <v-container>
+          <AccountingTableAccount
+            ref="tableItem"
+            :view-data="viewData"
+            :show-add-btn="showAddBtn"
+          ></AccountingTableAccount>
+        </v-container>
       </template>
 
       <template #saveData>

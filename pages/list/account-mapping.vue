@@ -16,7 +16,7 @@
       />
       <div class="mt-0">
         <FormDisplayTable
-          ref="formTable"
+          ref="formTableDetail"
           @openDialog="openDialog"
         ></FormDisplayTable>
       </div>
@@ -48,9 +48,9 @@ export default {
     newData() {
       const vm = this
       const details = {}
-      const clearData = vm.$refs.formTable.getAddData(document)
+      const clearData = vm.$refs.formTableDetail.getAddData(document)
       clearData.forEach(function (item, key) {
-        if (!vm.$refs.formTable.checkIfEmptyRow(key)) details[key] = item
+        if (!vm.$refs.formTableDetail.checkIfEmptyRow(key)) details[key] = item
       })
 
       this.$nuxt.$loading.start()
@@ -75,7 +75,7 @@ export default {
         .get(this.url)
         .then((res) => {
           setTimeout(() => {
-            this.$refs.formTable.setDataToDetails(
+            this.$refs.formTableDetail.setDataToDetails(
               res.data.data,
               res.data.colHeaders,
               res.data.columns
@@ -94,9 +94,9 @@ export default {
     selectItems(data) {
       const rowData = data.row
       const selected = data.selected
-      this.$refs.formTable.setDataAtRowProp(rowData, 'account_id', selected[0].id)
-      this.$refs.formTable.setDataAtRowProp(rowData, 'account', selected[0].code)
-      this.$refs.formTable.setDataAtRowProp(
+      this.$refs.formTableDetail.setDataAtRowProp(rowData, 'account_id', selected[0].id)
+      this.$refs.formTableDetail.setDataAtRowProp(rowData, 'account', selected[0].code)
+      this.$refs.formTableDetail.setDataAtRowProp(
         rowData,
         'account_name',
         selected[0].name

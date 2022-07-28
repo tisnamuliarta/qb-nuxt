@@ -32,7 +32,7 @@
             </v-chip>
 
             <span class="font-weight-medium text-h6"
-              >{{ form.name }}:
+              >{{ form.name }} account balances:
               {{
                 $auth.user.entity.currency.currency_symbol +
                 ' ' +
@@ -48,6 +48,7 @@
             :search-item="searchItem"
             :search="search"
             title="Chart of Accounts"
+            show-filter
             show-batch-action
             @emitData="emitData"
             @newData="newData"
@@ -61,6 +62,26 @@
             ' ' +
             $formatter.formatPrice(item.amount)
           }}
+        </template>
+
+        <template #[`item.contribution`]="{ item }">
+          {{
+            $auth.user.entity.currency.currency_symbol +
+            ' ' +
+            $formatter.formatPrice(item.contribution)
+          }}
+        </template>
+
+        <template #[`item.transaction_no`]="{ item }">
+          <a @click="editItem(item)">
+            <strong v-text="item.transaction_no"></strong>
+          </a>
+        </template>
+
+        <template #[`item.status`]="{ item }">
+          <v-chip label small dark :color="$formatter.statusColor(item.status)">
+            {{ item.status }}
+          </v-chip>
         </template>
 
         <template #[`item.id`]="{ item }">
@@ -123,6 +144,8 @@ export default {
       form: {},
       defaultItem: {},
       options: {},
+      date_from: null,
+      date_to: null,
       items: [
         { text: 'Edit', action: 'edit' },
         { text: 'Delete', action: 'delete' },
@@ -143,21 +166,22 @@ export default {
           cellClass: 'disable-wrap',
         },
         { text: 'Notes', value: 'narration', cellClass: 'disable-wrap' },
+        { text: 'Status', value: 'status', cellClass: 'disable-wrap' },
         {
           text: 'Amount',
-          value: 'amount',
+          value: 'contribution',
           cellClass: 'disable-wrap',
           sortable: false,
           filterable: false,
         },
-        {
-          text: 'Actions',
-          value: 'id',
-          align: 'right',
-          cellClass: 'disable-wrap',
-          sortable: false,
-          filterable: false,
-        },
+        // {
+        //   text: 'Actions',
+        //   value: 'id',
+        //   align: 'right',
+        //   cellClass: 'disable-wrap',
+        //   sortable: false,
+        //   filterable: false,
+        // },
       ],
       title: 'Chart Of Accounts',
     }
@@ -210,8 +234,13 @@ export default {
     },
 
     editItem(item) {
-      this.editedIndex = this.allData.indexOf(item)
-      this.$refs.forms.editItem(item, this.form)
+      this.$auth.$storage.setState('basePath', this.$route.path)
+      this.$router.push({
+        path: this.$formatter.mappingAction(item.transaction_type),
+        query: {
+          document: item.id,
+        },
+      })
     },
 
     deleteItem(item) {
@@ -254,6 +283,8 @@ export default {
       this.searchItem = data.searchItem
       this.search = data.search
       this.filters = data.filters
+      this.date_from= data.date_from
+      this.date_to= data.date_to
       this.getDataFromApi()
     },
 
@@ -268,6 +299,8 @@ export default {
             documentStatus: vm.documentStatus,
             searchStatus: vm.searchStatus,
             search: vm.search,
+            date_from: vm.date_from,
+            date_to: vm.date_to,
           },
         })
         .then((res) => {

@@ -14,14 +14,14 @@
         class="elevation-1 item-baseline"
       >
         <template #[`item.old_values`]="{ item }">
-          <span v-for="(value, index) in item.old_values">
+          <span v-for="(value, index) in item.old_values" :key="index">
             {{ index }} = {{ value }}
             <v-divider />
           </span>
         </template>
 
         <template #[`item.new_values`]="{ item }">
-          <span v-for="(value, index) in item.new_values">
+          <span v-for="(value, index) in item.new_values" :key="index">
             {{ index }} = {{ value }}
             <v-divider />
           </span>

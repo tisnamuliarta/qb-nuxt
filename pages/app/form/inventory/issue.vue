@@ -1,6 +1,6 @@
 <template>
   <div>
-    <LazyDocumentDialogForm
+    <LazyReceiptDialogReceipt
       ref="dialogForm"
       url="/api/documents"
       form-url="/app/form/inventory/issue"
@@ -8,7 +8,7 @@
       form-type-prefix="GI"
       dialog-title="Goods Issue"
       @getDataFromApi="getDataFromApi"
-    ></LazyDocumentDialogForm>
+    ></LazyReceiptDialogReceipt>
   </div>
 </template>
 

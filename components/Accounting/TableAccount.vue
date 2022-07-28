@@ -6,7 +6,7 @@
         :mobile-breakpoint="0"
         :headers="headers"
         :items="allData"
-        :items-per-page="150"
+        :items-per-page="250"
         :options.sync="options"
         :server-items-length="totalData"
         :loading="loading"
@@ -16,7 +16,7 @@
         fixed-header
         :height="viewData ? '60vh' : '70vh'"
         dense
-        :footer-props="{ 'items-per-page-options': [150, 250, 500, -1] }"
+        :footer-props="{ 'items-per-page-options': [250, 500, -1] }"
       >
         <template #top>
           <div v-if="!viewData" class="pl-4 pt-2">
@@ -263,7 +263,7 @@ export default {
             value: 'account_type',
             cellClass: 'disable-wrap',
           },
-          { text: 'Category', value: 'category.name' },
+          // { text: 'Category', value: 'category.name' },
           {
             text: 'Balance',
             value: 'balance',

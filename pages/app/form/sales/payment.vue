@@ -1,6 +1,6 @@
 <template>
   <div>
-    <LazyDocumentDialogForm
+    <LazyPaymentDialogPayment
       ref="dialogForm"
       url="/api/transactions"
       form-url="/app/form/sales/payment"
@@ -8,7 +8,7 @@
       form-type-prefix="SP"
       dialog-title="Incoming Payment"
       @getDataFromApi="getDataFromApi"
-    ></LazyDocumentDialogForm>
+    ></LazyPaymentDialogPayment>
   </div>
 </template>
 

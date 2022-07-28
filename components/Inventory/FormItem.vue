@@ -326,6 +326,54 @@
                         </v-col>
 
                         <v-col cols="12" md="12">
+                          <v-row dense>
+                            <v-col cols="12" sm="3">
+                              <v-text-field
+                                v-model="form.on_hand_qty"
+                                label="In Stock"
+                                outlined
+                                readonly
+                                dense
+                                hide-details="auto"
+                              ></v-text-field>
+                            </v-col>
+
+                            <v-col cols="12" sm="3">
+                              <v-text-field
+                                v-model="form.ordered_qty"
+                                label="Ordered"
+                                outlined
+                                readonly
+                                dense
+                                hide-details="auto"
+                              ></v-text-field>
+                            </v-col>
+
+                            <v-col cols="12" sm="3">
+                              <v-text-field
+                                v-model="form.committed_qty"
+                                label="Committed"
+                                outlined
+                                readonly
+                                dense
+                                hide-details="auto"
+                              ></v-text-field>
+                            </v-col>
+
+                            <v-col cols="12" sm="3">
+                              <v-text-field
+                                v-model="form.available_qty"
+                                label="Available"
+                                outlined
+                                readonly
+                                dense
+                                hide-details="auto"
+                              ></v-text-field>
+                            </v-col>
+                          </v-row>
+                        </v-col>
+
+                        <v-col cols="12" md="12">
                           <v-autocomplete
                             v-model="form.cogs_account_id"
                             :items="itemAccounts"

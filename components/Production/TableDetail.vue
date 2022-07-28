@@ -14,9 +14,9 @@
     ></LazyInventoryDialogResource>
 
     <AccountingDialogAccount
-        ref="dialogAccount"
-        @selectItems="selectAccount"
-      ></AccountingDialogAccount>
+      ref="dialogAccount"
+      @selectItems="selectAccount"
+    ></AccountingDialogAccount>
   </div>
 </template>
 <script>
@@ -196,7 +196,7 @@ export default {
             wordWrap: false,
           },
           {
-            width: 30,
+            width: 20,
             wordWrap: false,
             renderer: 'ButtonAddRenderer',
           },
@@ -334,10 +334,7 @@ export default {
             let propNew = 0
             changes.forEach(([row, prop, oldValue, newValue]) => {
               propNew = prop
-              if (
-                propNew === 'base_qty' ||
-                propNew === 'price'
-              ) {
+              if (propNew === 'base_qty' || propNew === 'price') {
                 if (oldValue !== newValue) {
                   vm.calculateTotal()
                 }
@@ -367,7 +364,7 @@ export default {
 
       this.$refs.details.hotInstance.batch(() => {
         selected.forEach(function (item, index) {
-          const narration = (item.description) ? item.description : item.name
+          const narration = item.description ? item.description : item.name
           // const taxName = sales.includes(type) ? salesTax : null
 
           vm.$refs.details.hotInstance.setDataAtRowProp([
@@ -386,8 +383,16 @@ export default {
     selectAccount(data) {
       const rowData = data.row
       const selected = data.selected
-      this.$refs.details.hotInstance.setDataAtRowProp(rowData, 'account_id', selected[0].id)
-      this.$refs.details.hotInstance.setDataAtRowProp(rowData, 'account_code', selected[0].code)
+      this.$refs.details.hotInstance.setDataAtRowProp(
+        rowData,
+        'account_id',
+        selected[0].id
+      )
+      this.$refs.details.hotInstance.setDataAtRowProp(
+        rowData,
+        'account_code',
+        selected[0].code
+      )
     },
 
     setDataToDetails(data, form) {
@@ -409,7 +414,7 @@ export default {
     setCommission(value) {
       this.$refs.details.hotInstance.batch(() => {
         this.commissionRate = value
-      this.calculateTotal()
+        this.calculateTotal()
       })
     },
 
@@ -428,7 +433,7 @@ export default {
         for (let i = 0; i < countRows; i++) {
           this.$refs.details.hotInstance.batch(() => {
             const qty = this.plannedQty
-            const unitPrice = parseFloat(this.commissionRate) / (countRows)
+            const unitPrice = parseFloat(this.commissionRate) / countRows
 
             this.$refs.details.hotInstance.setDataAtRowProp(
               i,

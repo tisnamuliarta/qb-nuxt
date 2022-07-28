@@ -16,6 +16,58 @@ const formatter = {
         return 'Off'
       }
   },
+
+  statusColor(status) {
+    switch (status) {
+      case 'open':
+      case 'planned':
+        return 'blue darken-3'
+      case 'partial':
+      case 'released':
+        return 'orange'
+      case 'paid':
+        return 'green'
+      case 'closed':
+        return 'green'
+      case 'overdue':
+        return 'red'
+      case 'cancel':
+        return 'red'
+    }
+  },
+
+  mappingAction(type) {
+    switch (type) {
+      case 'SQ':
+        return '/app/form/sales/quote'
+      case 'SO':
+        return '/app/form/sales/order'
+      case 'SD':
+        return '/app/form/sales/delivery'
+      case 'IN':
+        return '/app/form/sales/invoice'
+      case 'RC':
+        return '/app/form/sales/payment'
+      case 'CN':
+        return '/app/form/sales/creditmemo'
+      case 'SR':
+        return '/app/form/sales/return'
+      case 'PQ':
+        return '/app/form/purchase/quote'
+      case 'PO':
+        return '/app/form/purchase/order'
+      case 'GR':
+        return '/app/form/purchase/receipt'
+      case 'BL':
+        return '/app/form/purchase/invoice'
+      case 'PY':
+        return '/app/form/purchase/payment'
+      case 'DN':
+        return '/app/form/purchase/creditmemo'
+      case 'GN':
+        return '/app/form/purchase/return'
+    }
+  },
 }
 
 export default ({app}, inject) => {

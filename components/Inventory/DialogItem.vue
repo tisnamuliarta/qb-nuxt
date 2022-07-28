@@ -2,7 +2,7 @@
   <div>
     <DialogForm
       ref="dialogForm"
-      max-width="800px"
+      max-width="1000px"
       dialog-title="Item List"
       button-title="Save"
       original="top"
@@ -47,7 +47,7 @@ export default {
   },
 
   methods: {
-    openDialog(row) {
+    openDialog(row, form) {
       this.$refs.dialogForm.openDialog()
       setTimeout(() => {
         this.$refs.tableItem.setEmptyToSelected()

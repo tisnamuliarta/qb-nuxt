@@ -297,6 +297,18 @@ export default {
             cellClass: 'disable-wrap',
             class: 'disable-wrap',
           },
+          {
+            text: 'Warehouse',
+            value: 'whs_name',
+            cellClass: 'disable-wrap',
+            class: 'disable-wrap',
+          },
+          {
+            text: 'Available Qty',
+            value: 'available_qty',
+            cellClass: 'disable-wrap',
+            class: 'disable-wrap',
+          },
         ]
       } else {
         this.headers = [

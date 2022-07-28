@@ -1,17 +1,11 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="12">
-        <div id="parentContainer" class="scroll-container-min">
-          <hot-table
-            ref="details"
-            :root="detailsRoot"
-            :settings="settings"
-          ></hot-table>
-        </div>
-      </v-col>
-    </v-row>
-  </v-container>
+  <div id="parentContainer" style="height: 70vh !important;">
+    <hot-table
+      ref="detailsTableSimple"
+      :root="detailsRoot"
+      :settings="settings"
+    ></hot-table>
+  </div>
 </template>
 
 <script>
@@ -68,7 +62,7 @@ registerRenderer(
   'ButtonAddRenderer',
   function (hotInstance, td, row, column, prop, value, cellProperties) {
     let button = null
-    const vm = window.details
+    const vm = window.displayTableSimple
     button = document.createElement('button')
     button.type = 'button'
     button.innerHTML = '<span class="mdi mdi-arrow-right-bold"></span>'
@@ -91,7 +85,7 @@ registerRenderer(
   'ButtonDeleteRenderer',
   function (hotInstance, td, row, column, prop, value, cellProperties) {
     let button = null
-    const vm = window.details
+    const vm = window.displayTableSimple
     button = document.createElement('button')
     button.type = 'button'
     // button.innerText = '-'
@@ -112,17 +106,8 @@ registerRenderer(
   }
 )
 
-// Deselect column after click on input.
-const doNotSelectColumn = function (event, coords) {
-  if (coords.row === -1 && event.target.nodeName === 'TD') {
-    event.stopImmediatePropagation()
-    event.stopPropagation()
-    this.deselectCell()
-  }
-}
-
 export default {
-  name: 'FormTable',
+  name: 'FormDisplayTable',
 
   components: {
     HotTable,
@@ -130,7 +115,7 @@ export default {
 
   data() {
     return {
-      detailsRoot: 'detailsRoot22',
+      detailsRoot: 'detailsRoot',
       settings: {
         licenseKey: 'non-commercial-and-evaluation',
       },
@@ -143,37 +128,45 @@ export default {
 
   methods: {
     setInstance() {
-      window.details = this
+      window.displayTableSimple = this
     },
 
     removeRow(row) {
-      this.$refs.details.hotInstance.alter('remove_row', row)
+      this.$refs.detailsTableSimple.hotInstance.alter('remove_row', row)
     },
 
     addLine() {
-      const totalRow = this.$refs.details.hotInstance.countRows()
-      this.$refs.details.hotInstance.alter('insert_row', totalRow + 1, 5)
+      const totalRow = this.$refs.detailsTableSimple.hotInstance.countRows()
+      this.$refs.detailsTableSimple.hotInstance.alter(
+        'insert_row',
+        totalRow + 1,
+        5
+      )
     },
 
     getAddData() {
-      return this.$refs.details.hotInstance.getSourceData()
+      return this.$refs.detailsTableSimple.hotInstance.getSourceData()
     },
 
     checkIfEmptyRow(key) {
-      return this.$refs.details.hotInstance.isEmptyRow(key)
+      return this.$refs.detailsTableSimple.hotInstance.isEmptyRow(key)
     },
 
     setDataAtRowProp(row, prop, value) {
-      this.$refs.details.hotInstance.setDataAtRowProp(row, prop, value)
+      this.$refs.detailsTableSimple.hotInstance.setDataAtRowProp(
+        row,
+        prop,
+        value
+      )
     },
 
     updateTableSettings(colHeaders, columns) {
       // const listVat = this.$auth.$storage.getState('tax_row')
-      this.$refs.details.hotInstance.updateSettings({
+      this.$refs.detailsTableSimple.hotInstance.updateSettings({
         licenseKey: 'non-commercial-and-evaluation',
         colHeaders,
         columns,
-        height: '70vh',
+        // height: '70vh',
         currentRowClassName: 'currentRow',
         currentColClassName: 'currentCol',
         startRows: 2,
@@ -185,30 +178,29 @@ export default {
         colWidths: 80,
         persistentState: true,
         width: '100%',
-        preventOverflow: 'horizontal',
         // height: '28vh',
         stretchH: 'all',
-        nestedRows: true,
+        // nestedRows: true,
         // preventOverflow: 'horizontal',
         hiddenColumns: {
           copyPasteEnabled: false,
           indicator: false,
           columns: [0, 1],
         },
-        beforeOnCellMouseDown: doNotSelectColumn,
-        beforeRefreshDimensions() {
-          return false
-        },
       })
     },
 
     setDataToDetails(data, colHeaders, columns) {
       const vm = this
-      this.$refs.details.hotInstance.batch(() => {
+      setTimeout(() => {
         this.updateTableSettings(colHeaders, columns)
-        vm.$refs.details.hotInstance.loadData(data)
-        this.$nuxt.$loading.finish()
-      })
+        vm.$refs.detailsTableSimple.hotInstance.loadData(data)
+      }, 500)
+      // this.$refs.detailsTableSimple.hotInstance.batch(() => {
+      //   this.updateTableSettings(colHeaders, columns)
+      //   vm.$refs.detailsTableSimple.hotInstance.loadData(data)
+      //   // this.$nuxt.$loading.finish()
+      // })
     },
   },
 }

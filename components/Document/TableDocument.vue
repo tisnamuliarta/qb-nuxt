@@ -51,7 +51,7 @@
         </template>
 
         <template #[`item.status`]="{ item }">
-          <v-chip label small dark :color="statusColor(item)">
+          <v-chip label small dark :color="$formatter.statusColor(item.status)">
             {{ item.status }}
           </v-chip>
         </template>
@@ -82,7 +82,7 @@
 
         <template #[`item.actions`]="{ item }">
           <v-btn
-            v-if="item.status === 'open'"
+            v-if="item.status === 'open' || item.status === 'draft'"
             color="secondary"
             class="font-weight-bold text-right pr-0"
             text
@@ -235,63 +235,14 @@ export default {
       })
     },
 
-    statusColor(item) {
-      switch (item.status) {
-        case 'open':
-          return 'blue darken-3'
-        case 'partial':
-          return 'orange'
-        case 'paid':
-          return 'green'
-        case 'closed':
-          return 'green'
-        case 'overdue':
-          return 'red'
-        case 'canceled':
-          return 'red'
-      }
-    },
-
     editItem(item) {
+      this.$auth.$storage.setState('basePath', this.$route.path)
       this.$router.push({
-        path: this.mappingAction(item.transaction_type),
+        path: this.$formatter.mappingAction(item.transaction_type),
         query: {
           document: item.id,
         },
       })
-    },
-
-    mappingAction(type) {
-      switch (type) {
-        case 'SQ':
-          return '/app/form/sales/quote'
-        case 'SO':
-          return '/app/form/sales/order'
-        case 'SD':
-          return '/app/form/sales/delivery'
-        case 'IN':
-          return '/app/form/sales/invoice'
-        case 'RC':
-          return '/app/form/sales/payment'
-        case 'CN':
-          return '/app/form/sales/creditmemo'
-        case 'SR':
-          return '/app/form/sales/return'
-        case 'PQ':
-          return '/app/form/purchase/quote'
-        case 'PO':
-          return '/app/form/purchase/order'
-        case 'GR':
-          return '/app/form/purchase/receipt'
-        case 'BL':
-          return '/app/form/purchase/invoice'
-        case 'PY':
-          return '/app/form/purchase/payment'
-        case 'DN':
-          return '/app/form/purchase/creditmemo'
-        case 'GN':
-          return '/app/form/purchase/return'
-      }
     },
 
     actions(action, item) {

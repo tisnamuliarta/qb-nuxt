@@ -9,6 +9,7 @@
         ref="formDocument"
         :form-type="formType"
       ></LazyDocumentFormDocument>
+      <AccountingDialogLedger ref="ledger"></AccountingDialogLedger>
     </template>
 
     <template #actions>
@@ -151,6 +152,7 @@ export default {
         { text: 'Copy', action: 'copy' },
         { text: 'Cancel', action: 'cancel' },
         { text: 'Audit History', action: 'history' },
+        { text: 'Journal Entry', action: 'journal' },
       ]
       this.itemAction = this.appendItemAction(this.formType)
       // this.$refs.dialogForm.openDialog()
@@ -421,7 +423,6 @@ export default {
         this.title = this.dialogTitle + ' #' + this.form.transaction_no
 
         this.$refs.dialogForm.setTitle(this.title)
-
         this.$refs.formDocument.setData(this.form)
 
         this.showLoading = false
@@ -453,9 +454,15 @@ export default {
           this.$refs.formDocument.setData(this.form)
           break
 
+        case 'journal':
+          this.$refs.ledger.openDialog(
+            '/api/transaction/ledger/' + this.form.id
+          )
+          break
+
         default:
           this.$router.push({
-            path: vm.mappingAction(action),
+            path: vm.$formatter.mappingAction(action),
             query: {
               document: 0,
               copyFrom: this.form.id,
@@ -467,39 +474,6 @@ export default {
           this.form.base_num = this.form.document_number
           this.$refs.formDocument.setData(this.form)
           break
-      }
-    },
-
-    mappingAction(type) {
-      switch (type) {
-        case 'SQ':
-          return '/app/form/sales/quote'
-        case 'SO':
-          return '/app/form/sales/order'
-        case 'SD':
-          return '/app/form/sales/delivery'
-        case 'IN':
-          return '/app/form/sales/invoice'
-        case 'RC':
-          return '/app/form/sales/payment'
-        case 'CN':
-          return '/app/form/sales/creditmemo'
-        case 'SR':
-          return '/app/form/sales/return'
-        case 'PQ':
-          return '/app/form/purchase/quote'
-        case 'PO':
-          return '/app/form/purchase/order'
-        case 'GR':
-          return '/app/form/purchase/receipt'
-        case 'BL':
-          return '/app/form/purchase/invoice'
-        case 'PY':
-          return '/app/form/purchase/payment'
-        case 'DN':
-          return '/app/form/purchase/creditmemo'
-        case 'GN':
-          return '/app/form/purchase/return'
       }
     },
 

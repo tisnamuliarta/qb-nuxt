@@ -13,6 +13,7 @@
             outlined
             dense
             hide-details="auto"
+            clearable
             @change="changeContact"
           ></v-autocomplete>
         </v-col>
@@ -27,6 +28,7 @@
             outlined
             dense
             hide-details="auto"
+            clearable
             @change="changePaymentTerm"
           ></v-select>
         </v-col>
@@ -96,6 +98,22 @@
 
         <v-col cols="12" md="4">
           <v-autocomplete
+            v-model="form.warehouse_id"
+            :items="itemWarehouse"
+            item-value="id"
+            item-text="name"
+            label="Warehouse"
+            outlined
+            dense
+            persistent-hint
+            hide-details="auto"
+            clearable
+            @change="changeWarehouse"
+          ></v-autocomplete>
+        </v-col>
+
+        <v-col cols="12" md="6">
+          <v-autocomplete
             v-model="form.sales_person"
             :items="itemSalesPersons"
             item-value="user_id"
@@ -106,6 +124,7 @@
             multiple
             persistent-hint
             small-chips
+            clearable
             hide-details="auto"
           ></v-autocomplete>
         </v-col>
@@ -159,6 +178,7 @@
             <div class="scroll-container-min">
               <LazyDocumentTableDetail
                 ref="childDetails"
+                :form="form"
                 @calcTotal="calcTotal"
               ></LazyDocumentTableDetail>
             </div>
@@ -302,7 +322,7 @@
           </v-row>
         </v-col>
 
-        <v-col cols="12">
+        <!-- <v-col cols="12">
           <v-row dense>
             <v-spacer />
             <v-col cols="12" md="4" class="text-right pa-1">
@@ -321,7 +341,7 @@
               ></vuetify-money>
             </v-col>
           </v-row>
-        </v-col>
+        </v-col> -->
 
         <v-col cols="12">
           <v-row dense>
@@ -341,7 +361,7 @@
           </v-row>
         </v-col>
 
-        <v-col cols="12">
+        <!-- <v-col cols="12">
           <v-row dense>
             <v-spacer />
             <v-col cols="12" md="4" class="text-right pa-1">
@@ -360,7 +380,7 @@
               ></vuetify-money>
             </v-col>
           </v-row>
-        </v-col>
+        </v-col> -->
 
         <v-col cols="12">
           <v-row dense>
@@ -694,6 +714,10 @@ export default {
       this.showLoading = value
     },
 
+    changeWarehouse() {
+      this.setData(this.form)
+    },
+
     // Setting the data to the child component.
     setData(form) {
       this.showLoading = true
@@ -712,6 +736,7 @@ export default {
       }, 500)
 
       this.form = Object.assign({}, form)
+      // console.log(this.form)
 
       if (this.form.tax_details) {
         this.form.tax_details = this.reduceArrayTax(this.form.tax_details)
@@ -749,7 +774,7 @@ export default {
 
         const resContact = await this.$axios.get(`/api/bp/contacts`, {
           params: {
-            type: this.$route.query.type,
+            type: this.form.transaction_type,
           },
         })
 
@@ -770,6 +795,7 @@ export default {
         this.itemAccounts = resAccount.data.data
         this.itemContact = resContact.data.data
         this.itemPaymentTerm = resPaymentTerm.data.auto_complete
+        this.itemWarehouse = resWarehouse.data.data
         this.$auth.$storage.removeState('tax')
         this.$auth.$storage.setState('tax', resTax.data.simple)
         this.$auth.$storage.removeState('warehouse')
@@ -819,14 +845,16 @@ export default {
 
     changeContact() {
       const contact = this.form.contact_id
-      this.form.contact_id = contact.id
-      this.form.contact_address = contact.address
-        ? contact.address
-        : this.form.contact_address
+      if (contact) {
+        this.form.contact_id = contact.id
+        this.form.contact_address = contact.address
+          ? contact.address
+          : this.form.contact_address
 
-      this.form.shipping_address = contact.shipping_address
-        ? contact.shipping_address
-        : this.form.shipping_address
+        this.form.shipping_address = contact.shipping_address
+          ? contact.shipping_address
+          : this.form.shipping_address
+      }
     },
 
     checkDocument() {

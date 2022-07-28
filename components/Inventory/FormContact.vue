@@ -287,7 +287,7 @@
 
                     <v-tab-item value="tab-3">
                       <v-row dense>
-                        <v-col cols="12">
+                        <v-col cols="12" class="mt-3">
                           <v-autocomplete
                             v-model="form.receivable_account_id"
                             :items="itemAccounts"
@@ -300,7 +300,7 @@
                             hide-details="auto"
                           ></v-autocomplete>
                         </v-col>
-  
+
                         <v-col cols="12">
                           <v-autocomplete
                             v-model="form.payable_account_id"
@@ -314,7 +314,7 @@
                             hide-details="auto"
                           ></v-autocomplete>
                         </v-col>
-  
+
                         <v-col cols="12">
                           <v-checkbox
                             v-model="form.active_max_payable"
@@ -323,7 +323,7 @@
                             label="Active Max Payable"
                           ></v-checkbox>
                         </v-col>
-  
+
                         <v-col v-if="form.active_max_payable" cols="12">
                           <vuetify-money
                             v-model="form.max_payable"
@@ -335,7 +335,7 @@
                             hide-details="auto"
                           ></vuetify-money>
                         </v-col>
-  
+
                         <v-col cols="12">
                           <v-autocomplete
                             v-model="form.payment_term_id"

@@ -97,29 +97,24 @@
               ></v-text-field>
             </v-col>
 
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="6">
               <v-text-field
-                label="Date"
+                v-model="form.date_from"
+                label="Date From"
                 outlined
                 dense
+                type="date"
                 hide-details="auto"
               ></v-text-field>
             </v-col>
 
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="6">
               <v-text-field
-                label="From"
+                v-model="form.date_to"
+                label="Date To"
                 outlined
                 dense
-                hide-details="auto"
-              ></v-text-field>
-            </v-col>
-
-            <v-col cols="12" md="4">
-              <v-text-field
-                label="To"
-                outlined
-                dense
+                type="date"
                 hide-details="auto"
               ></v-text-field>
             </v-col>
@@ -128,7 +123,9 @@
         <v-card-actions>
           <v-btn text> Cancel </v-btn>
           <v-spacer></v-spacer>
-          <v-btn color="primary" small elevation="0"> Apply </v-btn>
+          <v-btn color="primary" small elevation="0" @click="passDataToToolbar">
+            Apply
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-menu>
@@ -361,6 +358,11 @@ export default {
         { text: 'Delete', action: 'delete' },
       ],
 
+      form: {
+        date_from: null,
+        date_to: null,
+      },
+
       itemsMenu: [
         { title: 'Refresh', icon: 'mdi-refresh', action: 'refresh' },
         { title: 'Print', icon: 'mdi-printer', action: 'print' },
@@ -398,6 +400,8 @@ export default {
         searchStatus: data.searchStatus,
         searchItem: data.searchItem,
         search: data.search,
+        date_from: this.form.date_from,
+        date_to: this.form.date_to,
       })
     },
 

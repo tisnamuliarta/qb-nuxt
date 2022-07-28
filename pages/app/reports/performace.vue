@@ -1,45 +1,86 @@
 <template>
-  <div>
-    <DocumentTableDocument
-      ref="tableDocument"
-      type-document="S"
-      form-url="/app/purchasereturn/form"
-      :header-table="[
-        {text: 'Number', value: 'document_number', cellClass: 'disable-wrap'},
-        {text: 'Customer', value: 'contact_name', cellClass: 'disable-wrap'},
-        {text: 'Type', value: 'type', cellClass: 'disable-wrap'},
-        {text: 'Date', value: 'issued_at', cellClass: 'disable-wrap', sortable: false, filterable: false},
-        {text: 'Due Date', value: 'due_at', cellClass: 'disable-wrap', sortable: false, filterable: false},
-        {text: 'Status', value: 'status', align: 'left', cellClass: 'disable-wrap', sortable: false, filterable: false},
-        {
-          text: 'Balance Due',
-          value: 'balance_due',
-          align: 'right',
-          cellClass: 'disable-wrap',
-          sortable: false,
-          filterable: false
-        },
-        {text: 'Total', value: 'amount', align: 'right', cellClass: 'disable-wrap', sortable: false, filterable: false},
-        {
-          text: 'Actions',
-          value: 'actions',
-          align: 'center',
-          cellClass: 'disable-wrap',
-          sortable: false,
-          filterable: false
-        },
-      ]"
-    ></DocumentTableDocument>
-  </div>
+  <v-container>
+    <v-row>
+      <v-col cols="12" lg="10">
+        <v-row>
+          <v-col cols="12" md="4">
+            <v-card class="mx-auto">
+              <v-card-text>
+                <div class="subtitle-1">SHORTCUTS</div>
+              </v-card-text>
+              <v-card-text>
+                <LazyChartBarChart></LazyChartBarChart>
+              </v-card-text>
+            </v-card>
+          </v-col>
+
+          <v-col cols="12" md="4">
+            <v-card class="mx-auto">
+              <v-card-text>
+                <div class="subtitle-1">SHORTCUTS</div>
+              </v-card-text>
+              <v-card-text>
+                <LazyChartBarChart></LazyChartBarChart>
+              </v-card-text>
+            </v-card>
+          </v-col>
+
+          <v-col cols="12" md="4">
+            <v-card class="mx-auto">
+              <v-card-text>
+                <div class="subtitle-1">SHORTCUTS</div>
+              </v-card-text>
+              <v-card-text>
+                <LazyChartLineChart></LazyChartLineChart>
+              </v-card-text>
+            </v-card>
+          </v-col>
+
+          <v-col cols="12" md="4">
+            <v-card class="mx-auto">
+              <v-card-text>
+                <div class="subtitle-1">SHORTCUTS</div>
+              </v-card-text>
+              <v-card-text>
+                <LazyChartLineChart></LazyChartLineChart>
+              </v-card-text>
+            </v-card>
+          </v-col>
+
+          <v-col cols="12" md="4">
+            <v-card class="mx-auto">
+              <v-card-text>
+                <div class="subtitle-1">SHORTCUTS</div>
+              </v-card-text>
+              <v-card-text>
+                <LazyChartPieChart></LazyChartPieChart>
+              </v-card-text>
+            </v-card>
+          </v-col>
+
+          <v-col cols="12" md="4">
+            <v-card class="mx-auto">
+              <v-card-text>
+                <div class="subtitle-1">SHORTCUTS</div>
+              </v-card-text>
+              <v-card-text>
+                <LazyChartDoughnutChart></LazyChartDoughnutChart>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
 export default {
-  name: 'AllSales',
+  name: 'PurchaseOverview',
 
   head() {
     return {
-      title: 'All Sales',
+      title: 'Purchase Overview',
     }
   },
 
@@ -59,10 +100,7 @@ export default {
       if (this.$refs.tableDocument) {
         this.$refs.tableDocument.getDataFromApi()
       }
-    }
-  }
+    },
+  },
 }
 </script>
-
-
-
