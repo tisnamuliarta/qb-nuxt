@@ -111,7 +111,6 @@
           bottom
           offset-y
           left
-          :close-on-content-click="false"
           :nudge-width="700"
         >
           <template #activator="{ on }">

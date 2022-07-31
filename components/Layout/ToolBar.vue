@@ -18,12 +18,11 @@
     <!--    </v-menu>-->
 
     <v-menu
-      v-model="menu"
+      v-model="menu2"
       transition="slide-y-transition"
       bottom
       offset-y
       left
-      :close-on-content-click="false"
       :nudge-width="400"
     >
       <template #activator="{ on }">
@@ -57,10 +56,12 @@
     </v-tooltip> -->
 
     <v-menu
+      v-model="menu"
       transition="slide-y-transition"
       bottom
       offset-y
       left
+      close-on-content-click
       :nudge-width="700"
     >
       <template #activator="{ on }">
@@ -123,6 +124,7 @@ export default {
     return {
       username: '',
       menu: false,
+      menu2: false,
     }
   },
 

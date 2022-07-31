@@ -92,6 +92,9 @@
           <template #[`item.minimum_stock`]="{ item }">
             {{ formatPrice(item.minimum_stock) }}
           </template>
+          <template #[`item.available_qty`]="{ item }">
+            {{ checkAvailable(item.item_warehouse) }}
+          </template>
         </v-data-table>
       </div>
     </v-flex>
@@ -135,6 +138,7 @@ export default {
       searchStatus: '',
       searchItem: '',
       search: '',
+      whs: '',
       form: {},
       defaultItem: {},
       options: {},
@@ -184,7 +188,21 @@ export default {
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
     },
 
-    setEmptyToSelected() {
+    checkAvailable(available) {
+      const vm = this
+      let availableQty = 0
+      available.forEach(element => {
+        // console.log(element)
+        if(element.whs_name === vm.whs) {
+          availableQty = element.available_qty
+        }
+      });
+      return availableQty;
+    },
+
+    setEmptyToSelected(whs) {
+      this.whs = whs
+      this.getDataFromApi()
       this.selected = []
     },
 
@@ -233,6 +251,7 @@ export default {
         documentStatus: vm.documentStatus,
         searchStatus: vm.searchStatus,
         search: vm.search,
+        whs: vm.whs,
       }
       this.$axios
         .get(`/api/inventory/items`, {

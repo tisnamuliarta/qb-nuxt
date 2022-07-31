@@ -66,6 +66,10 @@ const formatter = {
         return '/app/form/purchase/creditmemo'
       case 'GN':
         return '/app/form/purchase/return'
+      case 'GI':
+        return '/app/form/inventory/issue'
+      case 'GE':
+        return '/app/form/inventory/receipt'
     }
   },
 }

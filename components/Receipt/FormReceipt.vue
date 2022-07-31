@@ -3,17 +3,13 @@
     <v-col cols="12" md="9" sm="8">
       <v-row dense>
         <v-col cols="12" md="4" sm="12">
-          <v-autocomplete
-            v-model="form.status"
-            :items="['planned','released','closed','cancel']"
-            label="Status"
-            return-object
-            item-value="id"
-            item-text="name"
+          <v-text-field
+            v-model="form.reference_no"
+            label="Reference"
             outlined
             dense
             hide-details="auto"
-          ></v-autocomplete>
+          ></v-text-field>
         </v-col>
 
         <v-col cols="12" lg="2" md="2" sm="6">
@@ -74,6 +70,17 @@
             @calcTotal="calcTotal"
           ></LazyReceiptTableDetail>
         </div>
+        <v-card-actions>
+          <v-btn
+            small
+            depressed
+            outlined
+            @click="$refs.childDetails.addLine(1)"
+          >
+            Add Line
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
+        </v-card-actions>
       </v-card>
     </v-col>
 
@@ -243,19 +250,8 @@ export default {
 
     calcTotal(data) {
       try {
-        this.form.discount_per_line = data.discountAmount
-        this.form.sub_total = data.subTotal
-        this.taxDetails = data.taxDetail
-        this.form.main_account_amount = data.sub_total
-        this.form.balance_due = this.form.main_account_amount
-        this.subTotalMinDiscount =
-          parseFloat(this.form.main_account_amount)
+        this.form.main_account_amount = data.subTotal
         // this.taxAmount = this.tempTotalTax
-
-        if (this.form.main_account_amount === 0) {
-          this.form.discount_rate = 0
-          this.form.discount_amount = 0
-        }
       } catch (e) {
         // eslint-disable-next-line no-console
         console.log(e)

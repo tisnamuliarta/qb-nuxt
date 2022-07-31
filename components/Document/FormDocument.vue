@@ -112,7 +112,7 @@
           ></v-autocomplete>
         </v-col>
 
-        <v-col cols="12" md="6">
+        <v-col v-if="form.transaction_type === 'IN'" cols="12" md="6">
           <v-autocomplete
             v-model="form.sales_person"
             :items="itemSalesPersons"
@@ -203,7 +203,7 @@
             small
             depressed
             outlined
-            @click="$refs.childDetails.addLine(5)"
+            @click="$refs.childDetails.addLine(1)"
           >
             Add Line
             <v-icon>mdi-plus</v-icon>

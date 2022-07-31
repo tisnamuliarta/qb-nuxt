@@ -2,7 +2,7 @@
   <div>
     <DocumentTableDocument
       ref="tableDocument"
-      type-document="GT"
+      type-document="GE"
       form-url="/app/form/inventory/receipt"
       :table-title="$t('Goods Receipt')"
       :header-table="[
@@ -26,14 +26,6 @@
           text: 'Status',
           value: 'status',
           align: 'left',
-          cellClass: 'disable-wrap',
-          sortable: false,
-          filterable: false,
-        },
-        {
-          text: 'Balance Due',
-          value: 'balance_due',
-          align: 'right',
           cellClass: 'disable-wrap',
           sortable: false,
           filterable: false,

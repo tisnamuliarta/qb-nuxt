@@ -4,8 +4,8 @@
       ref="dialogForm"
       url="/api/documents"
       form-url="/app/form/inventory/receipt"
-      form-type="GT"
-      form-type-prefix="GT"
+      form-type="GE"
+      form-type-prefix="GE"
       dialog-title="Goods Receipt"
       @getDataFromApi="getDataFromApi"
     ></LazyReceiptDialogReceipt>

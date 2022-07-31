@@ -13,7 +13,7 @@
               <v-col cols="12" md="4">
                 <v-autocomplete
                   v-model="form.resource_type"
-                  :items="['machine','labor','other']"
+                  :items="['machine', 'labor', 'other']"
                   label="Type"
                   outlined
                   persistent-hint
@@ -33,7 +33,7 @@
                 ></v-text-field>
               </v-col>
 
-              <v-col cols="12" md="6">
+              <v-col cols="12">
                 <v-text-field
                   v-model="form.code"
                   label="Code"
@@ -43,10 +43,10 @@
                 ></v-text-field>
               </v-col>
 
-              <v-col cols="12" md="6">
+              <v-col cols="12">
                 <v-autocomplete
                   v-model="form.status"
-                  :items="['active','inactive']"
+                  :items="['active', 'inactive']"
                   label="Status"
                   outlined
                   persistent-hint
@@ -56,7 +56,7 @@
                 </v-autocomplete>
               </v-col>
 
-              <v-col v-if="form.resource_type === 'labor'" cols="12" md="6">
+              <v-col v-if="form.resource_type === 'labor'" cols="12">
                 <v-autocomplete
                   v-model="form.employee_id"
                   :items="itemEmployee"
@@ -71,9 +71,9 @@
                 </v-autocomplete>
               </v-col>
 
-              <v-col cols="12" md="6">
+              <v-col cols="12">
                 <v-autocomplete
-                  v-model="form.uom"
+                  v-model="form.unit"
                   :items="itemUnit"
                   label="UoM"
                   item-text="name"
@@ -86,7 +86,7 @@
                 </v-autocomplete>
               </v-col>
 
-              <v-col cols="12" md="6">
+              <v-col cols="12">
                 <v-autocomplete
                   v-model="form.std_cost_account_1"
                   :items="itemAccounts"
@@ -101,7 +101,7 @@
                 </v-autocomplete>
               </v-col>
 
-              <v-col cols="12" md="6">
+              <v-col cols="12">
                 <v-autocomplete
                   v-model="form.warehouse_id"
                   :items="itemWarehouse"
@@ -116,7 +116,7 @@
                 </v-autocomplete>
               </v-col>
 
-              <v-col cols="12" md="6">
+              <v-col cols="12">
                 <v-text-field
                   v-model="form.standard_cost"
                   type="number"
@@ -179,7 +179,6 @@
                   hide-details="auto"
                 ></v-text-field>
               </v-col>
-
             </v-row>
           </v-container>
         </v-form>

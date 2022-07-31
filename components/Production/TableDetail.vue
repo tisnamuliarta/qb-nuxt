@@ -221,7 +221,7 @@ export default {
             },
           },
           {
-            data: 'uom',
+            data: 'unit',
             className: 'htCenter',
             width: 60,
             readOnly: true,
@@ -253,7 +253,7 @@ export default {
             allowInvalid: false,
           },
           {
-            data: 'amount',
+            data: 'sub_total',
             width: 100,
             wordWrap: false,
             type: 'numeric',
@@ -370,8 +370,8 @@ export default {
           vm.$refs.details.hotInstance.setDataAtRowProp([
             [rowData, 'item_code', item.code],
             [rowData, 'item_id', item.id],
-            [rowData, 'uom', item.uom],
-            [rowData, 'whs_code', item.whs_code],
+            [rowData, 'unit', item.unit],
+            [rowData, 'whs_code', item.whs_name],
             [rowData, 'narration', narration],
             [rowData, 'base_qty', 1],
           ])
@@ -446,7 +446,7 @@ export default {
 
             this.$refs.details.hotInstance.setDataAtRowProp(
               i,
-              'amount',
+              'sub_total',
               subTotalRow
             )
           })

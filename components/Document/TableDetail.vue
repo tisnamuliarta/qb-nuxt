@@ -166,12 +166,12 @@ export default {
 
                 button.addEventListener('mousedown', (event) => {
                   event.preventDefault()
-                  // const warehouse =
-                  //   vm.$refs.details.hotInstance.getDataAtRowProp(
-                  //     row,
-                  //     'whs_name'
-                  //   )
-                  vm.$refs.dialogItem.openDialog(row, vm.form)
+                  const warehouse =
+                    vm.$refs.details.hotInstance.getDataAtRowProp(
+                      row,
+                      'whs_name'
+                    )
+                  vm.$refs.dialogItem.openDialog(row, warehouse)
                 })
 
                 // dom.empty(td)
@@ -480,13 +480,15 @@ export default {
         const items = form.line_items.length > 0 ? form.line_items : data
         vm.$refs.details.hotInstance.loadData(items)
         // vm.calculateTotal()
-        const countRows = this.$refs.details.hotInstance.countRows()
-        for (let i = 0; i < countRows; i++) {
-          this.$refs.details.hotInstance.setDataAtRowProp(
-            i,
-            'whs_name',
-            vm.form.warehouse_name
-          )
+        if (form.line_items.length === 0) {
+          const countRows = this.$refs.details.hotInstance.countRows()
+          for (let i = 0; i < countRows; i++) {
+            this.$refs.details.hotInstance.setDataAtRowProp(
+              i,
+              'whs_name',
+              vm.form.warehouse_name
+            )
+          }
         }
         this.$nuxt.$loading.finish()
       })
