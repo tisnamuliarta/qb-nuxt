@@ -2,7 +2,7 @@
   <div>
     <DialogForm
       ref="dialogForm"
-      max-width="1000px"
+      max-width="1200px"
       :dialog-title="$t('Journal Entry')"
       button-title="Save"
       original="top"
@@ -29,33 +29,53 @@
                   'items-per-page-options': [150, 250, 500, -1],
                 }"
               >
-                <template #[`item.entity_id`]="{ item }">
-                  <span v-if="item.entry_type === 'D'">
+                <template #[`item.amount_credit`]="{ item }">
+                  <span v-if="item.amount_credit">
                     {{
                       $auth.user.entity.currency.currency_symbol +
                       ' ' +
-                      $formatter.formatPrice(item.amount)
+                      $formatter.formatPrice(item.amount_credit)
                     }}
                   </span>
                 </template>
 
-                <template #[`item.id`]="{ item }">
-                  <span v-if="item.entry_type === 'C'">
+                <template #[`item.amount_debit`]="{ item }">
+                  <span v-if="item.amount_debit">
                     {{
                       $auth.user.entity.currency.currency_symbol +
                       ' ' +
-                      $formatter.formatPrice(item.amount)
+                      $formatter.formatPrice(item.amount_debit)
                     }}
                   </span>
                 </template>
 
-                <template  #[`body.append`]>
-                  <tr class="pink--text">
+                <template #[`body.append`]>
+                  <tr class="black--text">
                     <th class="title"></th>
-                    <th class="title">{{ sumField('calories') }}</th>
-                    <th class="title">{{ sumField('fat') }}</th>
-                    <th class="title">{{ sumField('carbs') }}</th>
-                    <th class="title">{{ sumField('protein') }}</th>
+                    <th class="title"></th>
+                    <th class="title"></th>
+                    <th class="title"></th>
+                    <th class="title"></th>
+                    <th class="title text-right">
+                      {{
+                        $auth.user.entity.currency.currency_symbol +
+                        ' ' +
+                        $formatter.formatPrice(sumField('amount_debit'))
+                      }}
+                    </th>
+                    <th class="title text-right">
+                      {{
+                        $auth.user.entity.currency.currency_symbol +
+                        ' ' +
+                        $formatter.formatPrice(sumField('amount_credit'))
+                      }}
+                    </th>
+                  </tr>
+                  <tr>
+                    <td>Notes: </td>
+                    <td colspan="3">
+                      <strong>{{ transaction.narration }}</strong>
+                    </td>
                   </tr>
                 </template>
               </v-data-table>
@@ -87,22 +107,38 @@ export default {
       row: null,
       url: '',
       allData: [],
+      transaction: [],
       totalData: 0,
       loading: false,
       options: {},
       headers: [
+        { text: 'Posting Date', value: 'posting_date' },
         { text: 'Account Code', value: 'post_account.code' },
+        { text: 'Account Category', value: 'post_account.account_type' },
         { text: 'Account Name', value: 'post_account.name' },
-        { text: 'Debit', value: 'entity_id', cellClass: 'disable-wrap' },
-        { text: 'Credit', value: 'id', cellClass: 'disable-wrap' },
+        {
+          text: 'Debit',
+          value: 'amount_debit',
+          class: 'text-center',
+          cellClass: 'disable-wrap text-right',
+        },
+        {
+          text: 'Credit',
+          value: 'amount_credit',
+          class: 'text-center',
+          cellClass: 'disable-wrap text-right',
+        },
       ],
     }
   },
 
   methods: {
     sumField(key) {
-        // sum data in give key (property)
-        return this.allData.reduce((a, b) => a + (b[key] || 0), 0)
+      // sum data in give key (property)
+      return this.allData.reduce(
+        (a, b) => parseFloat(a) + parseFloat(b[key] || 0),
+        0
+      )
     },
 
     openDialog(url) {
@@ -120,6 +156,7 @@ export default {
           const data = res.data
 
           this.allData = data.data
+          this.transaction = data.transaction
           this.totalData = data.total
         })
         .catch((err) => {

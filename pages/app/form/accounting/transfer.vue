@@ -4,6 +4,7 @@
       ref="dialogForm"
       url="/api/transactions"
       form-url="/app/form/accounting/transfer"
+      table-url="/app/accounting/transfer"
       form-type="CE"
       form-type-prefix="TF"
       dialog-title="Transfer"

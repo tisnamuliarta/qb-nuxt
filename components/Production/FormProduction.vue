@@ -28,18 +28,6 @@
           ></v-text-field>
         </v-col>
 
-        <v-col cols="12" lg="2" md="2" sm="6">
-          <v-text-field
-            v-model="form.due_date"
-            label="Due Date"
-            persistent-hint
-            outlined
-            dense
-            type="date"
-            hide-details="auto"
-          ></v-text-field>
-        </v-col>
-
         <v-col cols="12" md="2" sm="12">
           <v-autocomplete
             v-model="form.item_id"
@@ -51,15 +39,29 @@
             outlined
             dense
             hide-details="auto"
+            @change="changeItem"
           ></v-autocomplete>
         </v-col>
+
+        <v-col cols="12" lg="2" md="2" sm="6">
+          <!-- <v-text-field
+            v-model="form.due_date"
+            label="Due Date"
+            persistent-hint
+            outlined
+            dense
+            type="date"
+            hide-details="auto"
+          ></v-text-field> -->
+        </v-col>
+
+
 
         <v-col cols="12" md="4" sm="12">
           <v-autocomplete
             v-model="form.warehouse_id"
             :items="itemWarehouse"
             label="Warehouse"
-            return-object
             item-value="id"
             item-text="name"
             outlined
@@ -77,6 +79,20 @@
             dense
             type="number"
             hide-details="auto"
+            @change="changeQty"
+          ></v-text-field>
+        </v-col>
+
+       <v-col cols="12" lg="2" md="2" sm="6">
+          <v-text-field
+            v-model="form.commission_rate"
+            label="Commission"
+            readonly
+            persistent-hint
+            outlined
+            dense
+            type="number"
+            hide-details="auto"
           ></v-text-field>
         </v-col>
         <!-- <v-col cols="12" md="2"></v-col> -->
@@ -87,12 +103,12 @@
     <v-col cols="12" md="3" xl="2" sm="4" class="text-right">
       <v-row dense>
         <v-col cols="12" class="pt-0">
-          <p class="mb-0">Amount Due</p>
+          <p class="mb-0">Amount</p>
           <span class="text-right font-weight-bold text-h4">
             {{
-              isNaN(form.balance_due)
+              isNaN(form.main_account_amount)
                 ? 0
-                : $formatter.formatPrice(form.balance_due)
+                : $formatter.formatPrice(form.main_account_amount)
             }}
           </span>
         </v-col>
@@ -108,16 +124,16 @@
     <v-col cols="12" class="mt-1">
       <v-card flat>
         <div class="scroll-container-min">
-          <LazyProductionTableDetail
+          <LazyProductionTableDetailProduction
             ref="childDetails"
             @calcTotal="calcTotal"
-          ></LazyProductionTableDetail>
+          ></LazyProductionTableDetailProduction>
         </div>
       </v-card>
     </v-col>
 
     <v-col cols="12" md="4" lg="4">
-      <v-col cols="12" md="12">
+      <!-- <v-col cols="12" md="12">
         <v-textarea
           v-model="form.notes"
           rows="2"
@@ -126,7 +142,7 @@
           dense
           hide-details="auto"
         ></v-textarea>
-      </v-col>
+      </v-col> -->
 
       <v-col cols="12" md="12">
         <v-textarea
@@ -177,7 +193,7 @@
 
 <script>
 export default {
-  name: 'FormDocument',
+  name: 'FormProduction',
 
   props: {
     formType: {
@@ -223,7 +239,7 @@ export default {
       taxDiscount: 0,
       amountBeforeTax: 0,
       withholdingAmount: 0,
-      discountAmount: 0,
+      commission: 0,
       moneyOptions: {
         locale: 'en',
         prefix: '',
@@ -259,18 +275,29 @@ export default {
   },
 
   methods: {
+    changeItem() {
+      const item = this.form.item_id
+      this.form.item_id = item.id
+      this.form.commission_rate = item.commision_rate
+      this.$refs.childDetails.setCommission(item.commision_rate)
+    },
+
+    changeQty() {
+      this.$refs.childDetails.setQty(this.form.planned_qty)
+    },
+
     checkDisable() {
       return this.form.status === 'closed' || this.form.status === 'cancel'
     },
 
     statusColor(status) {
       switch (status) {
-        case 'open':
+        case 'planned':
           return 'blue darken-3'
         case 'partial':
           return 'orange'
-        case 'paid':
-          return 'green'
+        case 'released':
+          return 'orange'
         case 'closed':
           return 'green'
         case 'overdue':
@@ -282,144 +309,11 @@ export default {
 
     calcTotal(data) {
       try {
-        this.form.discount_per_line = data.discountAmount
-        this.form.sub_total = data.subTotal
-        this.form.tax_details = this.reduceArrayTax(data.taxDetail)
-        this.taxDetails = data.taxDetail
-        this.form.main_account_amount = data.amount + this.tempTotalTax
-        this.form.balance_due = this.form.main_account_amount
-        this.subTotalMinDiscount =
-          parseFloat(this.form.sub_total) -
-          parseFloat(this.form.discount_per_line)
-        // this.taxAmount = this.tempTotalTax
-
-        if (this.form.sub_total === 0) {
-          this.form.discount_rate = 0
-          this.form.discount_amount = 0
-        }
-
-        this.changeCalculation(data)
+        this.form.main_account_amount = data.subTotal
       } catch (e) {
         // eslint-disable-next-line no-console
         console.log(e)
       }
-    },
-
-    // Calculating the tax amount, discount amount, total amount, balance due, etc.
-    changeCalculation(data) {
-      // this.taxDetails = (data) ? data.taxDetail : []
-      // calculate discount
-      if (this.taxDetails.length > 0) {
-        this.form.tax_details = this.reduceArrayTax(this.taxDetails)
-      }
-      this.form.discount_amount = 0
-      if (this.form.discount_type === 'Percent') {
-        if (this.form.discount_rate > 0) {
-          this.subTotalMinDiscount =
-            parseFloat(this.form.sub_total) -
-            parseFloat(this.form.discount_per_line)
-          this.form.discount_amount =
-            (this.form.discount_rate / 100) * this.subTotalMinDiscount
-          this.taxDiscount = (this.form.discount_rate / 100) * this.tempTotalTax
-        }
-      } else {
-        this.form.discount_amount = parseFloat(this.form.discount_rate)
-        if (this.tempTotalTax > 0) {
-          this.taxDiscount = this.tempTotalTax - this.form.discount_amount
-        }
-      }
-
-      this.taxAmount =
-        parseFloat(this.tempTotalTax) - parseFloat(this.taxDiscount)
-
-      this.taxAmount = this.taxAmount === undefined ? 0 : this.taxAmount
-
-      // calculate tax details
-      if (
-        this.taxDetails.length > 0 &&
-        parseFloat(this.form.discount_rate) > 0
-      ) {
-        this.form.tax_details = this.reduceArrayTaxAfterDiscount(
-          this.taxDetails
-        )
-      }
-
-      // calculate total amount
-      this.form.main_account_amount =
-        parseFloat(this.form.sub_total) -
-        parseFloat(this.form.discount_per_line) -
-        parseFloat(this.form.discount_amount) +
-        parseFloat(this.taxAmount)
-
-      // calculate amount before tax for tax withholding
-      this.amountBeforeTax = this.form.main_account_amount - this.taxAmount
-
-      // calculate tax withholding
-      if (this.form.withholding_type === 'Percent') {
-        if (this.form.withholding_rate > 0) {
-          this.form.withholding_amount =
-            (this.form.withholding_rate / 100) * this.amountBeforeTax
-        }
-      } else {
-        this.form.withholding_amount = parseFloat(this.form.withholding_rate)
-      }
-
-      this.form.balance_due =
-        this.form.main_account_amount -
-        this.form.deposit_amount -
-        this.form.withholding_amount -
-        parseFloat(this.form.shipping_fee)
-    },
-
-    // Reducing the array of tax details and returning the result.
-    reduceArrayTaxAfterDiscount(taxDetails) {
-      const result = []
-      const vm = this
-      // console.log(taxDetails)
-      taxDetails.reduce(function (res, value) {
-        if (!res[value.name]) {
-          res[value.name] = { name: value.name, amount: 0 }
-          result.push(res[value.name])
-        }
-
-        if (parseFloat(vm.form.discount_rate) > 0) {
-          let taxDiscountValue = 0
-          if (vm.form.discount_type === 'Percent') {
-            taxDiscountValue =
-              (parseFloat(vm.form.discount_rate) / 100) *
-              parseFloat(value.amount)
-          } else {
-            taxDiscountValue = parseFloat(vm.form.discount_rate)
-          }
-          res[value.name].amount =
-            parseFloat(value.amount) - parseFloat(taxDiscountValue)
-        }
-        return res
-      }, {})
-
-      return result
-    },
-
-    reduceArrayTax(taxDetails) {
-      const result = []
-      const vm = this
-      let totalTax = 0
-      taxDetails.forEach(function (item, index) {
-        totalTax += parseFloat(item.amount)
-      })
-      vm.tempTotalTax = totalTax
-
-      taxDetails.reduce(function (res, value) {
-        if (!res[value.name]) {
-          res[value.name] = { name: value.name, amount: 0 }
-          result.push(res[value.name])
-        }
-        res[value.name].amount += value.amount
-
-        return res
-      }, {})
-
-      return result
     },
 
     showLoad(value) {
@@ -432,9 +326,6 @@ export default {
       setTimeout(() => {
         this.$refs.childDetails.setDataToDetails(
           [
-            {
-              quantity: null,
-            },
             {
               quantity: null,
             },

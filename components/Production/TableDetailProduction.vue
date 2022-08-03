@@ -6,12 +6,12 @@
       :settings="settings"
     ></hot-table>
 
-    <LazyInventoryDialogItem
+    <LazyInventoryDialogResource
       ref="dialogItem"
       :view-data="true"
       :show-add-btn="false"
       @selectItems="selectItems"
-    ></LazyInventoryDialogItem>
+    ></LazyInventoryDialogResource>
 
     <AccountingDialogAccount
       ref="dialogAccount"
@@ -50,6 +50,8 @@ import {
   AutoColumnSize,
 } from 'handsontable/plugins'
 
+import { registerRenderer } from 'handsontable/renderers'
+
 import 'handsontable/dist/handsontable.full.css'
 
 // register imported cell types and plugins
@@ -68,6 +70,56 @@ registerPlugin(HiddenRows)
 registerPlugin(DropdownMenu)
 registerPlugin(AutoColumnSize)
 
+registerRenderer(
+  'ButtonAddRenderer',
+  function (hotInstance, td, row, column, prop, value, cellProperties) {
+    let button = null
+    const vm = window.details
+    if (vm.form.status !== 'closed' && vm.form.status !== 'cancel') {
+      button = document.createElement('button')
+      button.type = 'button'
+      button.innerHTML = '<span class="mdi mdi-arrow-right-bold"></span>'
+      button.className = 'btnNPB'
+      button.value = 'Details'
+
+      button.addEventListener('mousedown', (event) => {
+        event.preventDefault()
+        vm.$refs.dialogItem.openDialog(row)
+      })
+
+      // dom.empty(td)
+      td.innerText = ''
+      td.appendChild(button)
+      return td
+    }
+  }
+)
+
+registerRenderer(
+  'ButtonAddAccountRenderer',
+  function (hotInstance, td, row, column, prop, value, cellProperties) {
+    let button = null
+    const vm = window.details
+    if (vm.form.status !== 'closed' && vm.form.status !== 'cancel') {
+      button = document.createElement('button')
+      button.type = 'button'
+      button.innerHTML = '<span class="mdi mdi-arrow-right-bold"></span>'
+      button.className = 'btnNPB'
+      button.value = 'Details'
+
+      button.addEventListener('mousedown', (event) => {
+        event.preventDefault()
+        vm.$refs.dialogAccount.openDialog(row)
+      })
+
+      // dom.empty(td)
+      td.innerText = ''
+      td.appendChild(button)
+      return td
+    }
+  }
+)
+
 // Deselect column after click on input.
 const doNotSelectColumn = function (event, coords) {
   if (coords.row === -1 && event.target.nodeName === 'TD') {
@@ -80,7 +132,7 @@ const doNotSelectColumn = function (event, coords) {
 // const listVat = $auth.$storage.getState('tax_row')
 
 export default {
-  name: 'TableDetail',
+  name: 'TableDetailProduction',
 
   components: {
     HotTable,
@@ -125,7 +177,6 @@ export default {
           'Unit Price',
           'Warehouse',
           'Amount',
-          '',
         ],
         columns: [
           {
@@ -145,45 +196,12 @@ export default {
             wordWrap: false,
           },
           {
-            width: 30,
+            width: 20,
             wordWrap: false,
-            renderer(
-              hotInstance,
-              td,
-              row,
-              column,
-              prop,
-              value,
-              cellProperties
-            ) {
-              let button = null
-              const vm = window.details
-              if (vm.form.status !== 'closed' && vm.form.status !== 'cancel') {
-                button = document.createElement('button')
-                button.type = 'button'
-                button.innerHTML =
-                  '<span class="mdi mdi-arrow-right-bold"></span>'
-                button.className = 'btnNPB'
-                button.value = 'Details'
-
-                button.addEventListener('mousedown', (event) => {
-                  const whs = vm.$refs.details.hotInstance.getDataAtRowProp(
-                    row,
-                    'whs_name'
-                  )
-                  event.preventDefault()
-                  vm.$refs.dialogItem.openDialog(row, whs)
-                })
-
-                // dom.empty(td)
-                td.innerText = ''
-                td.appendChild(button)
-                return td
-              }
-            },
+            renderer: 'ButtonAddRenderer',
           },
           {
-            data: 'code',
+            data: 'item_code',
             width: 120,
             readOnly: true,
             wordWrap: false,
@@ -194,12 +212,13 @@ export default {
             wordWrap: false,
           },
           {
-            data: 'quantity',
+            data: 'base_qty',
+            readOnly: true,
             width: 80,
             wordWrap: false,
             type: 'numeric',
             numericFormat: {
-              pattern: '0,0',
+              pattern: '0,0.00',
             },
           },
           {
@@ -214,12 +233,13 @@ export default {
             width: 100,
             wordWrap: false,
             type: 'numeric',
+            readOnly: true,
             numericFormat: {
               pattern: '0,0.00',
             },
           },
           {
-            data: 'whs_name',
+            data: 'whs_code',
             width: 100,
             height: 26,
             wordWrap: false,
@@ -242,41 +262,6 @@ export default {
             readOnly: true,
             numericFormat: {
               pattern: '0,0.00',
-            },
-          },
-          {
-            width: 30,
-            wordWrap: false,
-            renderer(
-              hotInstance,
-              td,
-              row,
-              column,
-              prop,
-              value,
-              cellProperties
-            ) {
-              let button = null
-              const vm = window.details
-              if (vm.form.status !== 'closed' && vm.form.status !== 'cancel') {
-                button = document.createElement('button')
-                button.type = 'button'
-                // button.innerText = '-'
-                button.innerHTML = '<span class="mdi mdi-delete"></span>'
-                // button.innerHTML = 'Delete'
-                button.className = 'btnDelete'
-                button.value = 'Details2'
-
-                button.addEventListener('mousedown', (event) => {
-                  event.preventDefault()
-                  vm.removeRow(row)
-                })
-
-                // dom.empty(td)
-                td.innerText = ''
-                td.appendChild(button)
-              }
-              return td
             },
           },
         ],
@@ -302,7 +287,7 @@ export default {
 
     addLine() {
       const totalRow = this.$refs.details.hotInstance.countRows()
-      this.$refs.details.hotInstance.alter('insert_row', totalRow + 1, 1)
+      this.$refs.details.hotInstance.alter('insert_row', totalRow + 1, 5)
     },
 
     updateTableSettings(header) {
@@ -331,6 +316,9 @@ export default {
           if (countRows === 1) {
             vm.$emit('calcTotal', {
               subTotal: 0,
+              amount: 0,
+              discountAmount: 0,
+              taxDetail: [],
             })
           }
 
@@ -348,7 +336,7 @@ export default {
             let propNew = 0
             changes.forEach(([row, prop, oldValue, newValue]) => {
               propNew = prop
-              if (propNew === 'quantity' || propNew === 'amount') {
+              if (propNew === 'base_qty' || propNew === 'amount') {
                 if (oldValue !== newValue) {
                   vm.calculateTotal()
                 }
@@ -356,6 +344,18 @@ export default {
             })
           }
         },
+
+        beforeRender(isForced) {
+          const vm = window.details
+          vm.$nuxt.$loading.start()
+        },
+
+        afterRender: (isForced) => {
+          const vm = window.details
+          vm.$nuxt.$loading.finish()
+        },
+
+        afterLoadData: (sourceData, initialLoad, source) => {},
       })
     },
 
@@ -373,9 +373,9 @@ export default {
             [rowData, 'item_code', item.code],
             [rowData, 'item_id', item.id],
             [rowData, 'unit', item.unit],
-            [rowData, 'whs_name', item.whs_name],
+            [rowData, 'whs_code', item.whs_code],
             [rowData, 'narration', narration],
-            [rowData, 'quantity', 1],
+            [rowData, 'base_qty', 1],
           ])
           rowData++
         })
@@ -413,24 +413,44 @@ export default {
       // }, 20)
     },
 
+    setCommission(value) {
+      this.$refs.details.hotInstance.batch(() => {
+        this.commissionRate = value
+        this.calculateTotal()
+      })
+    },
+
+    setQty(qty) {
+      this.$refs.details.hotInstance.batch(() => {
+        this.plannedQty = qty
+        this.calculateTotal()
+      })
+    },
+
     calculateTotal() {
       const countRows = this.$refs.details.hotInstance.countRows()
+      // console.log(countRows)
       let subTotal = 0
       if (countRows > 0) {
         for (let i = 0; i < countRows; i++) {
           this.$refs.details.hotInstance.batch(() => {
-            const qty = this.$refs.details.hotInstance.getDataAtRowProp(
+            const qty = parseFloat(this.plannedQty  / countRows)
+            const unitPrice = parseFloat(this.commissionRate)
+
+            this.$refs.details.hotInstance.setDataAtRowProp(
               i,
-              'quantity'
+              'amount',
+              unitPrice
             )
 
-            const amount = this.$refs.details.hotInstance.getDataAtRowProp(
+            this.$refs.details.hotInstance.setDataAtRowProp(
               i,
-              'amount'
+              'base_qty',
+              qty
             )
 
-            const subTotalRow = qty * amount
-            subTotal = subTotal + qty * amount
+            const subTotalRow = qty * unitPrice
+            subTotal = subTotal + qty * unitPrice
 
             this.$refs.details.hotInstance.setDataAtRowProp(
               i,

@@ -4,6 +4,7 @@
       ref="dialogForm"
       url="/api/transactions"
       form-url="/app/form/sales/invoice"
+      table-url="/app/sales/list/invoice"
       form-type="IN"
       form-type-prefix="SI"
       dialog-title="AR Invoice"

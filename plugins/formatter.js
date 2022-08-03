@@ -31,7 +31,7 @@ const formatter = {
         return 'green'
       case 'overdue':
         return 'red'
-      case 'cancel':
+      case 'canceled':
         return 'red'
     }
   },

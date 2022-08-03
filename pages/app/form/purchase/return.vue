@@ -4,6 +4,7 @@
       ref="dialogForm"
       url="/api/documents"
       form-url="/app/form/purchase/return"
+      table-url="/app/purchase/list/return"
       form-type="GN"
       form-type-prefix="GN"
       dialog-title="Goods Return"

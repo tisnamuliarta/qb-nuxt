@@ -4,6 +4,7 @@
       ref="dialogForm"
       url="/api/transactions"
       form-url="/app/form/accounting/journal-entry"
+      table-url="/app/accounting/journal-entry"
       form-type="JN"
       form-type-prefix="JN"
       dialog-title="Journal Entry"

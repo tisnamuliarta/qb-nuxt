@@ -4,6 +4,7 @@
       ref="dialogForm"
       url="/api/documents"
       form-url="/app/form/sales/creditmemo"
+      table-url="/app/sales/list/creditmemo"
       form-type="CN"
       form-type-prefix="CN"
       dialog-title="AR Credit Memo"

@@ -4,6 +4,7 @@
       ref="dialogForm"
       url="/api/transactions"
       form-url="/app/form/accounting/deposit"
+      table-url="/app/bank/transaction/deposit"
       form-type="CE"
       form-type-prefix="DO"
       dialog-title="Deposit"

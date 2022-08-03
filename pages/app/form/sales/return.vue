@@ -4,6 +4,7 @@
       ref="dialogForm"
       url="/api/documents"
       form-url="/app/form/sales/return"
+      table-url="/app/sales/list/return"
       form-type="SR"
       form-type-prefix="SR"
       dialog-title="Sales Return"

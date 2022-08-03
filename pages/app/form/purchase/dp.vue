@@ -4,6 +4,7 @@
       ref="dialogForm"
       url="/api/transactions"
       form-url="/app/form/purchase/dp"
+      table-url="/app/purchase/list/dp"
       form-type="PY"
       form-type-prefix="PD"
       dialog-title="AP Down Payment"

@@ -4,6 +4,7 @@
       ref="dialogForm"
       url="/api/documents"
       form-url="/app/form/purchase/receipt"
+      table-url="/app/purchase/list/receipt"
       form-type="GR"
       form-type-prefix="GR"
       dialog-title="Goods Receipt Purchase Order"

@@ -4,10 +4,11 @@
       ref="tableDocument"
       type-document="GT"
       form-url="/app/form/inventory/receipt"
+      table-url="/api/production/receipt"
       :table-title="$t('Receipt From Production')"
       :header-table="[
         { text: $t('Transaction No'), value: 'transaction_no', cellClass: 'disable-wrap' },
-        { text: 'Vendor', value: 'contact.name', cellClass: 'disable-wrap' },
+        { text: 'Description', value: 'narration', cellClass: 'disable-wrap' },
         {
           text: $t('Transaction Date'),
           value: 'transaction_date',
@@ -16,24 +17,8 @@
           filterable: false,
         },
         {
-          text: $t('Due Date'),
-          value: 'due_date',
-          cellClass: 'disable-wrap',
-          sortable: false,
-          filterable: false,
-        },
-        {
-          text: 'Status',
-          value: 'status',
-          align: 'left',
-          cellClass: 'disable-wrap',
-          sortable: false,
-          filterable: false,
-        },
-        {
-          text: 'Balance Due',
-          value: 'balance_due',
-          align: 'right',
+          text: 'Reference',
+          value: 'reference_no',
           cellClass: 'disable-wrap',
           sortable: false,
           filterable: false,
@@ -47,9 +32,9 @@
           filterable: false,
         },
         {
-          text: 'Actions',
-          value: 'actions',
-          align: 'center',
+          text: 'Status',
+          value: 'status',
+          align: 'left',
           cellClass: 'disable-wrap',
           sortable: false,
           filterable: false,

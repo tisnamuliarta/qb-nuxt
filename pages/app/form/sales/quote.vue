@@ -4,6 +4,7 @@
       ref="dialogForm"
       url="/api/documents"
       form-url="/app/form/sales/quote"
+      table-url="/app/sales/list/quotation"
       form-type="SQ"
       form-type-prefix="SQ"
       dialog-title="Sales Quotations"

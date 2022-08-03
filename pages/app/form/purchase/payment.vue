@@ -4,6 +4,7 @@
       ref="dialogForm"
       url="/api/transactions"
       form-url="/app/form/purchase/payment"
+      table-url="/app/bank/transaction/purchasepayment"
       form-type="PY"
       form-type-prefix="PP"
       dialog-title="Outgoing Payment"

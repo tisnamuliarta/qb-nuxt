@@ -34,6 +34,7 @@
             title="Chart of Accounts"
             show-batch-action
             show-new-data
+            show-filter
             new-data-text="New Account"
             @emitData="emitData"
             @newData="newData"
@@ -121,6 +122,7 @@ export default {
       searchStatus: '',
       searchItem: '',
       search: '',
+      show_zero_balance: null,
       form: {},
       defaultItem: {},
       options: {},
@@ -240,6 +242,7 @@ export default {
       this.searchItem = data.searchItem
       this.search = data.search
       this.filters = data.filters
+      this.show_zero_balance = data.show_zero_balance
       this.getDataFromApi()
     },
 
@@ -257,13 +260,12 @@ export default {
       } else {
         this.headers = [
           { text: 'Account Code', value: 'code' },
-          { text: 'Account Name', value: 'name', cellClass: 'disable-wrap' },
+          { text: 'Account Name', value: 'name' },
           {
             text: 'Account Type',
             value: 'account_type',
-            cellClass: 'disable-wrap',
           },
-          // { text: 'Category', value: 'category.name' },
+          { text: 'Category', value: 'category.name' },
           {
             text: 'Balance',
             value: 'balance',
@@ -292,6 +294,7 @@ export default {
         documentStatus: vm.documentStatus,
         searchStatus: vm.searchStatus,
         search: vm.search,
+        show_zero_balance: vm.show_zero_balance,
       }
       this.$axios
         .get(this.url, {

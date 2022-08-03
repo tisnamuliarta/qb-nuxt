@@ -123,6 +123,8 @@
         :url="url"
         @getDataFromApi="getDataFromApi"
       ></LazyAccountingFormAccount>
+
+      <AccountingDialogLedger ref="ledger"></AccountingDialogLedger>
     </v-col>
   </v-row>
 </template>
@@ -234,13 +236,16 @@ export default {
     },
 
     editItem(item) {
-      this.$auth.$storage.setState('basePath', this.$route.path)
-      this.$router.push({
-        path: this.$formatter.mappingAction(item.transaction_type),
-        query: {
-          document: item.id,
-        },
-      })
+      // this.$auth.$storage.setState('basePath', this.$route.path)
+
+      this.$refs.ledger.openDialog('/api/transaction/ledger/' + item.id)
+
+      // this.$router.push({
+      //   path: this.$formatter.mappingAction(item.transaction_type),
+      //   query: {
+      //     document: item.id,
+      //   },
+      // })
     },
 
     deleteItem(item) {
@@ -283,8 +288,8 @@ export default {
       this.searchItem = data.searchItem
       this.search = data.search
       this.filters = data.filters
-      this.date_from= data.date_from
-      this.date_to= data.date_to
+      this.date_from = data.date_from
+      this.date_to = data.date_to
       this.getDataFromApi()
     },
 

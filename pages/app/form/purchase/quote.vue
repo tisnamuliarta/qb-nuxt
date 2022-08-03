@@ -4,6 +4,7 @@
       ref="dialogForm"
       url="/api/documents"
       form-url="/app/form/purchase/quote"
+      table-url="/app/purchase/list/quotation"
       form-type="PQ"
       form-type-prefix="PQ"
       dialog-title="Purchase Quotations"

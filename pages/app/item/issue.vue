@@ -63,8 +63,9 @@ export default {
   },
 
   activated() {
-    this.$nuxt.$emit('extensionActive', {
-      active: 1,
+    this.$nuxt.$emit('extensionSetting', {
+      show: false,
+      showBtn: false,
     })
   },
 

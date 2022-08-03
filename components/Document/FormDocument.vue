@@ -146,7 +146,7 @@
         </v-col>
 
         <v-col cols="12">
-          <v-chip label :color="statusColor(form.status)" dark>
+          <v-chip label :color="$formatter.statusColor(form.status)" dark>
             {{ form.status }}</v-chip
           >
         </v-col>
@@ -226,7 +226,7 @@
 
       <v-col cols="12" md="12">
         <v-textarea
-          v-model="form.notes"
+          v-model="form.narration"
           rows="2"
           label="Memo"
           outlined
@@ -563,7 +563,7 @@ export default {
           return 'green'
         case 'overdue':
           return 'red'
-        case 'cancel':
+        case 'canceled':
           return 'red'
       }
     },

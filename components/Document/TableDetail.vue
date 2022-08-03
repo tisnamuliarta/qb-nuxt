@@ -237,7 +237,7 @@ export default {
             uncheckedTemplate: 0,
           },
           {
-            data: 'price',
+            data: 'amount',
             width: 100,
             wordWrap: false,
             type: 'numeric',
@@ -412,7 +412,7 @@ export default {
               propNew = prop
               if (
                 propNew === 'quantity' ||
-                propNew === 'price' ||
+                propNew === 'amount' ||
                 propNew === 'discount_rate' ||
                 propNew === 'tax_name'
               ) {
@@ -462,7 +462,7 @@ export default {
             [rowData, 'narration', narration],
             [rowData, 'default_currency_symbol', vm.form.default_currency_code],
             [rowData, 'item_id', item.id],
-            [rowData, 'price', price],
+            [rowData, 'amount', price],
             [rowData, 'tax_name', salesTax],
             [rowData, 'whs_name', item.whs_name],
             [rowData, 'quantity', 1],
@@ -514,7 +514,7 @@ export default {
             )
             const unitPrice = this.$refs.details.hotInstance.getDataAtRowProp(
               i,
-              'price'
+              'amount'
             )
             const discount = this.$refs.details.hotInstance.getDataAtRowProp(
               i,

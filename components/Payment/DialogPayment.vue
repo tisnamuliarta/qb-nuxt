@@ -1,5 +1,9 @@
 <template>
-  <LazyFormDialogFull ref="dialogForm">
+  <LazyFormDialogFull
+    ref="dialogForm"
+    @arrowLink="arrowLink"
+    @closeDialog="closeDialog"
+  >
     <v-overlay :value="showLoading">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
     </v-overlay>
@@ -116,6 +120,10 @@ export default {
       type: String,
       default: '',
     },
+    tableUrl: {
+      type: String,
+      default: '',
+    },
   },
 
   data() {
@@ -185,21 +193,26 @@ export default {
       return this.itemAction
     },
 
-    arrowLink(status, type) {
+    closeDialog() {
+      this.$router.push({
+        path: this.tableUrl,
+      })
+    },
+
+    arrowLink(data) {
       this.$axios
         .get(this.url + '/arrow', {
           params: {
-            type,
-            status,
+            type: this.formType,
+            status: data.status,
             document: this.$route.query.document,
           },
         })
         .then((res) => {
           this.$router.push({
-            path: '/dashboard/documents',
+            path: this.formUrl,
             query: {
               document: res.data.id,
-              type,
             },
           })
 
@@ -262,7 +275,10 @@ export default {
 
         this.$refs.dialogForm.setTitle(this.title)
 
-        if (this.form.transaction_type === 'RC' || this.form.transaction_type === 'PY') {
+        if (
+          this.form.transaction_type === 'RC' ||
+          this.form.transaction_type === 'PY'
+        ) {
           setTimeout(() => {
             this.$refs.formPayment.setData(this.form)
           }, 300)
@@ -302,7 +318,9 @@ export default {
           break
 
         case 'journal':
-          this.$refs.ledger.openDialog('/api/transaction/ledger/' + this.form.id)
+          this.$refs.ledger.openDialog(
+            '/api/transaction/ledger/' + this.form.id
+          )
           break
 
         default:

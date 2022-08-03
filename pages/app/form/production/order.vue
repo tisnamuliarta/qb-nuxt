@@ -1,14 +1,18 @@
 <template>
-  <LazyFormDialogFull ref="dialogForm">
+  <LazyFormDialogFull
+    ref="dialogForm"
+    @arrowLink="arrowLink"
+    @closeDialog="closeDialog"
+  >
     <v-overlay :value="showLoading">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
     </v-overlay>
 
     <template #content>
-      <LazyProductionFormDocument
+      <LazyProductionFormProduction
         ref="formDocument"
         :form-type="formType"
-      ></LazyProductionFormDocument>
+      ></LazyProductionFormProduction>
     </template>
 
     <template #actions>
@@ -102,7 +106,11 @@ export default {
     },
     dialogTitle: {
       type: String,
-      default: '',
+      default: 'Production order',
+    },
+    tableUrl: {
+      type: String,
+      default: '/app/productions/order',
     },
   },
 
@@ -170,29 +178,39 @@ export default {
       return [...this.action, ...this.itemAction]
     },
 
-    arrowLink(status, type) {
+    closeDialog() {
+      this.$router.push({
+        path: this.tableUrl,
+      })
+    },
+
+    arrowLink(data) {
+      this.$refs.dialogForm.showLoading()
       this.$axios
         .get(this.url + '/arrow', {
           params: {
-            type,
-            status,
+            type: this.formType,
+            status: data.status,
             document: this.$route.query.document,
           },
         })
         .then((res) => {
           this.$router.push({
-            path: '/dashboard/documents',
+            path: this.formUrl,
             query: {
               document: res.data.id,
-              type,
             },
           })
 
           setTimeout(() => {
             this.getDataFromApi()
           }, 300)
+
+          this.$refs.dialogForm.finishLoading()
         })
         .catch((err) => {
+          this.$refs.dialogForm.finishLoading()
+
           this.$swal({
             type: 'error',
             title: 'Error',

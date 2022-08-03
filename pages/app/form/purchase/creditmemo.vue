@@ -4,6 +4,7 @@
       ref="dialogForm"
       url="/api/transactions"
       form-url="/app/form/purchase/creditmemo"
+      table-url="/app/purchase/list/creditmemo"
       form-type="DN"
       form-type-prefix="DN"
       dialog-title="AP Credit Memo"

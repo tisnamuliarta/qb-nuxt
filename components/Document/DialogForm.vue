@@ -1,5 +1,9 @@
 <template>
-  <LazyFormDialogFull ref="dialogForm">
+  <LazyFormDialogFull
+    ref="dialogForm"
+    @arrowLink="arrowLink"
+    @closeDialog="closeDialog"
+  >
     <v-overlay :value="showLoading">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
     </v-overlay>
@@ -48,7 +52,7 @@
         small
         class="mr-3"
         :loading="loading"
-        :disabled="form.status === 'closed'"
+        :disabled="checkDisable()"
         @click="actionSave('saveDraft')"
       >
         Save draft
@@ -60,7 +64,7 @@
         class="mr-3"
         dark
         :loading="loading"
-        :disabled="form.status === 'closed'"
+        :disabled="checkDisable()"
         @click="actionSave('save')"
       >
         {{ actionName }}
@@ -70,7 +74,7 @@
             <v-btn
               dark
               icon
-              :disabled="form.status === 'closed'"
+              :disabled="checkDisable()"
               v-bind="attrs"
               v-on="on"
             >
@@ -115,6 +119,10 @@ export default {
       type: String,
       default: '',
     },
+    tableUrl: {
+      type: String,
+      default: '',
+    },
   },
 
   data() {
@@ -150,7 +158,7 @@ export default {
       this.action = []
       this.itemAction = [
         { text: 'Copy', action: 'copy' },
-        { text: 'Cancel', action: 'cancel' },
+        { text: 'Cancel', action: 'canceled' },
         { text: 'Audit History', action: 'history' },
         { text: 'Journal Entry', action: 'journal' },
       ]
@@ -177,7 +185,7 @@ export default {
     },
 
     checkDisable() {
-      return this.form.status === 'closed' || this.form.status === 'cancel'
+      return this.form.status === 'closed' || this.form.status === 'canceled'
     },
 
     appendItemAction(type) {
@@ -347,21 +355,26 @@ export default {
       return [...this.action, ...this.itemAction]
     },
 
-    arrowLink(status, type) {
+    closeDialog() {
+      this.$router.push({
+        path: this.tableUrl,
+      })
+    },
+
+    arrowLink(data) {
       this.$axios
         .get(this.url + '/arrow', {
           params: {
-            type,
-            status,
+            type: this.formType,
+            status: data.status,
             document: this.$route.query.document,
           },
         })
         .then((res) => {
           this.$router.push({
-            path: '/dashboard/documents',
+            path: this.formUrl,
             query: {
               document: res.data.id,
-              type,
             },
           })
 
@@ -460,6 +473,11 @@ export default {
           )
           break
 
+        case 'closed':
+        case 'canceled':
+          this.closeItem(this.form, action)
+          break
+
         default:
           this.$router.push({
             path: vm.$formatter.mappingAction(action),
@@ -475,6 +493,40 @@ export default {
           this.$refs.formDocument.setData(this.form)
           break
       }
+    },
+
+    closeItem(item, action) {
+      this.$swal({
+        title: this.$t('Are you sure you want to run this action?'),
+        text: 'Data cannot be change after posted!',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Save',
+      }).then((result) => {
+        if (result.value) {
+          this.$nuxt.$loading.start()
+          this.$axios
+            .put(this.url + '/' + item.id, {
+              updateStatus: action,
+              ...item,
+            })
+            .then((res) => {
+              this.getDataFromApi()
+            })
+            .catch((err) => {
+              this.$swal({
+                type: 'error',
+                title: 'Error',
+                text: err.response.data.message,
+              })
+            })
+            .finally(() => {
+              this.$nuxt.$loading.finish()
+            })
+        }
+      })
     },
 
     actionDocument(action) {

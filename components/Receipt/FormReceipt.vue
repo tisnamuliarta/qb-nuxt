@@ -65,10 +65,10 @@
     <v-col cols="12" class="mt-1">
       <v-card flat>
         <div class="scroll-container-min">
-          <LazyReceiptTableDetail
+          <LazyReceiptTableDetailReceipt
             ref="childDetails"
             @calcTotal="calcTotal"
-          ></LazyReceiptTableDetail>
+          ></LazyReceiptTableDetailReceipt>
         </div>
         <v-card-actions>
           <v-btn
@@ -134,7 +134,7 @@
 
 <script>
 export default {
-  name: 'FormDocument',
+  name: 'FormDocumentReceipt',
 
   props: {
     formType: {

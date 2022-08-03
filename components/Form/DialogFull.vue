@@ -17,6 +17,25 @@
           </v-btn>
           <span v-text="title"></span>
         </v-toolbar-title>
+
+        <v-spacer></v-spacer>
+
+        <v-btn icon>
+          <v-icon>mdi-new-box</v-icon>
+        </v-btn>
+
+        <v-btn icon>
+          <v-icon>mdi-printer</v-icon>
+        </v-btn>
+
+        <v-btn icon @click="$emit('arrowLink', { status: 'prev' })">
+          <v-icon>mdi-arrow-left-thin</v-icon>
+        </v-btn>
+
+        <v-btn icon @click="$emit('arrowLink', { status: 'next' })">
+          <v-icon>mdi-arrow-right-thin</v-icon>
+        </v-btn>
+
         <v-spacer></v-spacer>
         <v-btn icon dark color="red" @click="closeDialog">
           <v-icon>mdi-close</v-icon>
@@ -71,10 +90,10 @@ export default {
 
     closeDialog() {
       if (!this.$auth.$storage.getState('basePath')) {
-        this.$router.back()
+        this.$emit('closeDialog')
       } else {
         this.$router.push({
-          path: this.$auth.$storage.getState('basePath')
+          path: this.$auth.$storage.getState('basePath'),
         })
       }
       // this.$emit('getDataFromApi')

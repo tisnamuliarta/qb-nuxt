@@ -118,6 +118,18 @@
                 hide-details="auto"
               ></v-text-field>
             </v-col>
+
+            <v-col cols="12" md="6">
+              <v-select
+                v-model="form.show_zero_balance"
+                :items="['Yes', 'No']"
+                label="Show Zero Balance"
+                outlined
+                dense
+                type="date"
+                hide-details="auto"
+              ></v-select>
+            </v-col>
           </v-row>
         </v-card-text>
         <v-card-actions>
@@ -361,6 +373,7 @@ export default {
       form: {
         date_from: null,
         date_to: null,
+        show_zero_balance: null,
       },
 
       itemsMenu: [
@@ -402,6 +415,7 @@ export default {
         search: data.search,
         date_from: this.form.date_from,
         date_to: this.form.date_to,
+        show_zero_balance: this.form.show_zero_balance,
       })
     },
 

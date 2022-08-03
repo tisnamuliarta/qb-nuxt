@@ -4,6 +4,7 @@
       ref="dialogForm"
       url="/api/documents"
       form-url="/app/form/sales/order"
+      table-url="/app/sales/list/salesorder"
       form-type="SO"
       form-type-prefix="SO"
       dialog-title="Sales Order"

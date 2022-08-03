@@ -4,6 +4,7 @@
       ref="dialogForm"
       url="/api/documents"
       form-url="/app/form/purchase/order"
+      table-url="/app/purchase/list/purchaseorder"
       form-type="PO"
       form-type-prefix="PO"
       dialog-title="Purchase Order"

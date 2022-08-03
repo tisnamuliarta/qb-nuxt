@@ -1,5 +1,9 @@
 <template>
-  <LazyFormDialogFull ref="dialogForm">
+  <LazyFormDialogFull
+    ref="dialogForm"
+    @arrowLink="arrowLink"
+    @closeDialog="closeDialog"
+  >
     <v-overlay :value="showLoading">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
     </v-overlay>
@@ -115,6 +119,10 @@ export default {
       type: String,
       default: '',
     },
+    tableUrl: {
+      type: String,
+      default: '',
+    },
   },
 
   data() {
@@ -179,21 +187,26 @@ export default {
       return this.form.status === 'closed' || this.form.status === 'cancel'
     },
 
-    arrowLink(status, type) {
+    closeDialog() {
+      this.$router.push({
+        path: this.tableUrl,
+      })
+    },
+
+    arrowLink(data) {
       this.$axios
         .get(this.url + '/arrow', {
           params: {
-            type,
-            status,
+            type: this.formType,
+            status: data.status,
             document: this.$route.query.document,
           },
         })
         .then((res) => {
           this.$router.push({
-            path: '/dashboard/documents',
+            path: this.formUrl,
             query: {
               document: res.data.id,
-              type,
             },
           })
 
@@ -288,7 +301,7 @@ export default {
 
         case 'journal':
           this.$refs.ledger.openDialog(
-            '/api/transaction/ledger/' + this.form.id
+            '/api/transaction/ledger/' + this.form.transaction_id
           )
           break
 
@@ -387,7 +400,7 @@ export default {
     },
 
     actionSave(action) {
-      const type = ['IN', 'RC', 'CN', 'SR', 'BL', 'PY', 'DN', 'GN']
+      const type = ['IN', 'RC', 'CN', 'SR', 'BL', 'PY', 'DN', 'GN', 'GI', 'GE']
       if (action === 'save' && type.includes(this.form.transaction_type)) {
         this.$swal({
           title: this.$t('Are you sure you want to run this action?'),

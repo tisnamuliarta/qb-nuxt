@@ -4,6 +4,7 @@
       ref="dialogForm"
       url="/api/transactions"
       form-url="/app/form/sales/payment"
+      table-url="/app/bank/transaction/salespayment"
       form-type="RC"
       form-type-prefix="SP"
       dialog-title="Incoming Payment"

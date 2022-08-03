@@ -283,25 +283,37 @@ export default {
     },
 
     closeItem(item, action) {
-      this.$nuxt.$loading.start()
-      this.$axios
-        .put(this.tableUrl + '/' + item.id, {
-          updateStatus: action,
-          ...item,
-        })
-        .then((res) => {
-          this.getDataFromApi()
-        })
-        .catch((err) => {
-          this.$swal({
-            type: 'error',
-            title: 'Error',
-            text: err.response.data.message,
-          })
-        })
-        .finally(() => {
-          this.$nuxt.$loading.finish()
-        })
+      this.$swal({
+        title: this.$t('Are you sure you want to run this action?'),
+        text: 'Data cannot be change after posted!',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Save',
+      }).then((result) => {
+        if (result.value) {
+          this.$nuxt.$loading.start()
+          this.$axios
+            .put(this.tableUrl + '/' + item.id, {
+              updateStatus: action,
+              ...item,
+            })
+            .then((res) => {
+              this.getDataFromApi()
+            })
+            .catch((err) => {
+              this.$swal({
+                type: 'error',
+                title: 'Error',
+                text: err.response.data.message,
+              })
+            })
+            .finally(() => {
+              this.$nuxt.$loading.finish()
+            })
+        }
+      })
     },
 
     mappingDocument() {
