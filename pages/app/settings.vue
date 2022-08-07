@@ -1,5 +1,5 @@
 <template>
-  <LazyFormDialogFull ref="dialogFull">
+  <LazyFormDialogFull ref="dialogFull" @closeDialog="closeDialog">
     <template #content>
       <v-card elevation="0">
         <v-container fluid>
@@ -120,6 +120,10 @@ export default {
       this.selectedItem = 0
       this.$refs.dialogFull.openDialog(data)
       this.changeTabValue('company', true)
+    },
+
+    closeDialog() {
+      this.$router.back()
     },
 
     changeTabValue(page, action) {

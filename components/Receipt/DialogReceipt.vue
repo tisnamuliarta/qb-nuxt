@@ -165,7 +165,7 @@ export default {
       // this.$refs.dialogForm.openDialog()
       this.$refs.dialogForm.openDialog()
       this.getDataFromApi()
-    }, 300)
+    }, 500)
   },
 
   // mounted() {

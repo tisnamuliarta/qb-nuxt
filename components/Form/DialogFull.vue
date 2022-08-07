@@ -1,6 +1,8 @@
 <template>
   <v-dialog
+    id="dialogFull"
     v-model="dialog"
+    value="dialog"
     fullscreen
     hide-overlay
     persistent
@@ -64,7 +66,7 @@ export default {
 
   data() {
     return {
-      dialog: false,
+      dialog: true,
       loading: false,
       title: '',
       countRouter: -1,

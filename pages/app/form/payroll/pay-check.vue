@@ -9,43 +9,13 @@
     </v-overlay>
 
     <template #content>
-      <LazyProductionFormProduction
+      <LazyPayrollFormPayCheck
         ref="formDocument"
         :form-type="formType"
-      ></LazyProductionFormProduction>
+      ></LazyPayrollFormPayCheck>
     </template>
 
     <template #actions>
-      <span v-if="actionName === 'Update'">
-        <!-- <v-btn text small dark @click="printAction('preview')"
-          >Print or Preview</v-btn
-        >
-        <v-divider dark vertical></v-divider>
-        <v-btn text small dark>Make recurring</v-btn>
-        <v-divider dark vertical></v-divider> -->
-        <v-btn text small dark>
-          More
-          <v-menu transition="slide-y-transition" bottom>
-            <template #activator="{ on, attrs }">
-              <v-btn dark icon v-bind="attrs" v-on="on">
-                <v-icon>mdi-menu-down</v-icon>
-              </v-btn>
-            </template>
-            <v-list link>
-              <v-list-item
-                v-for="(value, i) in itemAction"
-                :key="i"
-                @click="actionItem(value.action)"
-              >
-                <v-list-item-content>
-                  <v-list-item-title>{{ value.text }}</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </v-btn>
-      </span>
-
       <v-spacer />
       <v-btn
         small
@@ -57,31 +27,6 @@
         @click="actionSave('save')"
       >
         {{ actionName }}
-
-        <v-menu transition="slide-y-transition" bottom>
-          <template #activator="{ on, attrs }">
-            <v-btn
-              dark
-              icon
-              :disabled="form.status === 'closed'"
-              v-bind="attrs"
-              v-on="on"
-            >
-              <v-icon>mdi-menu-down</v-icon>
-            </v-btn>
-          </template>
-          <v-list link>
-            <v-list-item
-              v-for="(value, i) in items"
-              :key="i"
-              @click="actionSave(value.action)"
-            >
-              <v-list-item-content>
-                <v-list-item-title>{{ value.text }}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-menu>
       </v-btn>
     </template>
   </LazyFormDialogFull>
@@ -94,7 +39,7 @@ export default {
   props: {
     url: {
       type: String,
-      default: '/api/production/order',
+      default: '/api/payroll/payroll',
     },
     formType: {
       type: String,
@@ -102,26 +47,21 @@ export default {
     },
     formUrl: {
       type: String,
-      default: '/app/form/production/order',
+      default: '/app/form/payroll/pay-check',
     },
     dialogTitle: {
       type: String,
-      default: 'Production order',
+      default: 'Paycheck list',
     },
     tableUrl: {
       type: String,
-      default: '/app/productions/order',
+      default: '/app/payroll/pay-check',
     },
   },
 
   data() {
     return {
       title: this.dialogTitle,
-      items: [
-        { text: 'Save and close', action: 'saveClose' },
-        { text: 'Save and new', action: 'saveNew' },
-        { text: 'Save and send', action: 'saveSend' },
-      ],
       itemAction: [],
       action: [],
       breadcrumb: [],
@@ -140,7 +80,7 @@ export default {
 
   head() {
     return {
-      title: this.$t('Production Order'),
+      title: this.$t('Paycheck list'),
     }
   },
 
@@ -265,7 +205,7 @@ export default {
 
         this.$refs.dialogForm.setTitle(this.title)
 
-        this.$refs.formDocument.setData(this.form)
+        this.$refs.formDocument.setData(this.form, res.data.columns, res.data.colHeaders)
 
         this.showLoading = false
       } catch (err) {
@@ -279,148 +219,6 @@ export default {
           text: message,
         })
       }
-    },
-
-    // A method that is called when a user clicks on an action button in the UI.
-    actionItem(action) {
-      const vm = this
-      switch (action) {
-        case 'copy':
-          this.$router.push({
-            path: vm.formUrl,
-            query: {
-              document: 0,
-            },
-          })
-          this.form.status = 'open'
-          this.$refs.formDocument.setData(this.form)
-          break
-
-        default:
-          this.$router.push({
-            path: vm.mappingAction(action),
-            query: {
-              document: 0,
-              copyFrom: this.form.id,
-            },
-          })
-          this.form.status = 'open'
-          this.form.base_id = this.form.id
-          this.form.base_type = this.form.transaction_type
-          this.form.base_num = this.form.document_number
-          this.$refs.formDocument.setData(this.form)
-          break
-      }
-    },
-
-    mappingAction(type) {
-      switch (type) {
-        case 'SQ':
-          return '/app/form/sales/quote'
-        case 'SO':
-          return '/app/form/sales/order'
-        case 'SD':
-          return '/app/form/sales/delivery'
-        case 'IN':
-          return '/app/form/sales/invoice'
-        case 'RC':
-          return '/app/form/sales/payment'
-        case 'CN':
-          return '/app/form/sales/creditmemo'
-        case 'SR':
-          return '/app/form/sales/return'
-        case 'PQ':
-          return '/app/form/purchase/quote'
-        case 'PO':
-          return '/app/form/purchase/order'
-        case 'GR':
-          return '/app/form/purchase/receipt'
-        case 'BL':
-          return '/app/form/purchase/invoice'
-        case 'PY':
-          return '/app/form/purchase/payment'
-        case 'DN':
-          return '/app/form/purchase/creditmemo'
-        case 'GN':
-          return '/app/form/purchase/return'
-      }
-    },
-
-    actionDocument(action) {
-      const document = this.$route.query.document
-      switch (action) {
-        case 'SQ':
-        case 'SO':
-        case 'PQ':
-        case 'PO':
-          this.$router.push({
-            path: '/dashboard/documents/form',
-            query: {
-              document: 0,
-              type: action,
-            },
-          })
-          setTimeout(() => {
-            this.actionName = 'Save'
-            this.$refs.formDocument.changeValue('type', action)
-            this.$refs.formDocument.changeValue('parent_id', document)
-          }, 300)
-          break
-        case 'C':
-          this.$refs.formDocument.changeValue('status', 'cancel')
-          this.store()
-          break
-        case 'sendEmail':
-          this.openDialogEmail()
-          break
-      }
-    },
-
-    printAction(action) {
-      switch (action) {
-        case 'preview':
-          this.previewDocument()
-          break
-        case 'sendEmail':
-          this.openDialogEmail()
-          break
-      }
-    },
-
-    openDialogEmail() {
-      this.$refs.dialogSendEmail.openEmailDialog(this.form)
-    },
-
-    previewDocument() {
-      const vm = this
-      this.$refs.dialogForm.showLoading()
-      this.$axios
-        .get(`/api/document/print`, {
-          params: {
-            id: vm.form.id,
-            type: vm.form.transaction_type,
-          },
-          responseType: 'arraybuffer',
-        })
-        .then((response) => {
-          this.$refs.dialogForm.finishLoading()
-          const url = window.URL.createObjectURL(new Blob([response.data]))
-          const link = document.createElement('a')
-
-          link.href = url
-          link.setAttribute('download', vm.form.transaction_no + '.pdf') // set custom file name
-          document.body.appendChild(link)
-
-          link.click() // force download file without open new tab
-        })
-        .catch((err) => {
-          this.$refs.dialogForm.finishLoading()
-          this.$swal({
-            type: 'error',
-            title: 'Error',
-            text: err.response.data.message,
-          })
-        })
     },
 
     actionSave(action) {

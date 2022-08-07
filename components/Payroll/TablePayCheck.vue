@@ -32,7 +32,7 @@
             show-batch-action
             show-filter
             show-new-data
-            new-data-text="New Employee"
+            new-data-text="Run Payroll"
             @emitData="emitData"
             @newData="newData"
             @getDataFromApi="getDataFromApi"
@@ -193,8 +193,12 @@ export default {
 
   methods: {
     newData() {
-      this.editedIndex = -1
-      this.$refs.formData.newData(this.form)
+      this.$router.push({
+        path: this.formUrl,
+        query: {
+          document: this.form.id,
+        },
+      })
     },
 
     statusColor(item) {
@@ -257,7 +261,7 @@ export default {
         type: this.typeDocument,
       }
       this.$axios
-        .get(`/api/payroll/employees`, {
+        .get(`/api/payroll/payroll`, {
           params: {
             ...vm.options,
             ...status,
@@ -274,7 +278,6 @@ export default {
           this.$refs.formData.setPaymentMethod(res.data.paymentMethod)
           this.$refs.formData.setPayFrequency(res.data.payFrequency)
           this.$refs.formData.setPayType(res.data.payType)
-          this.$refs.formData.setPaySchedule(res.data.paySchedule)
         })
         .catch((err) => {
           this.loading = false

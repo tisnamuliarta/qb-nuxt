@@ -10,30 +10,30 @@
         <v-form class="pt-2">
           <v-container>
             <v-row dense>
-              <v-col cols="12" md="5">
+              <v-col cols="12" md="4">
                 <v-text-field
                   v-model="form.first_name"
-                  label="First name"
+                  :label="$t('First name')"
                   outlined
                   dense
                   hide-details="auto"
                 ></v-text-field>
               </v-col>
 
-              <v-col cols="12" md="2">
+              <v-col cols="12" md="4">
                 <v-text-field
                   v-model="form.middle_name"
-                  label="Middle name"
+                  :label="$t('Middle name')"
                   outlined
                   dense
                   hide-details="auto"
                 ></v-text-field>
               </v-col>
 
-              <v-col cols="12" md="5">
+              <v-col cols="12" md="4">
                 <v-text-field
                   v-model="form.last_name"
-                  label="Last name"
+                  :label="$t('Last name')"
                   outlined
                   dense
                   hide-details="auto"
@@ -68,7 +68,7 @@
                         <v-col cols="12" md="5">
                           <v-text-field
                             v-model="form.birth_date"
-                            label="Birth Date"
+                            :label="$t('Birth Date')"
                             prepend-icon="mdi-calendar"
                             type="date"
                             persistent-hint
@@ -84,7 +84,7 @@
                             :items="itemGender"
                             item-text="name"
                             item-value="id"
-                            label="Gender"
+                            :label="$t('Gender')"
                             outlined
                             dense
                             hide-details="auto"
@@ -94,7 +94,7 @@
                         <v-col cols="12" md="12">
                           <v-text-field
                             v-model="form.address"
-                            label="Address"
+                            :label="$t('Address')"
                             outlined
                             dense
                             hide-details="auto"
@@ -104,7 +104,7 @@
                         <v-col cols="12" md="12">
                           <v-text-field
                             v-model="form.city"
-                            label="City"
+                            :label="$t('City')"
                             outlined
                             dense
                             hide-details="auto"
@@ -114,7 +114,7 @@
                         <v-col cols="12" md="12">
                           <v-text-field
                             v-model="form.zip_code"
-                            label="Zip Code"
+                            :label="$t('Zip Code')"
                             outlined
                             dense
                             hide-details="auto"
@@ -124,7 +124,7 @@
                         <v-col cols="12" md="12">
                           <v-text-field
                             v-model="form.home_phone"
-                            label="Home Phone"
+                            :label="$t('Home Phone')"
                             outlined
                             dense
                             hide-details="auto"
@@ -134,7 +134,7 @@
                         <v-col cols="12" md="12">
                           <v-text-field
                             v-model="form.work_phone"
-                            label="Work Phone"
+                            :label="$t('Work Phone')"
                             outlined
                             dense
                             hide-details="auto"
@@ -144,7 +144,7 @@
                         <v-col cols="12" md="12">
                           <v-text-field
                             v-model="form.mobile_phone"
-                            label="Mobile Phone"
+                            :label="$t('Mobile Phone')"
                             outlined
                             dense
                             hide-details="auto"
@@ -170,7 +170,7 @@
                           <v-autocomplete
                             v-model="form.payment_method"
                             :items="itemPaymentMethod"
-                            label="Payment Method"
+                            :label="$t('Payment Method')"
                             item-text="name"
                             item-value="id"
                             outlined
@@ -186,7 +186,7 @@
                         >
                           <v-text-field
                             v-model="form.bank_account_name"
-                            label="Bank Account Name"
+                            :label="$t('Bank Account Name')"
                             outlined
                             dense
                             hide-details="auto"
@@ -200,7 +200,7 @@
                         >
                           <v-text-field
                             v-model="form.bank_account_number"
-                            label="Bank Account Number"
+                            :label="$t('Bank Account Number')"
                             outlined
                             dense
                             hide-details="auto"
@@ -214,7 +214,7 @@
                         <v-col cols="12" md="12">
                           <v-text-field
                             v-model="form.hire_date"
-                            label="Hire Date"
+                            :label="$t('Hire Date')"
                             prepend-icon="mdi-calendar"
                             type="date"
                             persistent-hint
@@ -230,7 +230,7 @@
                             :items="itemWorkLocation"
                             item-text="name"
                             item-value="id"
-                            label="Work Location"
+                            :label="$t('Work Location')"
                             outlined
                             dense
                             hide-details="auto"
@@ -253,9 +253,22 @@
                       <v-row dense class="mt-2">
                         <v-col cols="12" md="12">
                           <v-autocomplete
+                            v-model="form.pay_schedule_id"
+                            :items="itemPaySchedule"
+                            :label="$t('Pay Schedule')"
+                            item-text="name"
+                            item-value="id"
+                            outlined
+                            dense
+                            hide-details="auto"
+                          ></v-autocomplete>
+                        </v-col>
+
+                        <v-col cols="12" md="12">
+                          <v-autocomplete
                             v-model="form.pay_type"
                             :items="itemPayType"
-                            label="Pay Type"
+                            :label="$t('Pay Type')"
                             outlined
                             dense
                             hide-details="auto"
@@ -266,7 +279,7 @@
                           <v-autocomplete
                             v-model="form.pay_frequency"
                             :items="itemPayFrequency"
-                            label="Pay Frequency"
+                            :label="$t('Pay Frequency')"
                             outlined
                             dense
                             hide-details="auto"
@@ -276,7 +289,7 @@
                         <v-col cols="12" md="12">
                           <v-text-field
                             v-model="form.salary"
-                            label="Salary"
+                            :label="$t('Salary')"
                             outlined
                             dense
                             hide-details="auto"
@@ -286,7 +299,7 @@
                         <v-col cols="12" md="12">
                           <v-text-field
                             v-model="form.per_hour_rate"
-                            label="Per Hour Rate"
+                            :label="$t('Per Hour Rate')"
                             outlined
                             dense
                             hide-details="auto"
@@ -296,7 +309,7 @@
                         <v-col cols="12" md="12">
                           <v-text-field
                             v-model="form.hour_per_day"
-                            label="Hour per day"
+                            :label="$t('Hour per day')"
                             outlined
                             dense
                             hide-details="auto"
@@ -306,7 +319,7 @@
                         <v-col cols="12" md="12">
                           <v-text-field
                             v-model="form.day_per_week"
-                            label="Day per week"
+                            :label="$t('Day per week')"
                             outlined
                             dense
                             hide-details="auto"
@@ -383,6 +396,7 @@ export default {
       itemGender: [],
       itemPaymentMethod: [],
       itemPayFrequency: [],
+      itemPaySchedule: [],
       itemPayType: [],
       items: [
         { tab: 'Personal Info', href: '#tab-1' },
@@ -426,6 +440,10 @@ export default {
 
     setPayType(data) {
       this.itemPayType = data
+    },
+
+    setPaySchedule(data) {
+      this.itemPaySchedule = data
     },
 
     newData(form) {

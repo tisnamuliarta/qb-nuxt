@@ -44,7 +44,7 @@ export default {
     return {
       dialog: false,
       itemCompany: [
-        { text: 'Account and Settings', type: 'SETTING', action: 'setting' },
+        { text: 'Account and Settings', route: '/app/settings', action: 'setting' },
         { text: 'Manage User', route: '/list/users', action: 'page' },
         {
           text: 'Chart Of Account',

@@ -178,7 +178,7 @@
       </template>
     </v-snackbar>
 
-    <LazySetupListSetting ref="settingForm" />
+    <!-- <LazySetupListSetting ref="settingForm" /> -->
 
     <v-footer color="grey lighten-3" padless>
       <v-col class="text-center" cols="12">
@@ -236,7 +236,7 @@ export default {
     this.$nuxt.$on('getLogo', ($event) => this.getLogo($event))
     this.$nuxt.$on('getCompany', ($event) => this.getCompany($event))
     this.$nuxt.$on('snackbar', ($event) => this.openSnackbar($event))
-    this.$nuxt.$on('openSetting', ($event) => this.openSetting($event))
+    // this.$nuxt.$on('openSetting', ($event) => this.openSetting($event))
     this.$nuxt.$on('showLoading', ($event) => this.showLoading($event))
     this.$nuxt.$on('hideLoading', ($event) => this.hideLoading($event))
     this.$nuxt.$on('extensionActive', ($event) => this.extensionActive($event))

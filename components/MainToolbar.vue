@@ -142,7 +142,7 @@
       </v-card>
     </v-menu>
 
-    <v-form class="d-none d-sm-flex ml-2">
+    <div class="d-none d-sm-flex ml-2">
       <v-layout wrap>
         <v-row>
           <v-col cols="12" md="12" sm="12" class="mt-0 mr-2">
@@ -158,7 +158,7 @@
           </v-col>
         </v-row>
       </v-layout>
-    </v-form>
+    </div>
 
     <v-spacer />
 

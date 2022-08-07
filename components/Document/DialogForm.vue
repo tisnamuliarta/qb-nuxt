@@ -13,17 +13,12 @@
         ref="formDocument"
         :form-type="formType"
       ></LazyDocumentFormDocument>
+
       <AccountingDialogLedger ref="ledger"></AccountingDialogLedger>
     </template>
 
     <template #actions>
       <span v-if="actionName === 'Update'">
-        <v-btn text small dark @click="printAction('preview')"
-          >Print or Preview</v-btn
-        >
-        <v-divider dark vertical></v-divider>
-        <v-btn text small dark>Make recurring</v-btn>
-        <v-divider dark vertical></v-divider>
         <v-btn text small dark>
           More
           <v-menu transition="slide-y-transition" bottom>
@@ -140,9 +135,9 @@ export default {
       audits: {},
       defaultItem: {},
       dialogLoading: false,
-      showLoading: true,
       dialog: false,
       loading: false,
+      showLoading: false,
       actionName: 'Save',
       actionOnSave: 'save',
       countRouter: -1,
@@ -163,20 +158,11 @@ export default {
         { text: 'Journal Entry', action: 'journal' },
       ]
       this.itemAction = this.appendItemAction(this.formType)
-      // this.$refs.dialogForm.openDialog()
+      // this.dialog = true
       this.$refs.dialogForm.openDialog()
       this.getDataFromApi()
-    }, 300)
+    }, 500)
   },
-
-  // mounted() {
-
-  //   setTimeout(() => {
-  //     this.$refs.dialogForm.openDialog()
-  //     this.$refs.dialogForm.openDialog()
-  //     this.getDataFromApi()
-  //   }, 300)
-  // },
 
   methods: {
     // A method that is called when the dialog is closed.
@@ -190,167 +176,7 @@ export default {
 
     appendItemAction(type) {
       this.action = []
-      switch (type) {
-        case 'PQ':
-          this.action = [
-            {
-              text: 'Copy to ' + this.$t('Purchase Order'),
-              action: 'PO',
-              type: 'document',
-            },
-            {
-              text: 'Copy to ' + this.$t('Goods Receipt PO'),
-              action: 'GR',
-              type: 'document',
-            },
-            {
-              text: 'Copy to ' + this.$t('A/P Invoice'),
-              action: 'BL',
-              type: 'transaction',
-            },
-          ]
-          break
-
-        case 'PO':
-          this.action = [
-            {
-              text: 'Copy to ' + this.$t('Goods Receipt PO'),
-              action: 'GR',
-              type: 'document',
-            },
-            {
-              text: 'Copy to ' + this.$t('A/P Invoice'),
-              action: 'BL',
-              type: 'transaction',
-            },
-          ]
-          break
-
-        case 'GR':
-          this.action = [
-            {
-              text: 'Copy to ' + this.$t('A/P Invoice'),
-              action: 'BL',
-              type: 'transaction',
-            },
-            {
-              text: 'Copy to ' + this.$t('Goods Return'),
-              action: 'BL',
-              type: 'document',
-            },
-          ]
-          break
-
-        case 'BL':
-          this.action = [
-            {
-              text: 'Copy to ' + this.$t('Outgoing Payment'),
-              action: 'PY',
-              type: 'transaction',
-            },
-          ]
-          break
-
-        case 'PY':
-          this.action = [
-            {
-              text: 'Copy to ' + this.$t('A/P Credit Memo'),
-              action: 'DN',
-              type: 'transaction',
-            },
-          ]
-          break
-
-        case 'DN':
-          this.action = [
-            {
-              text: 'Copy to ' + this.$t('Goods Return'),
-              action: 'GN',
-              type: 'document',
-            },
-          ]
-          break
-
-        case 'SQ':
-          this.action = [
-            {
-              text: 'Copy to ' + this.$t('Sales Order'),
-              action: 'SO',
-              type: 'document',
-            },
-            {
-              text: 'Copy to ' + this.$t('Sales Delivery'),
-              action: 'SD',
-              type: 'document',
-            },
-            {
-              text: 'Copy to ' + this.$t('A/R Invoice'),
-              action: 'IN',
-              type: 'transaction',
-            },
-          ]
-          break
-
-        case 'SO':
-          this.action = [
-            {
-              text: 'Copy to ' + this.$t('Sales Delivery'),
-              action: 'SD',
-              type: 'document',
-            },
-            {
-              text: 'Copy to ' + this.$t('A/R Invoice'),
-              action: 'IN',
-              type: 'transaction',
-            },
-          ]
-          break
-
-        case 'SD':
-          this.action = [
-            {
-              text: 'Copy to ' + this.$t('A/R Invoice'),
-              action: 'IN',
-              type: 'transaction',
-            },
-            {
-              text: 'Copy to ' + this.$t('Sales Return'),
-              action: 'SR',
-              type: 'document',
-            },
-          ]
-          break
-
-        case 'IN':
-          this.action = [
-            {
-              text: 'Copy to ' + this.$t('Incoming Payment'),
-              action: 'RC',
-              type: 'transaction',
-            },
-          ]
-          break
-
-        case 'RC':
-          this.action = [
-            {
-              text: 'Copy to ' + this.$t('A/R Credit Memo'),
-              action: 'CN',
-              type: 'transaction',
-            },
-          ]
-          break
-
-        case 'CN':
-          this.action = [
-            {
-              text: 'Copy to ' + this.$t('Sales Return'),
-              action: 'SR',
-              type: 'document',
-            },
-          ]
-          break
-      }
+      this.action = this.$formatter.appendAction(type)
 
       return [...this.action, ...this.itemAction]
     },
@@ -440,7 +266,7 @@ export default {
 
         this.showLoading = false
       } catch (err) {
-        // this.showLoading = false
+        this.showLoading = false
 
         const message =
           err.response !== undefined ? err.response.data.message : err

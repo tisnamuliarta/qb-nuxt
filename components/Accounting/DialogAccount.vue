@@ -2,7 +2,7 @@
   <div>
     <DialogForm
       ref="dialogForm"
-      max-width="900px"
+      max-width="1000px"
       :dialog-title="$t('Chart Of Accounts')"
       button-title="Save"
       original="top"

@@ -577,13 +577,13 @@ export default {
             'Product you buy and/or sell and you track quantities of'
           ),
         },
-        {
-          id: 2,
-          name: 'Non inventory',
-          desc: this.$t(
-            "Product you buy and/or sell but you don't need to (or can't) track quantities of, for example nuts and bolts used in an installation"
-          ),
-        },
+        // {
+        //   id: 2,
+        //   name: 'Non inventory',
+        //   desc: this.$t(
+        //     "Product you buy and/or sell but you don't need to (or can't) track quantities of, for example nuts and bolts used in an installation"
+        //   ),
+        // },
         {
           id: 3,
           name: 'Service',

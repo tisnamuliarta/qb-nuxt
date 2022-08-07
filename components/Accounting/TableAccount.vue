@@ -256,6 +256,7 @@ export default {
             value: 'account_type',
             cellClass: 'disable-wrap',
           },
+          { text: 'Category', value: 'category.name' },
         ]
       } else {
         this.headers = [

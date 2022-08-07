@@ -17,15 +17,15 @@
 export default {
   name: 'SalesQuotation',
 
-  // activated() {
-  //   this.$refs.dialogForm.getDataFromApi()
-  // },
-
   head() {
     return {
       title: 'Sales Return',
     }
   },
+
+  // activated() {
+  //   this.$refs.dialogForm.openDialogFull()
+  // },
 
   methods: {
     getDataFromApi() {
