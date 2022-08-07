@@ -6,12 +6,12 @@
       :table-title="$t('Paycheck list')"
       form-url="/app/form/payroll/pay-check"
       :header-table="[
-        { text: 'Name', value: 'first_name', cellClass: 'disable-wrap' },
-        { text: 'Pay Rate', value: 'salary', cellClass: 'disable-wrap' },
-        { text: 'Pay Method', value: 'payment_method', cellClass: 'disable-wrap' },
+        { text: $t('Transaction No'), value: 'transaction_no', cellClass: 'disable-wrap' },
+        { text: $t('Pay date'), value: 'pay_date', cellClass: 'disable-wrap' },
+        { text: 'From Date', value: 'from_date', cellClass: 'disable-wrap' },
         {
-          text: 'Phone Number',
-          value: 'mobile_phone',
+          text: 'To Date',
+          value: 'to_date',
           cellClass: 'disable-wrap',
           sortable: false,
           filterable: false,
@@ -19,6 +19,20 @@
         {
           text: 'Status',
           value: 'status',
+          cellClass: 'disable-wrap',
+          sortable: false,
+          filterable: false,
+        },
+        {
+          text: 'Created By',
+          value: 'user.name',
+          cellClass: 'disable-wrap',
+          sortable: false,
+          filterable: false,
+        },
+        {
+          text: 'Total',
+          value: 'main_account_amount',
           cellClass: 'disable-wrap',
           sortable: false,
           filterable: false,

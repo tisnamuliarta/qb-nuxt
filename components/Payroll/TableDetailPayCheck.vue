@@ -98,7 +98,7 @@ export default {
         hiddenColumns: {
           copyPasteEnabled: false,
           indicator: false,
-          columns: [0],
+          columns: [0, 1],
         },
         beforeOnCellMouseDown: doNotSelectColumn,
       },
@@ -174,7 +174,14 @@ export default {
             let propNew = 0
             changes.forEach(([row, prop, oldValue, newValue]) => {
               propNew = prop
-              if (propNew === 'base_qty' || propNew === 'amount') {
+
+              if (
+                propNew !== 'payroll_id' ||
+                propNew !== 'employee_name' ||
+                propNew !== 'employee_id' ||
+                propNew !== 'salary' ||
+                propNew !== 'sub_total'
+              ) {
                 if (oldValue !== newValue) {
                   vm.calculateTotal()
                 }
@@ -251,11 +258,32 @@ export default {
       // }, 20)
     },
 
-    setCommission(value) {
-      this.$refs.details.hotInstance.batch(() => {
-        this.commissionRate = value
-        this.calculateTotal()
-      })
+    setCommission(commission) {
+      this.commissionRate = commission
+      const countRows = this.$refs.details.hotInstance.countRows()
+      if (countRows > 0) {
+        for (let i = 0; i < countRows; i++) {
+          this.$refs.details.hotInstance.batch(() => {
+            const employee = this.$refs.details.hotInstance.getDataAtRowProp(
+              i,
+              'employee_name'
+            )
+            commission.forEach((item, index) => {
+              if (employee === item.employee_name) {
+                this.$refs.details.hotInstance.setDataAtRowProp(
+                  i,
+                  'Komisi',
+                  item.amount
+                )
+              }
+            })
+          })
+        }
+
+        setTimeout(() => {
+          this.calculateTotal()
+        }, 500)
+      }
     },
 
     setQty(qty) {
@@ -267,28 +295,33 @@ export default {
 
     calculateTotal() {
       const countRows = this.$refs.details.hotInstance.countRows()
-      // console.log(countRows)
       let subTotal = 0
       if (countRows > 0) {
         for (let i = 0; i < countRows; i++) {
           this.$refs.details.hotInstance.batch(() => {
-            const qty = parseFloat(this.plannedQty  / countRows)
-            const unitPrice = parseFloat(this.commissionRate)
+            let subTotalRow = 0
+            const sourceData =
+              this.$refs.details.hotInstance.getSourceDataAtRow(i)
+            for (const [key] of Object.entries(sourceData)) {
+              if (
+                key !== 'payroll_id' &&
+                key !== 'employee_id' &&
+                key !== 'employee_name' &&
+                key !== 'payment_method' &&
+                key !== 'pay_type_id' &&
+                key !== 'sub_total'
+              ) {
+                const amount = this.$refs.details.hotInstance.getDataAtRowProp(
+                  i,
+                  key
+                )
 
-            this.$refs.details.hotInstance.setDataAtRowProp(
-              i,
-              'amount',
-              unitPrice
-            )
+                subTotal = subTotal + parseFloat(amount)
+                subTotalRow = subTotalRow + parseFloat(amount)
+              }
+            }
 
-            this.$refs.details.hotInstance.setDataAtRowProp(
-              i,
-              'base_qty',
-              qty
-            )
-
-            const subTotalRow = qty * unitPrice
-            subTotal = subTotal + qty * unitPrice
+            // console.log(subTotalRow)
 
             this.$refs.details.hotInstance.setDataAtRowProp(
               i,
@@ -325,12 +358,6 @@ export default {
     },
 
     getAddData(document) {
-      if (document === '0') {
-        const countRows = this.$refs.details.hotInstance.countRows()
-        for (let i = 0; i < countRows; i++) {
-          this.$refs.details.hotInstance.setDataAtRowProp(i, 'id', null)
-        }
-      }
       return this.$refs.details.hotInstance.getSourceData()
       // return this.$refs.details.hotInstance.getData()
     },

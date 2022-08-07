@@ -38,9 +38,9 @@
             @getDataFromApi="getDataFromApi"
           />
         </template>
-        <template #[`item.first_name`]="{ item }">
+        <template #[`item.transaction_no`]="{ item }">
           <a @click="editItem(item)">
-            <strong v-text="item.first_name + ' ' + item.last_name"></strong>
+            <strong v-text="item.transaction_no"></strong>
           </a>
         </template>
 
@@ -50,8 +50,8 @@
           </v-chip>
         </template>
 
-        <template #[`item.salary`]="{ item }">
-          {{ $formatter.formatPrice(item.salary) }}
+        <template #[`item.main_account_amount`]="{ item }">
+          {{ $formatter.formatPrice(item.main_account_amount) }}
         </template>
 
         <template #[`item.payment_method`]="{ item }">
@@ -62,6 +62,7 @@
 
         <template #[`item.actions`]="{ item }">
           <v-btn
+            v-if="item.status === 'draft'"
             color="secondary"
             class="font-weight-bold text-right pr-0"
             text
@@ -70,24 +71,26 @@
           >
             Edit
           </v-btn>
-          <v-menu transition="slide-y-transition" bottom>
-            <template #activator="{ on, attrs }">
-              <v-btn color="black" dark icon v-bind="attrs" v-on="on">
-                <v-icon>mdi-menu-down</v-icon>
-              </v-btn>
-            </template>
-            <v-list>
-              <v-list-item
-                v-for="(value, i) in items"
-                :key="i"
-                @click="actions(value.action, item)"
-              >
-                <v-list-item-content>
-                  <v-list-item-title>{{ value.text }}</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </v-menu>
+          <v-btn
+            v-else-if="item.status === 'closed'"
+            color="secondary"
+            class="font-weight-bold text-right pr-0"
+            text
+            small
+            @click="actions('edit', item)"
+          >
+            Print
+          </v-btn>
+          <v-btn
+            v-else
+            color="secondary"
+            class="font-weight-bold text-right pr-0"
+            text
+            small
+            @click="actions('edit', item)"
+          >
+            View
+          </v-btn>
         </template>
       </v-data-table>
     </v-col>
@@ -218,9 +221,12 @@ export default {
     },
 
     editItem(item) {
-      this.editedIndex = 1
-      this.editedIndex = this.allData.indexOf(item)
-      this.$refs.formData.editItem(item, this.url)
+      this.$router.push({
+        path: this.formUrl,
+        query: {
+          document: item.id,
+        },
+      })
     },
 
     actions(action, item) {
