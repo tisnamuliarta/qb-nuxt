@@ -45,8 +45,6 @@ import {
   AutoColumnSize,
 } from 'handsontable/plugins'
 
-import { registerRenderer } from 'handsontable/renderers'
-
 import 'handsontable/dist/handsontable.full.css'
 
 // register imported cell types and plugins
@@ -65,57 +63,6 @@ registerPlugin(HiddenRows)
 registerPlugin(DropdownMenu)
 registerPlugin(AutoColumnSize)
 
-registerRenderer(
-  'ButtonAddRenderer',
-  function (hotInstance, td, row, column, prop, value, cellProperties) {
-    let button = null
-    const vm = window.details
-    if (vm.form.status !== 'closed' && vm.form.status !== 'cancel') {
-      button = document.createElement('button')
-      button.type = 'button'
-      button.innerHTML = '<span class="mdi mdi-arrow-right-bold"></span>'
-      button.className = 'btnNPB'
-      button.value = 'Details'
-
-      button.addEventListener('mousedown', (event) => {
-        event.preventDefault()
-        vm.$refs.dialogItem.openDialog(row)
-      })
-
-      // dom.empty(td)
-      td.innerText = ''
-      td.appendChild(button)
-      return td
-    }
-  }
-)
-
-registerRenderer(
-  'ButtonDeleteRenderer',
-  function (hotInstance, td, row, column, prop, value, cellProperties) {
-    let button = null
-    const vm = window.details
-    if (vm.form.status !== 'closed' && vm.form.status !== 'cancel') {
-      button = document.createElement('button')
-      button.type = 'button'
-      // button.innerText = '-'
-      button.innerHTML = '<span class="mdi mdi-delete"></span>'
-      // button.innerHTML = 'Delete'
-      button.className = 'btnDelete'
-      button.value = 'Details2'
-
-      button.addEventListener('mousedown', (event) => {
-        event.preventDefault()
-        vm.removeRow(row)
-      })
-
-      // dom.empty(td)
-      td.innerText = ''
-      td.appendChild(button)
-    }
-    return td
-  }
-)
 
 // Deselect column after click on input.
 const doNotSelectColumn = function (event, coords) {
@@ -163,6 +110,7 @@ export default {
         colHeaders: [
           '#',
           'Id',
+          'Transaction',
           'Description',
           'Due Date',
           'Open Balance',
@@ -178,6 +126,13 @@ export default {
           },
           {
             data: 'id',
+            wordWrap: false,
+          },
+
+          {
+            data: 'classification',
+            width: 80,
+            readOnly: true,
             wordWrap: false,
           },
 
@@ -287,6 +242,7 @@ export default {
             changes.forEach(([row, prop, oldValue, newValue]) => {
               propNew = prop
               if (
+                propNew === 'check_payment' ||
                 propNew === 'quantity' ||
                 propNew === 'price' ||
                 propNew === 'discount_rate' ||
@@ -322,6 +278,7 @@ export default {
       this.$refs.details.hotInstance.batch(() => {
         selected.forEach(function (item, index) {
           vm.$refs.details.hotInstance.setDataAtRowProp([
+            [rowData, 'classification', item.classification],
             [rowData, 'narration', item.narration],
             [rowData, 'service_date', item.due_date],
             [rowData, 'sub_total', item.sub_total],
@@ -337,7 +294,7 @@ export default {
       this.form = form
       this.$refs.details.hotInstance.batch(() => {
         this.updateTableSettings()
-        const items = form.length > 0 ? form : data
+        const items = form.line_items.length > 0 ? form.line_items : data
         vm.$refs.details.hotInstance.loadData(items)
         // vm.calculateTotal()
         // const countRows = this.$refs.details.hotInstance.countRows()

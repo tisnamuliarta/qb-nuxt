@@ -35,6 +35,7 @@ export default ({app}, inject) => {
         case 'overdue':
           return 'red'
         case 'canceled':
+        case 'cancel':
           return 'red'
       }
     },
@@ -221,6 +222,8 @@ export default ({app}, inject) => {
           return '/app/form/purchase/creditmemo'
         case 'GN':
           return '/app/form/purchase/return'
+        case 'JN':
+          return '/app/form/accounting/journal-entry'
         case 'GI':
         case 'PI':
           return '/app/form/inventory/issue'

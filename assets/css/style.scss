@@ -527,3 +527,42 @@ body {
 .theme--light.v-tabs > .v-tabs-bar .v-tab--disabled {
   color: rgba(0, 0, 0, 0.8) !important;
 }
+
+.v-data-table-custom tbody tr:nth-of-type(even) {
+  background-color: rgba(236, 237, 237);
+}
+.v-data-table-custom tbody tr:nth-of-type(odd) {
+  background-color: rgb(250 ,250, 250);
+}
+
+.v-data-table-custom .v-data-table-header {
+  background-color: rgba(182, 183, 187);
+  color: white;
+}
+.v-data-table-custom .v-data-footer {
+  background-color: rgb(250 ,250, 250);
+}
+
+.theme--light.v-data-table-custom thead tr th {
+  color: white;
+}
+// .theme--light.v-data-table-custom > .v-data-table__wrapper > table > thead > tr:last-child > th {
+//   border: thin solid rgba(0, 0, 0, 0.12);
+//   border-bottom: 2px solid rgba(0, 0, 0, 0.12) !important;
+// }
+// .theme--light.v-data-table-custom > .v-data-table__wrapper > table > tbody > tr:not(:last-child) > td:not(.v-data-table__mobile-row), .theme--light.v-data-table-custom > .v-data-table__wrapper > table > tbody > tr:not(:last-child) > th:not(.v-data-table__mobile-row) {
+//   border: thin solid rgba(0, 0, 0, 0.12);
+// }
+
+// .v-data-table-custom.v-data-table > .v-data-table__wrapper > table > tbody > tr > td {
+//   border: thin solid rgba(0, 0, 0, 0.12);
+// }
+// .v-data-table-custom .v-data-table__wrapper {
+//   border-radius: inherit;
+// }
+// .v-data-table-custom > .v-data-table__wrapper tbody tr:first-child:hover td:first-child {
+//   border-top-left-radius: 0 !important;
+// }
+// .v-data-table-custom > .v-data-table__wrapper tbody tr:first-child:hover td:last-child {
+//   border-top-right-radius: 0 !important;
+// }

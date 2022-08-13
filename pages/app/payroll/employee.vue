@@ -7,6 +7,7 @@
       form-url="/app/purchasereturn/form"
       :header-table="[
         { text: 'Name', value: 'first_name', cellClass: 'disable-wrap' },
+        { text: 'ID', value: 'employee_id', cellClass: 'disable-wrap' },
         { text: 'Pay Rate', value: 'salary', cellClass: 'disable-wrap' },
         { text: 'Pay Method', value: 'payment_method', cellClass: 'disable-wrap' },
         {

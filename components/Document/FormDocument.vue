@@ -768,7 +768,7 @@ export default {
         const resWarehouse = await this.$axios.get(`/api/inventory/warehouse`)
         const resAccount = await this.$axios.get(`/api/financial/accounts`, {
           params: {
-            type: 'All',
+            type: "'CURRENT_ASSET', 'BANK'",
           },
         })
 

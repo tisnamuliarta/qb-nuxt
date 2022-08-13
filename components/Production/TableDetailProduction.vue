@@ -7,11 +7,18 @@
     ></hot-table>
 
     <LazyInventoryDialogResource
-      ref="dialogItem"
+      ref="dialogResource"
       :view-data="true"
       :show-add-btn="false"
       @selectItems="selectItems"
     ></LazyInventoryDialogResource>
+
+    <LazyInventoryDialogItem
+      ref="dialogItem"
+      :view-data="true"
+      :show-add-btn="false"
+      @selectItems="selectItems"
+    ></LazyInventoryDialogItem>
 
     <AccountingDialogAccount
       ref="dialogAccount"
@@ -71,35 +78,10 @@ registerPlugin(DropdownMenu)
 registerPlugin(AutoColumnSize)
 
 registerRenderer(
-  'ButtonAddRenderer',
-  function (hotInstance, td, row, column, prop, value, cellProperties) {
-    let button = null
-    const vm = window.details
-    if (vm.form.status !== 'closed' && vm.form.status !== 'cancel') {
-      button = document.createElement('button')
-      button.type = 'button'
-      button.innerHTML = '<span class="mdi mdi-arrow-right-bold"></span>'
-      button.className = 'btnNPB'
-      button.value = 'Details'
-
-      button.addEventListener('mousedown', (event) => {
-        event.preventDefault()
-        vm.$refs.dialogItem.openDialog(row)
-      })
-
-      // dom.empty(td)
-      td.innerText = ''
-      td.appendChild(button)
-      return td
-    }
-  }
-)
-
-registerRenderer(
   'ButtonAddAccountRenderer',
   function (hotInstance, td, row, column, prop, value, cellProperties) {
     let button = null
-    const vm = window.details
+    const vm = window.detailProduction
     if (vm.form.status !== 'closed' && vm.form.status !== 'cancel') {
       button = document.createElement('button')
       button.type = 'button'
@@ -169,6 +151,7 @@ export default {
           'Id',
           'Base ID',
           'account ID',
+          'Type',
           '',
           'Item Code',
           'Description',
@@ -177,6 +160,7 @@ export default {
           'Unit Price',
           'Warehouse',
           'Amount',
+          '',
         ],
         columns: [
           {
@@ -196,9 +180,68 @@ export default {
             wordWrap: false,
           },
           {
+            data: 'item_type',
+            width: 60,
+            height: 26,
+            wordWrap: false,
+            editor: 'select',
+            selectOptions: ['item', 'resource'],
+            visibleRows: 5,
+            strict: true,
+            filter: false,
+            allowInvalid: false,
+          },
+          {
             width: 20,
             wordWrap: false,
-            renderer: 'ButtonAddRenderer',
+            renderer(
+              hotInstance,
+              td,
+              row,
+              column,
+              prop,
+              value,
+              cellProperties
+            ) {
+              let button = null
+              const vm = window.detailProduction
+              if (vm.form.status !== 'closed' && vm.form.status !== 'cancel') {
+                button = document.createElement('button')
+                button.type = 'button'
+                button.innerHTML =
+                  '<span class="mdi mdi-arrow-right-bold"></span>'
+                button.className = 'btnNPB'
+                button.value = 'Details'
+
+                button.addEventListener('mousedown', (event) => {
+                  event.preventDefault()
+                  const itemType =
+                    vm.$refs.details.hotInstance.getDataAtRowProp(
+                      row,
+                      'item_type'
+                    )
+
+                  if (!itemType) {
+                    vm.$swal({
+                      type: 'error',
+                      title: 'Error',
+                      text: 'Please select item type first!',
+                    })
+                  }
+
+                  if (itemType === 'item') {
+                    vm.$refs.dialogItem.openDialog(row, vm.form.warehouse_id)
+                  } else if (itemType === 'resource') {
+                    vm.$refs.dialogResource.openDialog(row)
+                  }
+                })
+
+                // dom.empty(td)
+                td.innerText = ''
+                td.appendChild(button)
+                return td
+              }
+            },
           },
           {
             data: 'item_code',
@@ -246,7 +289,7 @@ export default {
             editor: 'select',
             className: 'htCenter',
             selectOptions: () => {
-              const vm = window.details
+              const vm = window.detailProduction
               return vm.$auth.$storage.getState('warehouse')
             },
             visibleRows: 5,
@@ -264,7 +307,65 @@ export default {
               pattern: '0,0.00',
             },
           },
+
+          {
+            width: 20,
+            wordWrap: false,
+            renderer(
+              hotInstance,
+              td,
+              row,
+              column,
+              prop,
+              value,
+              cellProperties
+            ) {
+              let button = null
+              const vm = window.detailProduction
+              if (vm.form.status !== 'closed' && vm.form.status !== 'cancel') {
+                button = document.createElement('button')
+                button.type = 'button'
+                // button.innerText = '-'
+                button.innerHTML = '<span class="mdi mdi-delete"></span>'
+                // button.innerHTML = 'Delete'
+                button.className = 'btnDelete'
+                button.value = 'Details2'
+
+                button.addEventListener('mousedown', (event) => {
+                  event.preventDefault()
+                  vm.removeRow(row)
+                })
+
+                // dom.empty(td)
+                td.innerText = ''
+                td.appendChild(button)
+              }
+              return td
+            },
+          },
         ],
+        cells(row, col, prop) {
+          // const vm = window.detailProduction
+          const cellProperties = {}
+          const itemType = this.instance.getDataAtRowProp(row, 'item_type')
+
+          if (itemType === 'resource') {
+            if (prop === 'base_qty') {
+              cellProperties.readOnly = true
+            }
+            if (prop === 'amount') {
+              cellProperties.readOnly = true
+            }
+          } else if (itemType === 'item') {
+            if (prop === 'base_qty') {
+              cellProperties.readOnly = false
+            }
+            if (prop === 'amount') {
+              cellProperties.readOnly = false
+            }
+          }
+          return cellProperties
+        },
       },
       detailsRoot: 'detailsRoot',
       colHeaders: [],
@@ -278,7 +379,7 @@ export default {
 
   methods: {
     setInstance() {
-      window.details = this
+      window.detailProduction = this
     },
 
     removeRow(row) {
@@ -287,7 +388,10 @@ export default {
 
     addLine() {
       const totalRow = this.$refs.details.hotInstance.countRows()
-      this.$refs.details.hotInstance.alter('insert_row', totalRow + 1, 5)
+      this.$refs.details.hotInstance.alter('insert_row', totalRow + 1, 1)
+      this.$refs.details.hotInstance.setDataAtRowProp([
+        [totalRow, 'item_type', 'resource'],
+      ])
     },
 
     updateTableSettings(header) {
@@ -300,11 +404,11 @@ export default {
         },
         beforeOnCellMouseDown: doNotSelectColumn,
         afterRemoveRow: (index, amount, physicalRow, source) => {
-          const vm = window.details
+          const vm = window.detailProduction
           vm.calculateTotal()
         },
         beforeRemoveRow: (index, amount, physicalRow, source) => {
-          const vm = window.details
+          const vm = window.detailProduction
           const id = []
           physicalRow.forEach(function (index, value) {
             const entry = vm.$refs.details.hotInstance.getDataAtCell(index, 0)
@@ -331,7 +435,7 @@ export default {
         },
 
         afterChange: (changes, source) => {
-          const vm = window.details
+          const vm = window.detailProduction
           if (changes) {
             let propNew = 0
             changes.forEach(([row, prop, oldValue, newValue]) => {
@@ -346,12 +450,12 @@ export default {
         },
 
         beforeRender(isForced) {
-          const vm = window.details
+          const vm = window.detailProduction
           vm.$nuxt.$loading.start()
         },
 
         afterRender: (isForced) => {
-          const vm = window.details
+          const vm = window.detailProduction
           vm.$nuxt.$loading.finish()
         },
 
@@ -368,8 +472,11 @@ export default {
         selected.forEach(function (item, index) {
           const narration = item.description ? item.description : item.name
           // const taxName = sales.includes(type) ? salesTax : null
-
+          const itemType = (item.resource_type === undefined) ? 'item' : 'resource';
+          const amount = (itemType === 'item') ? item.purchase_price : 0
           vm.$refs.details.hotInstance.setDataAtRowProp([
+            [rowData, 'item_type', itemType],
+            [rowData, 'amount', amount],
             [rowData, 'item_code', item.code],
             [rowData, 'item_id', item.id],
             [rowData, 'unit', item.unit],
@@ -431,23 +538,74 @@ export default {
       const countRows = this.$refs.details.hotInstance.countRows()
       // console.log(countRows)
       let subTotal = 0
+      let productCost = 0
+      let componentCost = 0
+      let countResource = 0
+
+      if (countRows > 0) {
+        for (let i = 0; i < countRows; i++) {
+          const itemType = this.$refs.details.hotInstance.getDataAtRowProp(
+              i,
+              'item_type'
+            )
+
+          if (itemType === 'resource') {
+            countResource++;
+          }
+        }
+      }
+
       if (countRows > 0) {
         for (let i = 0; i < countRows; i++) {
           this.$refs.details.hotInstance.batch(() => {
-            const qty = parseFloat(this.plannedQty  / countRows)
-            const unitPrice = parseFloat(this.commissionRate)
-
-            this.$refs.details.hotInstance.setDataAtRowProp(
+            const itemType = this.$refs.details.hotInstance.getDataAtRowProp(
               i,
-              'amount',
-              unitPrice
+              'item_type'
             )
-
-            this.$refs.details.hotInstance.setDataAtRowProp(
+            const itemCode = this.$refs.details.hotInstance.getDataAtRowProp(
               i,
-              'base_qty',
-              qty
+              'item_code'
             )
+            let qty = 0
+            let unitPrice = 0
+            if (itemType === 'resource') {
+              if (itemCode) {
+                qty = parseFloat(this.plannedQty / countResource)
+                unitPrice = parseFloat(this.commissionRate)
+                this.$refs.details.hotInstance.setDataAtRowProp(
+                  i,
+                  'base_qty',
+                  qty
+                )
+
+                this.$refs.details.hotInstance.setDataAtRowProp(
+                  i,
+                  'amount',
+                  unitPrice
+                )
+              } else {
+                qty = this.$refs.details.hotInstance.getDataAtRowProp(
+                  i,
+                  'base_qty'
+                )
+                unitPrice = this.$refs.details.hotInstance.getDataAtRowProp(
+                  i,
+                  'amount'
+                )
+              }
+              componentCost = componentCost + qty * unitPrice
+            } else {
+              qty = this.$refs.details.hotInstance.getDataAtRowProp(
+                i,
+                'base_qty'
+              )
+              unitPrice = this.$refs.details.hotInstance.getDataAtRowProp(
+                i,
+                'amount'
+              )
+
+              productCost = productCost + qty * unitPrice
+            }
 
             const subTotalRow = qty * unitPrice
             subTotal = subTotal + qty * unitPrice
@@ -462,6 +620,8 @@ export default {
       }
       this.$emit('calcTotal', {
         subTotal,
+        productCost,
+        componentCost,
       })
     },
 

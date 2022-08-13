@@ -41,11 +41,34 @@
             />
           </template>
 
+          <template #[`item.name`]="{ item }">
+            <a @click="viewItem(item)">
+              <strong v-text="item.name"></strong>
+            </a>
+          </template>
+
           <!-- <template #[`item.name`]="{ item }">
             <a @click="openDetail(item)">
               <strong v-text="item.name"></strong>
             </a>
           </template> -->
+
+          <template #[`item.balance`]="{ item }">
+            <span v-if="item.type === 'Customer'">
+              {{
+                $auth.user.entity.currency.currency_symbol +
+                ' ' +
+                $formatter.formatPrice(item.sell_account.balance)
+              }}
+            </span>
+            <span v-else>
+              {{
+                $auth.user.entity.currency.currency_symbol +
+                ' ' +
+                $formatter.formatPrice(item.purchase_account.balance)
+              }}
+            </span>
+          </template>
 
           <template #[`item.ACTIONS`]="{ item }">
             <v-btn
@@ -75,9 +98,6 @@
                 </v-list-item>
               </v-list>
             </v-menu>
-          </template>
-          <template #[`item.balance`]="{ item }">
-            {{ $formatter.formatPrice(item.balance) }}
           </template>
         </v-data-table>
       </div>
@@ -133,6 +153,7 @@ export default {
           value: 'balance',
           sortable: false,
           filterable: false,
+          align: 'right',
         },
         {
           text: 'Action',
@@ -190,6 +211,14 @@ export default {
   },
 
   methods: {
+    viewItem(item) {
+      this.$router.push({
+        path: '/app/contact/detail/transaction',
+        query: {
+          id: item.id,
+        },
+      })
+    },
     newData() {
       this.editedIndex = -1
       this.$refs.formData.newData(this.form, this.defaultItem)

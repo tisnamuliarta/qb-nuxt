@@ -2,9 +2,9 @@
   <div>
     <DocumentTableDocument
       ref="tableDocument"
-      type-document="GT"
+      type-document="PR"
       form-url="/app/form/inventory/receipt"
-      table-url="/api/production/receipt"
+      table-url="/api/documents"
       :table-title="$t('Receipt From Production')"
       :header-table="[
         { text: $t('Transaction No'), value: 'transaction_no', cellClass: 'disable-wrap' },

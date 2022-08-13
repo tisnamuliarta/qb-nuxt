@@ -7,7 +7,7 @@
       :table-title="$t('Goods Receipt')"
       :header-table="[
         { text: $t('Transaction No'), value: 'transaction_no', cellClass: 'disable-wrap' },
-        { text: 'Vendor', value: 'contact.name', cellClass: 'disable-wrap' },
+        // { text: 'Vendor', value: 'contact.name', cellClass: 'disable-wrap' },
         {
           text: $t('Transaction Date'),
           value: 'transaction_date',

@@ -1,119 +1,83 @@
 <template>
   <v-row>
     <v-col cols="12" class="mt-0">
-      <v-data-table
-        :mobile-breakpoint="0"
-        :headers="headers"
-        :items="allData"
-        :items-per-page="20"
-        :options.sync="options"
-        :server-items-length="totalData"
-        :loading="loading"
-        hide-default-footer
-        class="elevation-1"
-        show-select
-        fixed-header
-        height="76vh"
-        dense
-        :footer-props="{ 'items-per-page-options': [20, 50, 100, -1] }"
-      >
-        <template #top>
-          <div class="pl-4 pt-2">
-            <v-chip
-              link
-              class="ma-2"
-              color="primary"
-              label
-              small
-              @click="$router.push({ path: '/app/accounting/account' })"
-            >
-              <v-icon left> mdi-arrow-left</v-icon>
-              All Accounts
-            </v-chip>
+      <div class="pl-4 pt-2">
+        <v-chip
+          link
+          class="ma-2"
+          color="primary"
+          label
+          small
+          @click="$router.push({ path: '/app/accounting/account' })"
+        >
+          <v-icon left> mdi-arrow-left</v-icon>
+          All Accounts
+        </v-chip>
 
-            <span class="font-weight-medium text-h6"
-              >{{ form.name }} account balances:
-              {{
-                $auth.user.entity.currency.currency_symbol +
-                ' ' +
-                $formatter.formatPrice(form.balance)
-              }}</span
-            >
-          </div>
+        <span class="font-weight-medium text-h6"
+          >{{ form.name }} account balances:
+          {{ $auth.user.entity.currency.currency_symbol + ' ' }}
+          <strong>{{ $formatter.formatPrice(form.balance) }}</strong>
+        </span>
+      </div>
 
-          <LazyMainToolbar
-            :document-status="documentStatus"
-            :search-status="searchStatus"
-            :item-search="itemSearch"
-            :search-item="searchItem"
-            :search="search"
-            title="Chart of Accounts"
-            show-filter
-            show-batch-action
-            @emitData="emitData"
-            @newData="newData"
-            @getDataFromApi="getDataFromApi"
-          />
+      <LazyMainToolbar
+        :document-status="documentStatus"
+        :search-status="searchStatus"
+        :item-search="itemSearch"
+        :search-item="searchItem"
+        :search="search"
+        title="Chart of Accounts"
+        show-filter
+        show-batch-action
+        @emitData="emitData"
+        @newData="newData"
+        @getDataFromApi="getDataFromApi"
+      />
+
+      <v-simple-table height="70vh" dense>
+        <template #default>
+          <thead>
+            <tr>
+              <th class="text-left">Transaction No</th>
+              <th class="text-left">Transaction Type</th>
+              <th class="text-left">Transaction Date</th>
+              <th class="text-left">Notes</th>
+              <th class="text-left">Status</th>
+              <th class="text-left">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in allData" :key="item.name">
+              <td>
+                <a @click="editItem(item)">
+                  <strong v-text="item.transaction_no"></strong>
+                </a>
+              </td>
+              <td>{{ item.type }}</td>
+              <td>{{ item.date }}</td>
+              <td>{{ item.narration }}</td>
+              <td>
+                <v-chip
+                  label
+                  small
+                  dark
+                  :color="$formatter.statusColor(item.status)"
+                >
+                  {{ item.status }}
+                </v-chip>
+              </td>
+              <td>
+                {{
+                  $auth.user.entity.currency.currency_symbol +
+                  ' ' +
+                  $formatter.formatPrice(item.contribution)
+                }}
+              </td>
+            </tr>
+          </tbody>
         </template>
-
-        <template #[`item.amount`]="{ item }">
-          {{
-            $auth.user.entity.currency.currency_symbol +
-            ' ' +
-            $formatter.formatPrice(item.amount)
-          }}
-        </template>
-
-        <template #[`item.contribution`]="{ item }">
-          {{
-            $auth.user.entity.currency.currency_symbol +
-            ' ' +
-            $formatter.formatPrice(item.contribution)
-          }}
-        </template>
-
-        <template #[`item.transaction_no`]="{ item }">
-          <a @click="editItem(item)">
-            <strong v-text="item.transaction_no"></strong>
-          </a>
-        </template>
-
-        <template #[`item.status`]="{ item }">
-          <v-chip label small dark :color="$formatter.statusColor(item.status)">
-            {{ item.status }}
-          </v-chip>
-        </template>
-
-        <template #[`item.id`]="{ item }">
-          <v-btn
-            color="secondary"
-            class="font-weight-bold text-right"
-            text
-            small
-            @click="actions(itemAction, item)"
-          >
-            {{ itemText }}
-          </v-btn>
-          <v-menu transition="slide-y-transition" bottom>
-            <template #activator="{ on, attrs }">
-              <v-btn color="black" dark icon v-bind="attrs" v-on="on">
-                <v-icon>mdi-menu-down</v-icon>
-              </v-btn>
-            </template>
-            <v-list>
-              <v-list-item
-                v-for="(value, i) in items"
-                :key="i"
-                @click="actions(value.action, item)"
-              >
-                <v-list-item-content>
-                  <v-list-item-title>{{ value.text }}</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </template>
-      </v-data-table>
+      </v-simple-table>
 
       <LazyAccountingFormAccount
         ref="forms"

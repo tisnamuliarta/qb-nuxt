@@ -193,7 +193,7 @@ export default {
       let availableQty = 0
       available.forEach(element => {
         // console.log(element)
-        if(element.whs_name === vm.whs) {
+        if(element.warehouse_id === vm.whs) {
           availableQty = element.available_qty
         }
       });
@@ -345,13 +345,13 @@ export default {
             sortable: false,
             filterable: false,
           },
-          // {
-          //   text: 'Reorder Point',
-          //   value: 'reorder_point',
-          //   align: 'right',
-          //   sortable: false,
-          //   filterable: false,
-          // },
+          {
+            text: 'Commission',
+            value: 'commision_rate',
+            align: 'right',
+            sortable: false,
+            filterable: false,
+          },
           { text: 'Unit', value: 'unit', sortable: false, filterable: false },
           // {
           //   text: 'Buy Price',

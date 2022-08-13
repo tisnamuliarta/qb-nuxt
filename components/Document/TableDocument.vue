@@ -121,6 +121,8 @@
           </v-menu>
         </template>
       </v-data-table>
+
+      <AccountingDialogLedger ref="ledger"></AccountingDialogLedger>
     </v-col>
   </v-row>
 </template>
@@ -236,13 +238,18 @@ export default {
     },
 
     editItem(item) {
-      this.$auth.$storage.setState('basePath', this.$route.path)
-      this.$router.push({
-        path: this.$formatter.mappingAction(item.transaction_type),
-        query: {
-          document: item.id,
-        },
-      })
+      if (item.transaction_type === 'JN') {
+        this.$refs.ledger.openDialog('/api/transaction/ledger/' + item.id)
+      } else {
+        this.$auth.$storage.setState('basePath', this.$route.path)
+        this.$router.push({
+          path: this.$formatter.mappingAction(item.transaction_type),
+          query: {
+            document: item.id,
+          },
+        })
+
+      }
     },
 
     actions(action, item) {

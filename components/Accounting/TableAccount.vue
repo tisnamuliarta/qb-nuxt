@@ -6,14 +6,12 @@
         :mobile-breakpoint="0"
         :headers="headers"
         :items="allData"
-        :items-per-page="250"
-        :options.sync="options"
-        :server-items-length="totalData"
         :loading="loading"
         :single-select="viewData"
         :class="viewData ? 'elevation-0' : 'elevation-1'"
         show-select
         fixed-header
+        :search="search"
         :height="viewData ? '60vh' : '70vh'"
         dense
         :footer-props="{ 'items-per-page-options': [250, 500, -1] }"
@@ -35,11 +33,25 @@
             show-batch-action
             show-new-data
             show-filter
+            :show-search-filter="false"
             new-data-text="New Account"
             @emitData="emitData"
             @newData="newData"
             @getDataFromApi="getDataFromApi"
-          />
+          >
+            <template #search>
+              <v-text-field
+                v-model="search"
+                append-icon="mdi-magnify"
+                label="Search"
+                single-line
+                outlined
+                dense
+                clearable
+                hide-details="auto"
+              ></v-text-field>
+            </template>
+          </LazyMainToolbar>
         </template>
 
         <template #[`item.balance`]="{ item }">
@@ -153,13 +165,8 @@ export default {
     },
   },
 
-  watch: {
-    options: {
-      handler() {
-        this.getDataFromApi()
-      },
-      deep: true,
-    },
+  activated() {
+    this.getDataFromApi()
   },
 
   mounted() {
@@ -284,6 +291,10 @@ export default {
           },
         ]
       }
+    },
+
+    searchData(data) {
+      this.search = data.search
     },
 
     getDataFromApi() {

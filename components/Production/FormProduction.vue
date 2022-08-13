@@ -129,6 +129,17 @@
             @calcTotal="calcTotal"
           ></LazyProductionTableDetailProduction>
         </div>
+        <v-card-actions>
+          <v-btn
+            small
+            depressed
+            outlined
+            @click="$refs.childDetails.addLine(1)"
+          >
+            Add Line
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
+        </v-card-actions>
       </v-card>
     </v-col>
 
@@ -173,7 +184,39 @@
           <v-row dense>
             <v-spacer />
             <v-col cols="12" md="4" class="text-right pa-1">
-              <span class="font-weight-bold subtitle-1">Total</span>
+              <span class="font-weight-bold subtitle-1">Total Cost Item</span>
+            </v-col>
+            <v-col cols="12" md="4" class="text-right pa-1">
+              <span class="font-weight-bold subtitle-1">
+                {{
+                  isNaN(form.product_cost)
+                    ? 0
+                    : $formatter.formatPrice(form.product_cost)
+                }}
+              </span>
+            </v-col>
+          </v-row>
+
+          <v-row dense>
+            <v-spacer />
+            <v-col cols="12" md="4" class="text-right pa-1">
+              <span class="font-weight-bold subtitle-1">Total Cost Resource</span>
+            </v-col>
+            <v-col cols="12" md="4" class="text-right pa-1">
+              <span class="font-weight-bold subtitle-1">
+                {{
+                  isNaN(form.component_cost)
+                    ? 0
+                    : $formatter.formatPrice(form.component_cost)
+                }}
+              </span>
+            </v-col>
+          </v-row>
+
+          <v-row dense>
+            <v-spacer />
+            <v-col cols="12" md="4" class="text-right pa-1">
+              <span class="font-weight-bold subtitle-1">Total Cost</span>
             </v-col>
             <v-col cols="12" md="4" class="text-right pa-1">
               <span class="font-weight-bold subtitle-1">
@@ -310,6 +353,8 @@ export default {
     calcTotal(data) {
       try {
         this.form.main_account_amount = data.subTotal
+        this.form.product_cost = data.productCost
+        this.form.component_cost = data.componentCost
       } catch (e) {
         // eslint-disable-next-line no-console
         console.log(e)
@@ -327,6 +372,7 @@ export default {
         this.$refs.childDetails.setDataToDetails(
           [
             {
+              item_type: 'resource',
               quantity: null,
             },
           ],

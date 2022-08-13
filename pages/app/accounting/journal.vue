@@ -2,22 +2,16 @@
   <div>
     <DocumentTableDocument
       ref="tableDocument"
-      type-document="JE"
-      form-url="/app/form/purchase/payment"
+      type-document="JN"
+      form-url="/app/form/accounting/journal-entry"
       table-url="/api/transactions"
+      table-title="Journal Entry"
       :header-table="[
         { text: 'Number', value: 'transaction_no', cellClass: 'disable-wrap' },
-        { text: 'Customer', value: 'contact.name', cellClass: 'disable-wrap' },
+        { text: 'Notes', value: 'narration', cellClass: 'disable-wrap' },
         {
           text: 'Date',
-          value: 'issued_at',
-          cellClass: 'disable-wrap',
-          sortable: false,
-          filterable: false,
-        },
-        {
-          text: 'Due Date',
-          value: 'due_at',
+          value: 'date',
           cellClass: 'disable-wrap',
           sortable: false,
           filterable: false,
@@ -26,14 +20,6 @@
           text: 'Status',
           value: 'status',
           align: 'left',
-          cellClass: 'disable-wrap',
-          sortable: false,
-          filterable: false,
-        },
-        {
-          text: 'Balance Due',
-          value: 'balance_due',
-          align: 'right',
           cellClass: 'disable-wrap',
           sortable: false,
           filterable: false,
@@ -65,13 +51,14 @@ export default {
 
   head() {
     return {
-      title: this.$t('Outgoing Payment'),
+      title: this.$t('Journal Entry'),
     }
   },
 
   activated() {
-    this.$nuxt.$emit('extensionActive', {
-      active: 2,
+    this.$nuxt.$emit('extensionSetting', {
+      show: false,
+      showBtn: false,
     })
   },
 

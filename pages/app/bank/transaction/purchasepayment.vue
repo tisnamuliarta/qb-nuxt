@@ -31,14 +31,6 @@
           filterable: false,
         },
         {
-          text: 'Balance Due',
-          value: 'balance_due',
-          align: 'right',
-          cellClass: 'disable-wrap',
-          sortable: false,
-          filterable: false,
-        },
-        {
           text: 'Total',
           value: 'main_account_amount',
           align: 'right',

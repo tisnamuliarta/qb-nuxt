@@ -44,7 +44,7 @@
 
         <v-col cols="12" md="4" sm="12">
           <v-autocomplete
-            v-model="form.account_id"
+            v-model="form.deposit_account_id"
             :items="itemAccounts"
             label="Deposit Account"
             return-object
@@ -103,7 +103,7 @@
     <v-col cols="12" md="4" lg="4">
       <v-col cols="12" md="12">
         <v-textarea
-          v-model="form.notes"
+          v-model="form.narration"
           rows="2"
           label="Memo"
           outlined
@@ -238,6 +238,7 @@ export default {
   },
 
   activated() {
+    this.getMasterData()
     this.$nextTick(() => {
       this.$nuxt.$loading.start()
     })
@@ -245,7 +246,7 @@ export default {
 
   // The above code is calling the methods that are defined in the methods section of the Vue instance.
   mounted() {
-    this.getMasterData()
+    // this.getMasterData()
   },
 
   methods: {
@@ -329,7 +330,7 @@ export default {
         )
         const resAccount = await this.$axios.get(`/api/financial/accounts`, {
           params: {
-            type: 'All',
+            type: 'BANK',
           },
         })
 

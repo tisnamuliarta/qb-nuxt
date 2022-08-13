@@ -1,7 +1,7 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col cols="12">
+    <v-row align="center" align-content="center" justify="center">
+      <v-col cols="12" :md="mdWidth">
         <v-card>
           <v-card-text>
             <div class="pl-4 pt-2">
@@ -19,7 +19,7 @@
 
               <span class="font-weight-medium text-h6">{{
                 $route.query.name
-              }}</span>
+              }} {{ period }}</span>
             </div>
 
             <LazyMainToolbar
@@ -35,53 +35,7 @@
             />
 
             <v-col cols="12" class="mt-4">
-              <v-simple-table dense>
-                <template #default>
-                  <thead>
-                    <tr>
-                      <th class="text-left">Description</th>
-                      <th class="text-left">Amount</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>NON_OPERATING_EXPENSES</td>
-                      <td></td>
-                    </tr>
-
-                    <tr>
-                      <td>NON_OPERATING_REVENUES</td>
-                      <td></td>
-                    </tr>
-
-                    <tr>
-                      <td>OPERATING_EXPENSES</td>
-                      <td></td>
-                    </tr>
-
-                    <tr>
-                      <td>OPERATING_REVENUES</td>
-                      <td></td>
-                    </tr>
-
-                    <tr v-for="(item, i) in allData.accounts" :key="i + '1'">
-                      <td>{{ item.OPERATING_EXPENSES }}</td>
-                    </tr>
-
-                    <tr v-for="(item, i) in allData.balances" :key="i + '2'">
-                      <td>{{ item[i] }}</td>
-                    </tr>
-
-                    <tr v-for="(item, i) in allData.results" :key="i + '3'">
-                      <td>{{ item[i] }}</td>
-                    </tr>
-
-                    <tr v-for="(item, i) in allData.totals" :key="i + '4'">
-                      <td>{{ item[i] }}</td>
-                    </tr>
-                  </tbody>
-                </template>
-              </v-simple-table>
+              <slot name="content"></slot>
             </v-col>
           </v-card-text>
         </v-card>
@@ -93,6 +47,17 @@
 <script>
 export default {
   name: 'ListReport',
+
+  props: {
+    mdWidth: {
+      type: String,
+      default: '12',
+    },
+    period: {
+      type: String,
+      default: '',
+    },
+  },
 
   data() {
     return {
@@ -123,14 +88,6 @@ export default {
   },
 
   methods: {
-    actions(action, item) {
-      if (action === 'edit') {
-        this.editItem(item)
-      } else {
-        this.deleteItem(item)
-      }
-    },
-
     editItem(item) {
       this.$auth.$storage.setState('basePath', this.$route.path)
       this.$router.push({
@@ -171,7 +128,12 @@ export default {
         })
         .then((res) => {
           this.loading = false
-          this.allData = res.data.transactions
+          this.allData = res.data.data
+          this.$emit('getData', {
+            data: this.allData,
+            startDate: res.data.start_date,
+            endDate: res.data.end_date,
+          })
           this.totalData = res.data.total
           this.itemSearch = res.data.filter
           this.form = Object.assign({}, res.data.data)

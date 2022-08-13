@@ -75,7 +75,6 @@
                 <v-btn
                   color="primary"
                   elevation="0"
-                  block
                   class="mr-2"
                   :loading="loading"
                   @click="login"

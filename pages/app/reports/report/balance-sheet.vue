@@ -1,40 +1,197 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="12">
-        <div class="pl-4 pt-2">
-          <v-chip
-            link
-            class="ma-2"
-            color="primary"
-            label
-            small
-            @click="$router.push({ path: '/app/reports/list' })"
-          >
-            <v-icon left> mdi-arrow-left</v-icon>
-            All Reports
-          </v-chip>
+  <LazyReportLayoutDefault
+    ref="report"
+    md-width="8"
+    :period="period"
+    @getData="getData"
+  >
+    <template #content>
+      <v-simple-table dense>
+        <template #default>
+          <tbody>
+            <tr>
+              <th>Assets</th>
+              <th></th>
+            </tr>
+            <tr v-if="itemNonCurrentAsset">
+              <td colspan="2">
+                <ReportSectionDetail :items="itemNonCurrentAsset"></ReportSectionDetail>
+              </td>
+            </tr>
+            <tr v-if="itemContraAsset">
+              <td colspan="2">
+                <ReportSectionDetail :items="itemContraAsset"></ReportSectionDetail>
+              </td>
+            </tr>
+            <tr v-if="itemInventory">
+              <td colspan="2">
+                <ReportSectionDetail :items="itemInventory"></ReportSectionDetail>
+              </td>
+            </tr>
+            <tr v-if="itemBank">
+              <td colspan="2">
+                <ReportSectionDetail :items="itemBank"></ReportSectionDetail>
+              </td>
+            </tr>
+            <tr v-if="itemCurrentAsset">
+              <td colspan="2">
+                <ReportSectionDetail :items="itemCurrentAsset"></ReportSectionDetail>
+              </td>
+            </tr>
+            <tr v-if="itemReceivable">
+              <td colspan="2">
+                <ReportSectionDetail :items="itemReceivable"></ReportSectionDetail>
+              </td>
+            </tr>
+            <tr style="border-top: 2px solid #222 !important">
+              <th>Total Assets</th>
+              <th
+                class="text-right"
+                style="border-top: 2px solid #222 !important"
+              >
+                <span class="mr-4">
+                  {{
+                    $auth.user.entity.currency.currency_symbol +
+                    ' ' +
+                    $formatter.formatPrice(totalAsset)
+                  }}
+                </span>
+              </th>
+            </tr>
 
-          <span class="font-weight-medium text-h6">{{
-            $route.query.name
-          }}</span>
-        </div>
+            <tr>
+              <th>Liabilities</th>
+              <th></th>
+            </tr>
 
-        <LazyMainToolbar
-          :document-status="documentStatus"
-          :search-status="searchStatus"
-          :item-search="itemSearch"
-          :search-item="searchItem"
-          :search="search"
-          title="Chart of Accounts"
-          show-filter
-          show-batch-action
-          @emitData="emitData"
-          @getDataFromApi="getDataFromApi"
-        />
-      </v-col>
-    </v-row>
-  </v-container>
+            <tr v-if="itemNonCurrentLiability">
+              <td colspan="2">
+                <ReportSectionDetail
+                  :items="itemNonCurrentLiability"
+                ></ReportSectionDetail>
+              </td>
+            </tr>
+
+            <tr v-if="itemControl">
+              <td colspan="2">
+                <ReportSectionDetail
+                  :items="itemControl"
+                ></ReportSectionDetail>
+              </td>
+            </tr>
+
+            <tr v-if="itemCurrentLiability">
+              <td colspan="2">
+                <ReportSectionDetail
+                  :items="itemCurrentLiability"
+                ></ReportSectionDetail>
+              </td>
+            </tr>
+
+            <tr v-if="itemPayable">
+              <td colspan="2">
+                <ReportSectionDetail
+                  :items="itemPayable"
+                ></ReportSectionDetail>
+              </td>
+            </tr>
+
+            <tr>
+              <th>Total Liabilities</th>
+
+              <th
+                class="text-right"
+                style="border-top: 2px solid #222 !important"
+              >
+                <span class="mr-4">
+                  {{
+                    $auth.user.entity.currency.currency_symbol +
+                    ' ' +
+                    $formatter.formatPrice(totalLiability)
+                  }}
+                </span>
+              </th>
+            </tr>
+
+            <tr>
+              <th>Reconciliation</th>
+              <th></th>
+            </tr>
+
+            <tr v-if="itemReconciliation">
+              <td colspan="2">
+                <ReportSectionDetail
+                  :items="itemReconciliation"
+                ></ReportSectionDetail>
+              </td>
+            </tr>
+
+            <tr>
+              <th>Total Reconciliation</th>
+              <th
+                class="text-right"
+                style="border-top: 2px solid #222 !important"
+              >
+                <span class="mr-4">
+                  {{
+                    $auth.user.entity.currency.currency_symbol +
+                    ' ' +
+                    $formatter.formatPrice(totalReconciliation)
+                  }}
+                </span>
+              </th>
+            </tr>
+
+            <tr>
+              <th>Net Assets</th>
+              <th
+                class="text-right"
+                style="border-top: 2px solid #222 !important"
+              >
+                <span class="mr-4">
+                  {{
+                    $auth.user.entity.currency.currency_symbol +
+                    ' ' +
+                    $formatter.formatPrice(netAsset)
+                  }}
+                </span>
+              </th>
+            </tr>
+
+            <tr>
+              <th>Equity</th>
+              <th></th>
+            </tr>
+
+            <tr v-if="itemEquity">
+              <td colspan="2">
+                <ReportSectionDetail
+                  :items="itemEquity"
+                ></ReportSectionDetail>
+              </td>
+            </tr>
+
+            <tr>
+              <th>Total Equity</th>
+              <th
+                class="text-right"
+                style="border-top: 2px solid #222 !important"
+              >
+                <span class="mr-4">
+                  {{
+                    $auth.user.entity.currency.currency_symbol +
+                    ' ' +
+                    $formatter.formatPrice(totalEquity)
+                  }}
+                </span>
+              </th>
+            </tr>
+
+          </tbody>
+        </template>
+      </v-simple-table>
+    </template>
+  </LazyReportLayoutDefault>
 </template>
 
 <script>
@@ -43,19 +200,32 @@ export default {
 
   data() {
     return {
-      totalData: 0,
       loading: true,
       allData: [],
-      documentStatus: [],
-      itemSearch: [],
-      searchStatus: '',
-      searchItem: '',
-      search: '',
-      form: {},
-      date_from: null,
-      date_to: null,
-      url: '/api/report',
-      title: 'Reports',
+      // asset
+      itemNonCurrentAsset: {},
+      itemContraAsset: {},
+      itemInventory: {},
+      itemBank: {},
+      itemCurrentAsset: {},
+      itemReceivable: {},
+
+      totalAsset: 0,
+      totalEquity: 0,
+      totalLiability: 0,
+      totalReconciliation: 0,
+      // liability
+      itemNonCurrentLiability: {},
+      itemControl: {},
+      itemCurrentLiability: {},
+      itemPayable: {},
+
+      itemEquity: {},
+
+      itemReconciliation: {},
+
+      netAsset: 0,
+      period: '',
     }
   },
 
@@ -65,73 +235,35 @@ export default {
     }
   },
 
-  activated() {
-    this.getDataFromApi()
-  },
-
   methods: {
-    actions(action, item) {
-      if (action === 'edit') {
-        this.editItem(item)
-      } else {
-        this.deleteItem(item)
-      }
-    },
+    getData(data) {
+      this.allData = data.data
 
-    editItem(item) {
-      this.$auth.$storage.setState('basePath', this.$route.path)
-      this.$router.push({
-        path: this.$formatter.mappingAction(item.transaction_type),
-        query: {
-          document: item.id,
-        },
-      })
-    },
+      this.period = data.startDate + ' to ' + data.endDate
+      // assets
+      this.itemNonCurrentAsset = this.allData.accounts.ASSETS.NON_CURRENT_ASSET
+      this.itemContraAsset = this.allData.accounts.ASSETS.CONTRA_ASSET
+      this.itemInventory = this.allData.accounts.ASSETS.INVENTORY
+      this.itemBank = this.allData.accounts.ASSETS.BANK
+      this.itemCurrentAsset = this.allData.accounts.ASSETS.CURRENT_ASSET
+      this.itemReceivable = this.allData.accounts.ASSETS.RECEIVEABLE
 
-    emitData(data) {
-      this.documentStatus = data.documentStatus
-      this.itemSearch = data.itemSearch
-      this.searchStatus = data.searchStatus
-      this.searchItem = data.searchItem
-      this.search = data.search
-      this.filters = data.filters
-      this.date_from = data.date_from
-      this.date_to = data.date_to
-      this.getDataFromApi()
-    },
+      // liability
+      this.itemNonCurrentLiability = this.allData.accounts.LIABILITIES.NON_CURRENT_LIABILITY
+      this.itemControl = this.allData.accounts.LIABILITIES.CONTROL
+      this.itemCurrentLiability = this.allData.accounts.LIABILITIES.CURRENT_LIABILITY
+      this.itemPayable = this.allData.accounts.LIABILITIES.PAYABLE
 
-    getDataFromApi() {
-      this.loading = true
-      const vm = this
-      this.$axios
-        .get(this.url, {
-          params: {
-            options: vm.options,
-            searchItem: vm.searchItem,
-            documentStatus: vm.documentStatus,
-            searchStatus: vm.searchStatus,
-            search: vm.search,
-            start_date: vm.date_from,
-            end_date: vm.date_to,
-            report_type: vm.$route.query.name,
-          },
-        })
-        .then((res) => {
-          this.loading = false
-          this.allData = res.data.transactions
-          this.totalData = res.data.total
-          this.itemSearch = res.data.filter
-          this.form = Object.assign({}, res.data.data)
-          this.defaultItem = Object.assign({}, res.data.form)
-        })
-        .catch((err) => {
-          this.loading = false
-          this.$swal({
-            type: 'error',
-            title: 'Error',
-            text: err.response.data.message,
-          })
-        })
+      // equity
+      this.itemEquity = this.allData.accounts.EQUITY.EQUITY
+
+      this.itemReconciliation = this.allData.accounts.RECONCILIATION.RECONCILIATION
+
+      this.totalAsset = this.allData.totals.ASSETS
+      this.totalLiability = this.allData.totals.LIABILITIES
+      this.totalReconciliation = this.allData.totals.RECONCILIATION
+      this.netAsset = this.allData.results.NET_ASSETS
+      this.totalEquity = this.allData.results.TOTAL_EQUITY
     },
   },
 }

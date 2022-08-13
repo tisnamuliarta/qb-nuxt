@@ -259,6 +259,15 @@ export default {
           this.form.transaction_type = this.formType
         }
 
+        if (this.form.tags) {
+          const tags = []
+          this.form.tags.forEach((item, index) => {
+            tags.push(item.name.en)
+          })
+
+          this.form.tags = tags
+        }
+
         this.title = this.dialogTitle + ' #' + this.form.transaction_no
 
         this.$refs.dialogForm.setTitle(this.title)

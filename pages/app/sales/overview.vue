@@ -3,7 +3,7 @@
     <v-row>
       <v-col cols="12" lg="10">
         <v-row>
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="6" xl="4">
             <v-card class="mx-auto">
               <v-card-text>
                 <div class="subtitle-1">SHORTCUTS</div>
@@ -15,7 +15,7 @@
           </v-col>
 
 
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="6" xl="4">
             <v-card class="mx-auto">
               <v-card-text>
                 <div class="subtitle-1">SHORTCUTS</div>
@@ -26,7 +26,7 @@
             </v-card>
           </v-col>
 
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="6" xl="4">
             <v-card class="mx-auto">
               <v-card-text>
                 <div class="subtitle-1">SHORTCUTS</div>
@@ -37,7 +37,7 @@
             </v-card>
           </v-col>
 
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="6" xl="4">
             <v-card class="mx-auto">
               <v-card-text>
                 <div class="subtitle-1">SHORTCUTS</div>
@@ -48,7 +48,7 @@
             </v-card>
           </v-col>
 
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="6" xl="4">
             <v-card class="mx-auto">
               <v-card-text>
                 <div class="subtitle-1">SHORTCUTS</div>
@@ -59,7 +59,7 @@
             </v-card>
           </v-col>
 
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="6" xl="4">
             <v-card class="mx-auto">
               <v-card-text>
                 <div class="subtitle-1">SHORTCUTS</div>
