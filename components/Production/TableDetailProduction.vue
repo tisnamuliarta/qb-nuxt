@@ -390,64 +390,79 @@ export default {
       const totalRow = this.$refs.details.hotInstance.countRows()
       this.$refs.details.hotInstance.alter('insert_row', totalRow + 1, 1)
       this.$refs.details.hotInstance.setDataAtRowProp([
-        [totalRow, 'item_type', 'resource'],
+        [totalRow, 'item_type', 'resource', 'edit'],
       ])
     },
 
     updateTableSettings(header) {
       // const listVat = this.$auth.$storage.getState('tax_row')
-      this.$refs.details.hotInstance.updateSettings({
-        licenseKey: 'non-commercial-and-evaluation',
-        height: 'auto',
-        beforeRefreshDimensions() {
-          return false
-        },
-        beforeOnCellMouseDown: doNotSelectColumn,
-        afterRemoveRow: (index, amount, physicalRow, source) => {
-          const vm = window.detailProduction
-          vm.calculateTotal()
-        },
-        beforeRemoveRow: (index, amount, physicalRow, source) => {
-          const vm = window.detailProduction
-          const id = []
-          physicalRow.forEach(function (index, value) {
-            const entry = vm.$refs.details.hotInstance.getDataAtCell(index, 0)
-            if (entry) {
-              id.push(entry)
+      this.$refs.details.hotInstance.batch(() => {
+        this.$refs.details.hotInstance.updateSettings({
+          licenseKey: 'non-commercial-and-evaluation',
+          height: 'auto',
+          beforeRefreshDimensions() {
+            return false
+          },
+          beforeOnCellMouseDown: doNotSelectColumn,
+          afterRemoveRow: (index, amount, physicalRow, source) => {
+            const vm = window.detailProduction
+            vm.calculateTotal()
+          },
+          beforeRemoveRow: (index, amount, physicalRow, source) => {
+            const vm = window.detailProduction
+            const id = []
+            physicalRow.forEach(function (index, value) {
+              const entry = vm.$refs.details.hotInstance.getDataAtCell(index, 0)
+              if (entry) {
+                id.push(entry)
+              }
+            })
+            const countRows = vm.$refs.details.hotInstance.countRows()
+            if (countRows === 1) {
+              vm.$emit('calcTotal', {
+                subTotal: 0,
+                amount: 0,
+                discountAmount: 0,
+                taxDetail: [],
+              })
             }
-          })
-          const countRows = vm.$refs.details.hotInstance.countRows()
-          if (countRows === 1) {
-            vm.$emit('calcTotal', {
-              subTotal: 0,
-              amount: 0,
-              discountAmount: 0,
-              taxDetail: [],
-            })
-          }
 
-          if (id.length > 0) {
-            vm.$emit('removeData', {
-              id,
-            })
-          }
-          return true
-        },
+            if (id.length > 0) {
+              vm.$emit('removeData', {
+                id,
+              })
+            }
+            return true
+          },
 
-        afterChange: (changes, source) => {
-          const vm = window.detailProduction
-          if (changes) {
-            let propNew = 0
-            changes.forEach(([row, prop, oldValue, newValue]) => {
-              propNew = prop
+          afterChange: (changes, source) => {
+            const vm = window.detailProduction
+            if (changes) {
+              let propNew = 0
+              const cellChanges = []
+              changes.forEach(([row, prop, oldValue, newValue]) => {
+                propNew = prop
+                const cellChange = [row, prop, oldValue, newValue, 0]
+                if (propNew === 'base_qty' || propNew === 'amount') {
+                  if (oldValue !== newValue) {
+                    cellChanges.push(cellChange)
+                    // vm.calculateTotal()
+                  }
+                }
+              })
+
               if (propNew === 'base_qty' || propNew === 'amount') {
-                if (oldValue !== newValue) {
+                for (
+                  let j = 0, length2 = cellChanges.length;
+                  j < length2;
+                  j++
+                ) {
                   vm.calculateTotal()
                 }
               }
-            })
-          }
-        },
+            }
+          },
+        })
       })
     },
 
@@ -464,14 +479,14 @@ export default {
             item.resource_type === undefined ? 'item' : 'resource'
           const amount = itemType === 'item' ? item.purchase_price : 0
           vm.$refs.details.hotInstance.setDataAtRowProp([
-            [rowData, 'item_type', itemType],
-            [rowData, 'amount', amount],
-            [rowData, 'item_code', item.code],
-            [rowData, 'item_id', item.id],
-            [rowData, 'unit', item.unit],
-            [rowData, 'whs_code', item.whs_code],
-            [rowData, 'narration', narration],
-            [rowData, 'base_qty', 1],
+            [rowData, 'item_type', itemType, 'edit'],
+            [rowData, 'amount', amount, 'edit'],
+            [rowData, 'item_code', item.code, 'edit'],
+            [rowData, 'item_id', item.id, 'edit'],
+            [rowData, 'unit', item.unit, 'edit'],
+            [rowData, 'whs_code', item.whs_code, 'edit'],
+            [rowData, 'narration', narration, 'edit'],
+            [rowData, 'base_qty', 1, 'edit'],
           ])
           rowData++
         })
@@ -533,7 +548,7 @@ export default {
 
       if (countRows > 0) {
         this.$refs.details.hotInstance.batch(() => {
-          this.$refs.details.hotInstance.suspendExecution();
+          this.$refs.details.hotInstance.suspendExecution()
           for (let i = 0; i < countRows; i++) {
             const itemType = this.$refs.details.hotInstance.getDataAtRowProp(
               i,
@@ -560,17 +575,12 @@ export default {
               if (itemCode) {
                 qty = parseFloat(this.plannedQty / countResource)
                 unitPrice = parseFloat(this.commissionRate / countResource)
-                this.$refs.details.hotInstance.setDataAtRowProp(
-                  i,
-                  'base_qty',
-                  qty
-                )
-
-                this.$refs.details.hotInstance.setDataAtRowProp(
-                  i,
-                  'amount',
-                  unitPrice
-                )
+                this.$refs.details.hotInstance.setDataAtCell([
+                  // [i, 'base_qty', qty, 'edit'],
+                  // [i, 'amount', unitPrice, 'edit'],
+                  [i, 7, qty, 'edit'],
+                  [i, 9, unitPrice, 'edit'],
+                ])
               } else {
                 qty = this.$refs.details.hotInstance.getDataAtRowProp(
                   i,
@@ -598,13 +608,11 @@ export default {
             const subTotalRow = qty * unitPrice
             subTotal = subTotal + qty * unitPrice
 
-            this.$refs.details.hotInstance.setDataAtRowProp(
-              i,
-              'sub_total',
-              subTotalRow
-            )
+            this.$refs.details.hotInstance.setDataAtRowProp([
+              [i, 'sub_total', subTotalRow, 'edit'],
+            ])
           }
-          this.$refs.details.hotInstance.resumeExecution();
+          this.$refs.details.hotInstance.resumeExecution()
         })
       }
       this.$emit('calcTotal', {

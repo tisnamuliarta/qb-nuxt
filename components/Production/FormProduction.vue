@@ -314,6 +314,13 @@ export default {
     }
   },
 
+  head() {
+    return {
+      title: this.$t('Production Order'),
+    }
+  },
+
+
   activated() {
     this.$nextTick(() => {
       this.$nuxt.$loading.start()
