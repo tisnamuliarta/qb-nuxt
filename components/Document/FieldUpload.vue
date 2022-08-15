@@ -52,11 +52,11 @@ export default {
         withCredentials: true,
         thumbnailWidth: 50,
         thumbnailHeight: 50,
-        acceptedFiles: 'image/*',
+        acceptedFiles: 'image/*, application/pdf',
         dictDefaultMessage:
           "<span class='mdi mdi-cloud-upload'></span> UPLOAD HERE",
         headers: {
-          Authorization: this.$auth.$storage.getLocalStorage('_token.local'),
+          Authorization: this.$auth.$storage.getCookie('_token.local'),
         },
       },
     }
@@ -111,8 +111,8 @@ export default {
         })
         .then((res) => {
           this.$emit('eventGetFiles', {
-            total: res.data.data.total,
-            row: res.data.data.rows,
+            // total: res.data.data.total,
+            row: res.data.rows,
           })
           vm.showLoadingAttachment = false
         })

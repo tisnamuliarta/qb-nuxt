@@ -209,7 +209,7 @@
       <v-icon>mdi-refresh</v-icon>
     </v-btn>
 
-    <v-btn
+    <!-- <v-btn
       class="ml-1 mr-1 d-none d-sm-flex"
       :loading="loading"
       icon
@@ -237,7 +237,7 @@
       @click="processAction('setting')"
     >
       <v-icon>mdi-cog</v-icon>
-    </v-btn>
+    </v-btn> -->
 
     <v-menu offset-y left class="d-flex d-sm-none" :nudge-width="120">
       <template #activator="{ on, attrs }">

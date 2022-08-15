@@ -111,7 +111,7 @@
           bottom
           offset-y
           left
-          :nudge-width="700"
+          :nudge-width="600"
         >
           <template #activator="{ on }">
             <v-btn outlined block small color="primary" class="mb-4" v-on="on">

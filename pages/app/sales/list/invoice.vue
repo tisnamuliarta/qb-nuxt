@@ -8,6 +8,7 @@
       :header-table="[
         { text: $t('Transaction No'), value: 'transaction_no', cellClass: 'disable-wrap' },
         { text: 'Customer', value: 'contact.name', cellClass: 'disable-wrap' },
+        { text: 'No Contract', value: 'reference_no', cellClass: 'disable-wrap' },
         {
           text: $t('Transaction Date'),
           value: 'transaction_date',
@@ -71,7 +72,7 @@ export default {
 
   activated() {
     this.$nuxt.$emit('extensionActive', {
-      active: 3,
+      active: 2,
     })
   },
 

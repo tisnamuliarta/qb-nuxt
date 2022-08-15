@@ -256,7 +256,7 @@ export default {
           },
           {
             data: 'base_qty',
-            // readOnly: true,
+            readOnly: true,
             width: 80,
             wordWrap: false,
             type: 'numeric',
@@ -276,7 +276,7 @@ export default {
             width: 100,
             wordWrap: false,
             type: 'numeric',
-            // readOnly: true,
+            readOnly: true,
             numericFormat: {
               pattern: '0,0.00',
             },
@@ -344,28 +344,28 @@ export default {
             },
           },
         ],
-        // cells(row, col, prop) {
-        //   // const vm = window.detailProduction
-        //   const cellProperties = {}
-        //   const itemType = this.instance.getDataAtRowProp(row, 'item_type')
+        cells(row, col, prop) {
+          // const vm = window.detailProduction
+          const cellProperties = {}
+          const itemType = this.instance.getDataAtRowProp(row, 'item_type')
 
-        //   if (itemType === 'resource') {
-        //     if (prop === 'base_qty') {
-        //       cellProperties.readOnly = true
-        //     }
-        //     if (prop === 'amount') {
-        //       cellProperties.readOnly = true
-        //     }
-        //   } else if (itemType === 'item') {
-        //     if (prop === 'base_qty') {
-        //       cellProperties.readOnly = false
-        //     }
-        //     if (prop === 'amount') {
-        //       cellProperties.readOnly = false
-        //     }
-        //   }
-        //   return cellProperties
-        // },
+          if (itemType === 'resource') {
+            if (prop === 'base_qty') {
+              cellProperties.readOnly = true
+            }
+            if (prop === 'amount') {
+              cellProperties.readOnly = true
+            }
+          } else if (itemType === 'item') {
+            if (prop === 'base_qty') {
+              cellProperties.readOnly = false
+            }
+            if (prop === 'amount') {
+              cellProperties.readOnly = false
+            }
+          }
+          return cellProperties
+        },
       },
       detailsRoot: 'detailsRoot',
       colHeaders: [],
@@ -448,6 +448,18 @@ export default {
             })
           }
         },
+
+        beforeRender(isForced) {
+          const vm = window.detailProduction
+          vm.$nuxt.$loading.start()
+        },
+
+        afterRender: (isForced) => {
+          const vm = window.detailProduction
+          vm.$nuxt.$loading.finish()
+        },
+
+        afterLoadData: (sourceData, initialLoad, source) => {},
       })
     },
 
@@ -460,9 +472,8 @@ export default {
         selected.forEach(function (item, index) {
           const narration = item.description ? item.description : item.name
           // const taxName = sales.includes(type) ? salesTax : null
-          const itemType =
-            item.resource_type === undefined ? 'item' : 'resource'
-          const amount = itemType === 'item' ? item.purchase_price : 0
+          const itemType = (item.resource_type === undefined) ? 'item' : 'resource';
+          const amount = (itemType === 'item') ? item.purchase_price : 0
           vm.$refs.details.hotInstance.setDataAtRowProp([
             [rowData, 'item_type', itemType],
             [rowData, 'amount', amount],
@@ -532,20 +543,21 @@ export default {
       let countResource = 0
 
       if (countRows > 0) {
-        this.$refs.details.hotInstance.batch(() => {
-          this.$refs.details.hotInstance.suspendExecution();
-          for (let i = 0; i < countRows; i++) {
-            const itemType = this.$refs.details.hotInstance.getDataAtRowProp(
+        for (let i = 0; i < countRows; i++) {
+          const itemType = this.$refs.details.hotInstance.getDataAtRowProp(
               i,
               'item_type'
             )
 
-            if (itemType === 'resource') {
-              countResource++
-            }
+          if (itemType === 'resource') {
+            countResource++;
           }
+        }
+      }
 
-          for (let i = 0; i < countRows; i++) {
+      if (countRows > 0) {
+        for (let i = 0; i < countRows; i++) {
+          this.$refs.details.hotInstance.batch(() => {
             const itemType = this.$refs.details.hotInstance.getDataAtRowProp(
               i,
               'item_type'
@@ -559,7 +571,7 @@ export default {
             if (itemType === 'resource') {
               if (itemCode) {
                 qty = parseFloat(this.plannedQty / countResource)
-                unitPrice = parseFloat(this.commissionRate / countResource)
+                unitPrice = parseFloat(this.commissionRate)
                 this.$refs.details.hotInstance.setDataAtRowProp(
                   i,
                   'base_qty',
@@ -603,9 +615,8 @@ export default {
               'sub_total',
               subTotalRow
             )
-          }
-          this.$refs.details.hotInstance.resumeExecution();
-        })
+          })
+        }
       }
       this.$emit('calcTotal', {
         subTotal,

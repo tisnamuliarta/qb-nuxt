@@ -17,10 +17,10 @@ export default {
   activated() {
     this.$nuxt.$emit('extensionSetting', {
       tabs: [
-        {
-          title: this.$t('Purchase Quotations'),
-          route: '/app/purchase/list/quotation',
-        },
+        // {
+        //   title: this.$t('Purchase Quotations'),
+        //   route: '/app/purchase/list/quotation',
+        // },
         {
           title: this.$t('Purchase Order'),
           route: '/app/purchase/list/purchaseorder',

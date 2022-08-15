@@ -44,11 +44,11 @@ export default {
     return {
       dialog: false,
       itemSales: [
-        {
-          text: this.$t('Sales Quotations'),
-          type: 'SQ',
-          route: '/app/form/sales/quote',
-        },
+        // {
+        //   text: this.$t('Sales Quotations'),
+        //   type: 'SQ',
+        //   route: '/app/form/sales/quote',
+        // },
         {
           text: this.$t('Sales Order'),
           type: 'SO',
@@ -82,11 +82,11 @@ export default {
       ],
 
       itemPurchase: [
-        {
-          text: this.$t('Purchase Quotations'),
-          type: 'PQ',
-          route: '/app/form/purchase/quote',
-        },
+        // {
+        //   text: this.$t('Purchase Quotations'),
+        //   type: 'PQ',
+        //   route: '/app/form/purchase/quote',
+        // },
         {
           text: this.$t('Purchase Order'),
           type: 'PO',
@@ -153,11 +153,11 @@ export default {
           type: 'JE',
           route: '/app/form/accounting/journal',
         },
-        {
-          text: this.$t('Statement'),
-          type: 'STATEMENT',
-          route: '/app/form/accounting/statements',
-        },
+        // {
+        //   text: this.$t('Statement'),
+        //   type: 'STATEMENT',
+        //   route: '/app/form/accounting/statements',
+        // },
         {
           text: this.$t('Goods Receipt'),
           type: 'GR',
@@ -168,11 +168,11 @@ export default {
           type: 'GI',
           route: '/app/form/inventory/issue',
         },
-        {
-          text: this.$t('Expenses'),
-          type: 'EXPENSE',
-          route: '/app/form/purchase/expense',
-        },
+        // {
+        //   text: this.$t('Expenses'),
+        //   type: 'EXPENSE',
+        //   route: '/app/form/purchase/expense',
+        // },
       ],
     }
   },

@@ -213,35 +213,64 @@
     </v-col>
 
     <v-col cols="12" md="4" lg="4">
-      <v-col cols="12" md="12">
+      <!-- <v-col cols="12" md="12">
         <v-textarea
           v-model="form.footer"
           rows="2"
-          label="Message"
+          label="Remark"
           outlined
           dense
           hide-details="auto"
         ></v-textarea>
-      </v-col>
+      </v-col> -->
 
       <v-col cols="12" md="12">
         <v-textarea
           v-model="form.narration"
           rows="2"
-          label="Memo"
+          label="Journal Remark"
           outlined
           dense
           hide-details="auto"
         ></v-textarea>
       </v-col>
 
-      <v-col cols="12" md="12">
+      <v-col v-if="$route.query.document !== '0'" cols="12" md="12">
         <DocumentFieldUpload
           ref="uploadField"
           :form-data="form"
           form-type="document"
           @eventGetFiles="eventGetFiles"
         ></DocumentFieldUpload>
+
+        <v-col v-if="itemFiles" cols="12" md="12">
+          <v-simple-table dense>
+            <template #default>
+              <thead>
+                <tr>
+                  <th class="text-left">File Name</th>
+                  <th class="text-left">Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in itemFiles" :key="item.id">
+                  <td>
+                    <a target="_blank" :href="item.directory">{{ item.filename }}</a>
+                  </td>
+                  <td>
+                    <v-btn
+                      x-small
+                      color="red darken-1"
+                      dark
+                      @click="$refs.uploadField.deleteFile(item)"
+                      >Remove</v-btn
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </v-col>
       </v-col>
     </v-col>
 
@@ -536,6 +565,7 @@ export default {
   },
 
   activated() {
+    this.getMasterData()
     this.$nextTick(() => {
       this.$nuxt.$loading.start()
     })
@@ -543,7 +573,7 @@ export default {
 
   // The above code is calling the methods that are defined in the methods section of the Vue instance.
   mounted() {
-    this.getMasterData()
+    // this.getMasterData()
   },
 
   methods: {
@@ -774,7 +804,7 @@ export default {
 
         const resContact = await this.$axios.get(`/api/bp/contacts`, {
           params: {
-            type: this.form.transaction_type,
+            type: this.formType,
           },
         })
 
@@ -803,6 +833,7 @@ export default {
         this.$auth.$storage.setState('tax_row', resTax.data.data)
         this.$auth.$storage.setState('salesPerson', resEmployee.data.data)
         this.itemSalesPersons = resEmployee.data.data
+        this.$refs.uploadField.getFiles()
       } catch (err) {
         this.$swal({
           type: 'error',

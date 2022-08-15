@@ -1,5 +1,5 @@
 <template>
-  <LazyFormDialogFull ref="dialogFull" @closeDialog="closeDialog">
+  <LazyFormDialogFull ref="dialogFullWindow" @closeDialog="closeDialog">
     <template #content>
       <v-card elevation="0">
         <v-container fluid>
@@ -54,7 +54,7 @@
         class="mr-3"
         dark
         small
-        @click="$refs.dialogFull.closeDialog()"
+        @click="$refs.dialogFullWindow.closeDialog()"
       >
         Done
       </v-btn>
@@ -109,16 +109,21 @@ export default {
   },
 
   activated() {
+    this.$nextTick(() => {
+      this.$nuxt.$loading.start()
+    })
     this.selectedItem = 0
-    this.$refs.dialogFull.openDialog()
+    setTimeout(() => {
+      this.$refs.dialogFullWindow.openDialog()
+    }, 500)
     this.changeTabValue('company', true)
-    this.$refs.dialogFull.setTitle(this.$t('Account and settings'))
+    this.$refs.dialogFullWindow.setTitle(this.$t('Account and settings'))
   },
 
   methods: {
     openDialog(data) {
       this.selectedItem = 0
-      this.$refs.dialogFull.openDialog(data)
+      this.$refs.dialogFullWindow.openDialog(data)
       this.changeTabValue('company', true)
     },
 

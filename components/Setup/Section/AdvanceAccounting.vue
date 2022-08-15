@@ -270,7 +270,7 @@ export default {
   methods: {
     getPaymentTerm() {
       this.$axios.get(`/api/financial/payment-terms`).then((res) => {
-        this.itemPaymentTerm = res.data.data.simple
+        this.itemPaymentTerm = res.data.simple
       })
     },
 

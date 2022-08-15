@@ -3,7 +3,7 @@
     <DocumentTableDocument
       ref="tableDocument"
       type-document="JN"
-      form-url="/app/form/accounting/journal-entry"
+      form-url="/app/form/accounting/journal"
       table-url="/api/transactions"
       table-title="Journal Entry"
       :header-table="[

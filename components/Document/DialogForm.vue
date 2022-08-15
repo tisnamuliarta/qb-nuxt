@@ -18,7 +18,7 @@
     </template>
 
     <template #actions>
-      <span v-if="actionName === 'Update'">
+      <span v-if="actionName === 'Update Document'">
         <v-btn text small dark>
           More
           <v-menu transition="slide-y-transition" bottom>
@@ -64,7 +64,7 @@
       >
         {{ actionName }}
 
-        <v-menu transition="slide-y-transition" bottom>
+        <!-- <v-menu transition="slide-y-transition" bottom>
           <template #activator="{ on, attrs }">
             <v-btn
               dark
@@ -87,7 +87,7 @@
               </v-list-item-content>
             </v-list-item>
           </v-list>
-        </v-menu>
+        </v-menu> -->
       </v-btn>
     </template>
   </LazyFormDialogFull>
@@ -138,7 +138,7 @@ export default {
       dialog: false,
       loading: false,
       showLoading: false,
-      actionName: 'Save',
+      actionName: 'Save Document',
       actionOnSave: 'save',
       countRouter: -1,
       showDraft: false,
@@ -242,10 +242,10 @@ export default {
         this.audits = res.data.audits
         if (res.data.count === 0) {
           form = res.data.form
-          this.actionName = 'Save'
+          this.actionName = 'Save Document'
         } else {
           form = res.data.data
-          this.actionName = 'Update'
+          this.actionName = 'Update Document'
         }
 
         this.form = Object.assign({}, form)

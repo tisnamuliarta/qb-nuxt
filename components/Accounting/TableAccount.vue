@@ -170,6 +170,7 @@ export default {
   },
 
   mounted() {
+    this.getDataFromApi()
     this.mappingHeader()
   },
 

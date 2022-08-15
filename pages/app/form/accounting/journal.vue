@@ -9,10 +9,10 @@
     </v-overlay>
 
     <template #content>
-      <LazyProductionFormProduction
+      <LazyAccountingFormJournal
         ref="formDocument"
         :form-type="formType"
-      ></LazyProductionFormProduction>
+      ></LazyAccountingFormJournal>
     </template>
 
     <template #actions>

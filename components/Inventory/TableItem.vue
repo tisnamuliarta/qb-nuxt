@@ -191,13 +191,17 @@ export default {
     checkAvailable(available) {
       const vm = this
       let availableQty = 0
-      available.forEach(element => {
+      available.forEach((element) => {
         // console.log(element)
-        if(element.warehouse_id === vm.whs) {
+        if (typeof vm.whs === 'string') {
+          if (element.whs_name === vm.whs) {
+            availableQty = element.available_qty
+          }
+        } else if (element.warehouse_id === vm.whs) {
           availableQty = element.available_qty
         }
-      });
-      return availableQty;
+      })
+      return availableQty
     },
 
     setEmptyToSelected(whs) {

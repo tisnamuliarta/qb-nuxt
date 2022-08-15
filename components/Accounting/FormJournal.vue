@@ -85,6 +85,7 @@
           <v-text-field
             v-model="form.commission_rate"
             label="Commission"
+            readonly
             persistent-hint
             outlined
             dense
@@ -122,10 +123,10 @@
     <v-col cols="12" class="mt-1">
       <v-card flat>
         <div class="scroll-container-min">
-          <LazyProductionTableDetailProduction
+          <LazyAccountingTableDetailJournal
             ref="childDetails"
             @calcTotal="calcTotal"
-          ></LazyProductionTableDetailProduction>
+          ></LazyAccountingTableDetailJournal>
         </div>
         <v-card-actions>
           <v-btn
@@ -389,10 +390,6 @@ export default {
       }, 500)
 
       this.form = Object.assign({}, form)
-
-      if (this.form.tax_details) {
-        this.form.tax_details = this.reduceArrayTax(this.form.tax_details)
-      }
 
       this.moneyOptionTotal.prefix = this.form.default_currency_symbol
       this.moneyOptionTotalDiscount.prefix = this.form.default_currency_symbol
