@@ -208,6 +208,8 @@ export default ({app}, inject) => {
           return '/app/form/sales/creditmemo'
         case 'SR':
           return '/app/form/sales/return'
+        case 'CS':
+          return '/app/form/sales/cash'
         case 'PQ':
           return '/app/form/purchase/quote'
         case 'PO':
@@ -222,6 +224,8 @@ export default ({app}, inject) => {
           return '/app/form/purchase/creditmemo'
         case 'GN':
           return '/app/form/purchase/return'
+        case 'CP':
+          return '/app/form/purchase/cash'
         case 'JN':
           return '/app/form/accounting/journal-entry'
         case 'GI':

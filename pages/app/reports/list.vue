@@ -1,25 +1,20 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" md="10">
+      <v-col cols="12" md="7">
         <v-card class="mx-auto">
-          <v-sheet class="pa-4 primary lighten-2">
+          <v-sheet class="pa-4 primary">
             <v-text-field
               v-model="search"
               label="Search Company Directory"
               dark
               flat
+              dense
               solo-inverted
               hide-details
               clearable
               clear-icon="mdi-close-circle-outline"
             ></v-text-field>
-            <v-checkbox
-              v-model="caseSensitive"
-              dark
-              hide-details
-              label="Case sensitive search"
-            ></v-checkbox>
           </v-sheet>
           <v-card-text>
             <v-treeview
@@ -28,7 +23,9 @@
               :filter="filter"
               :open.sync="open"
               open-all
+              dense
               activatable
+              hoverable
             >
               <template #label="{ item }">
                 <a @click="openDialog(item)">{{ item.name }}</a>

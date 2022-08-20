@@ -312,6 +312,7 @@ export default {
         this.headers = [
           { text: 'Item Code', value: 'code', width: '120px' },
           { text: 'Item Name', value: 'name', width: '150px' },
+          { text: 'Unit', value: 'unit', width: '150px' },
           {
             text: 'Item Type',
             value: 'resource_type',

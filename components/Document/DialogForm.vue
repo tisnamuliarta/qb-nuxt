@@ -9,7 +9,13 @@
     </v-overlay>
 
     <template #content>
+      <LazyDocumentFormCash
+        v-if="formType === 'CP' || formType === 'CS'"
+        ref="formDocument"
+        :form-type="formType"
+      ></LazyDocumentFormCash>
       <LazyDocumentFormDocument
+        v-else
         ref="formDocument"
         :form-type="formType"
       ></LazyDocumentFormDocument>
@@ -19,6 +25,10 @@
 
     <template #actions>
       <span v-if="actionName === 'Update Document'">
+        <v-btn text small dark @click="printAction('preview')"
+          >Print or Preview</v-btn
+        >
+        <v-divider dark vertical></v-divider>
         <v-btn text small dark>
           More
           <v-menu transition="slide-y-transition" bottom>
@@ -176,7 +186,11 @@ export default {
 
     appendItemAction(type) {
       this.action = []
-      this.action = this.$formatter.appendAction(type)
+      if (type === 'CS' || type === 'CP') {
+        this.action = []
+      } else {
+        this.action = this.$formatter.appendAction(type)
+      }
 
       return [...this.action, ...this.itemAction]
     },

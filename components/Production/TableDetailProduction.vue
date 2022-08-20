@@ -439,25 +439,84 @@ export default {
             const vm = window.detailProduction
             if (changes) {
               let propNew = 0
+              let prevRow
               const cellChanges = []
+              // changes.forEach(([row, prop, oldValue, newValue]) => {
+              //   propNew = prop
+              //   const cellChange = [row, prop, oldValue, newValue, 0]
+              //   if (propNew === 'base_qty' || propNew === 'amount') {
+              //     if (oldValue !== newValue) {
+              //       cellChanges.push(cellChange)
+              //       // vm.calculateTotal()
+              //     }
+              //   }
+              // })
+
+              // if (propNew === 'base_qty' || propNew === 'amount') {
+              //   for (
+              //     let j = 0, length2 = cellChanges.length;
+              //     j < length2;
+              //     j++
+              //   ) {
+              //     vm.calculateTotal()
+              //   }
+              // }
+
               changes.forEach(([row, prop, oldValue, newValue]) => {
                 propNew = prop
-                const cellChange = [row, prop, oldValue, newValue, 0]
                 if (propNew === 'base_qty' || propNew === 'amount') {
+                  const tblQty = vm.$refs.details.hotInstance.getDataAtCell(
+                    row,
+                    7
+                  )
+                  const qty = tblQty || 0
+
+                  const tblUnitPrice =
+                    vm.$refs.details.hotInstance.getDataAtCell(row, 9)
+                  const unitPrice = tblUnitPrice || 0
+                  const total = qty * unitPrice
+
+                  const cellChange = [row, prop, oldValue, newValue, total]
                   if (oldValue !== newValue) {
+                    prevRow = changes[0][0]
                     cellChanges.push(cellChange)
-                    // vm.calculateTotal()
                   }
                 }
               })
 
               if (propNew === 'base_qty' || propNew === 'amount') {
+                const clearChanges = []
+                let count = 0
+                let changeIt = false
                 for (
                   let j = 0, length2 = cellChanges.length;
                   j < length2;
                   j++
                 ) {
-                  vm.calculateTotal()
+                  const row = cellChanges[j][0]
+                  // console.log(row)
+                  if (row !== '10') {
+                    changeIt = true
+                    if (prevRow === row) {
+                      count = count + 1
+                    } else {
+                      prevRow = row
+                      count = 0
+                    }
+                    if (count === 1) {
+                      clearChanges.push(cellChanges[j])
+                    }
+                  }
+                }
+
+                if (changeIt) {
+                  for (
+                    let k = 0, length3 = clearChanges.length;
+                    k < length3;
+                    k++
+                  ) {
+                    vm.calculateTotal()
+                  }
                 }
               }
             }

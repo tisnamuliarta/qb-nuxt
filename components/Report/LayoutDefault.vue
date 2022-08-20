@@ -18,7 +18,7 @@
               </v-chip>
 
               <span class="font-weight-medium text-h6">{{
-                $route.query.name
+                $t($route.query.name)
               }} {{ period }}</span>
             </div>
 
@@ -84,6 +84,9 @@ export default {
   },
 
   activated() {
+    this.$nextTick(() => {
+      this.$nuxt.$loading.start()
+    })
     this.getDataFromApi()
   },
 
@@ -127,6 +130,7 @@ export default {
           },
         })
         .then((res) => {
+          this.$nuxt.$loading.finish()
           this.loading = false
           this.allData = res.data.data
           this.$emit('getData', {
@@ -141,6 +145,7 @@ export default {
         })
         .catch((err) => {
           this.loading = false
+          this.$nuxt.$loading.finish()
           this.$swal({
             type: 'error',
             title: 'Error',

@@ -79,6 +79,11 @@ export default {
           type: 'SR',
           route: '/app/form/sales/return',
         },
+        {
+          text: this.$t('Cash Sale'),
+          type: 'CS',
+          route: '/app/form/sales/cash',
+        },
       ],
 
       itemPurchase: [
@@ -116,6 +121,11 @@ export default {
           text: this.$t('Goods Return'),
           type: 'GR',
           route: '/app/form/purchase/return',
+        },
+        {
+          text: this.$t('Cash Purchase'),
+          type: 'CP',
+          route: '/app/form/purchase/cash',
         },
       ],
 

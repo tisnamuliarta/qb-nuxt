@@ -24,22 +24,27 @@ export default {
         {
           title: this.$t('Sales Order'),
           route: '/app/sales/list/salesorder',
+          icon: 'mdi-sale'
         },
         {
           title: this.$t('Sales Delivery'),
           route: '/app/sales/list/delivery',
+          icon: 'mdi-truck-fast'
         },
         {
           title: this.$t('A/R Invoice'),
           route: '/app/sales/list/invoice',
-        },
-        {
-          title: this.$t('Sales Return'),
-          route: '/app/sales/list/return',
+          icon: 'mdi-receipt'
         },
         {
           title: this.$t('A/R Credit Memo'),
           route: '/app/sales/list/creditmemo',
+          icon: 'mdi-keyboard-return'
+        },
+        {
+          title: this.$t('Sales Return'),
+          route: '/app/sales/list/return',
+          icon: 'mdi-truck-remove'
         },
       ],
       show: true,

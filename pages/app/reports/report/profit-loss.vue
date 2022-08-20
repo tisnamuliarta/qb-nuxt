@@ -10,7 +10,7 @@
         <template #default>
           <tbody>
             <tr>
-              <th>Operating Revenues</th>
+              <th>{{ $t('Operating Revenues') }}</th>
               <th></th>
             </tr>
             <tr v-if="operatingRevenue">
@@ -19,7 +19,7 @@
               </td>
             </tr>
             <tr>
-              <th>Operating Expenses</th>
+              <th>{{ $t('Operating Expenses') }}</th>
               <th></th>
             </tr>
             <tr v-if="operatingExpense">
@@ -28,7 +28,7 @@
               </td>
             </tr>
             <tr style="border-top: 2px solid #222 !important">
-              <th>Gross Profit</th>
+              <th>{{ $t('Gross Profit') }}</th>
               <th class="text-right" style="border-top: 2px solid #222 !important;">
                 <span class="mr-4">
                   {{
@@ -40,7 +40,7 @@
               </th>
             </tr>
             <tr>
-              <th>Non Operating Revenues</th>
+              <th>{{ $t('Non Operating Revenues') }}</th>
               <th></th>
             </tr>
             <tr v-if="nonOperatingRevenue">
@@ -49,7 +49,7 @@
               </td>
             </tr>
             <tr>
-              <th>Total Revenue</th>
+              <th>{{ $t('Total Revenue') }}</th>
 
               <th class="text-right" style="border-top: 2px solid #222 !important;">
                 <span class="mr-4">
@@ -63,7 +63,7 @@
             </tr>
 
             <tr>
-              <th>Non Operating Expenses</th>
+              <th>{{ $t('Non Operating Expenses') }}</th>
               <th></th>
             </tr>
 
@@ -86,7 +86,7 @@
             </tr>
 
             <tr>
-              <th>Total Non Operating Expenses</th>
+              <th>{{ $t('Total Non Operating Expenses') }}</th>
               <th class="text-right" style="border-top: 2px solid #222 !important;">
                 <span class="mr-4">
                   {{
@@ -98,7 +98,7 @@
               </th>
             </tr>
             <tr>
-              <th>Net Profit</th>
+              <th>{{ $t('Net Profit')}}</th>
               <th class="text-right" style="border-top: 2px solid #222 !important;">
                 <span class="mr-4">
                   {{

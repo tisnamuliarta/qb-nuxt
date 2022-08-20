@@ -12,6 +12,7 @@
           <AccountingTableAccount
             ref="tableItem"
             :view-data="viewData"
+            :form-type="formType"
             :show-add-btn="showAddBtn"
           ></AccountingTableAccount>
         </v-container>
@@ -39,6 +40,10 @@ export default {
     showAddBtn: {
       type: Boolean,
       default: true,
+    },
+    formType: {
+      type: String,
+      default: '',
     },
   },
 

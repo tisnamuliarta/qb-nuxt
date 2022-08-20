@@ -176,11 +176,12 @@
               @calcTotal="calcTotal"
             ></LazyDocumentTableDetail> -->
             <div class="scroll-container-min">
-              <LazyDocumentTableDetail
+              <LazyDocumentTableDetailCash
                 ref="childDetails"
                 :form="form"
+                :form-type="formType"
                 @calcTotal="calcTotal"
-              ></LazyDocumentTableDetail>
+              ></LazyDocumentTableDetailCash>
             </div>
           </v-tab-item>
 
@@ -845,7 +846,9 @@ export default {
         this.$auth.$storage.setState('tax_row', resTax.data.data)
         this.$auth.$storage.setState('salesPerson', resEmployee.data.data)
         this.itemSalesPersons = resEmployee.data.data
-        this.$refs.uploadField.getFiles()
+        if (this.$refs.uploadField) {
+          this.$refs.uploadField.getFiles()
+        }
       } catch (err) {
         this.$swal({
           type: 'error',

@@ -2,10 +2,12 @@
   <div>
     <DocumentTableDocument
       ref="tableDocument"
-      type-document="SR"
-      form-url="/app/form/sales/return"
+      type-document="BL"
+      form-url="/app/form/sales/cash"
+      table-url="/api/transactions"
       :header-table="[
         { text: $t('Transaction No'), value: 'transaction_no', cellClass: 'disable-wrap' },
+        { text: 'No Contract', value: 'reference_no', cellClass: 'disable-wrap' },
         { text: 'Customer', value: 'contact.name', cellClass: 'disable-wrap' },
         {
           text: $t('Transaction Date'),
@@ -25,14 +27,6 @@
           text: 'Status',
           value: 'status',
           align: 'left',
-          cellClass: 'disable-wrap',
-          sortable: false,
-          filterable: false,
-        },
-        {
-          text: 'Balance Due',
-          value: 'balance_due',
-          align: 'right',
           cellClass: 'disable-wrap',
           sortable: false,
           filterable: false,
@@ -64,7 +58,7 @@ export default {
 
   head() {
     return {
-      title: this.$t('Sales Return'),
+      title: this.$t('Cash Sale'),
     }
   },
 

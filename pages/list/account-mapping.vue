@@ -122,6 +122,12 @@ export default {
     }
   },
 
+  head() {
+    return {
+      title: 'Account Mapping',
+    }
+  },
+
   activated() {
     // this.getAccounts()
     this.getAccountMapping()

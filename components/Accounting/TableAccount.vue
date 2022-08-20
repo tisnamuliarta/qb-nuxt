@@ -120,6 +120,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    formType: {
+      type: String,
+      default: '',
+    },
   },
 
   data() {
@@ -302,12 +306,22 @@ export default {
       this.loading = true
       const vm = this
 
+      let accountType = ''
+
+      if (this.formType === 'CS') {
+        accountType = 'OPERATING_REVENUE'
+      } else if (this.formType === 'CP') {
+        accountType =
+          'OPERATING_EXPENSE, DIRECT_EXPENSE, OVERHEAD_EXPENSE, OTHER_EXPENSE, NON_CURRENT_ASSET, CURRENT_ASSET, INVENTORY'
+      }
+
       const search = {
         searchItem: vm.searchItem,
         documentStatus: vm.documentStatus,
         searchStatus: vm.searchStatus,
         search: vm.search,
         show_zero_balance: vm.show_zero_balance,
+        type: accountType
       }
       this.$axios
         .get(this.url, {

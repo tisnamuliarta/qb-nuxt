@@ -24,22 +24,27 @@ export default {
         {
           title: this.$t('Purchase Order'),
           route: '/app/purchase/list/purchaseorder',
+          icon: 'mdi-store-edit'
         },
         {
           title: this.$t('Goods Receipt PO'),
           route: '/app/purchase/list/receipt',
+          icon: 'mdi-truck-fast'
         },
         {
           title: this.$t('A/P Invoice'),
           route: '/app/purchase/list/invoice',
-        },
-        {
-          title: this.$t('Goods Return'),
-          route: '/app/purchase/list/return',
+          icon: 'mdi-receipt'
         },
         {
           title: this.$t('A/P Credit Memo'),
           route: '/app/purchase/list/creditmemo',
+          icon: 'mdi-keyboard-return'
+        },
+        {
+          title: this.$t('Goods Return'),
+          route: '/app/purchase/list/return',
+          icon: 'mdi-truck-remove'
         },
       ],
       show: true,

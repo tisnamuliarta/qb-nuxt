@@ -71,7 +71,7 @@ export default {
 
   activated() {
     this.$nuxt.$emit('extensionActive', {
-      active: 3,
+      active: 4,
     })
   },
 

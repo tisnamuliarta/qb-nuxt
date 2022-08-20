@@ -27,6 +27,9 @@
           align-with-title
           color="black"
           slider-color="green"
+          next-icon="mdi-arrow-right-bold-box-outline"
+          prev-icon="mdi-arrow-left-bold-box-outline"
+          show-arrows
           slider-size="4"
         >
           <v-tab
@@ -34,8 +37,9 @@
             :key="key"
             @click="$router.push(item.route)"
           >
-            {{ item.title }}</v-tab
-          >
+            <v-icon v-if="item.icon" class="mr-2">{{ item.icon }}</v-icon>
+            {{ item.title }}
+          </v-tab>
         </v-tabs>
 
         <v-spacer />

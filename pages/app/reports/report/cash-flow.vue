@@ -10,104 +10,117 @@
         <template #default>
           <tbody>
             <tr>
-              <th>Operations Cash Flow</th>
+              <th>{{ $t('Operations Cash Flow') }}</th>
               <th></th>
             </tr>
 
             <tr>
-              <th>Net Profit</th>
-              <th class="text-right">
-                <span class="mr-4">
-                  {{
-                    $auth.user.entity.currency.currency_symbol +
-                    ' ' +
-                    $formatter.formatPrice(netProfit)
-                  }}
-                </span>
-              </th>
+              <td colspan="2" style="padding-right: 0 !important">
+                <v-simple-table dense>
+                  <template #default>
+                    <tbody>
+                      <tr>
+                        <td>{{ $t('Net Profit') }}</td>
+                        <td class="text-right">
+                          <span class="mr-4">
+                            {{
+                              $auth.user.entity.currency.currency_symbol +
+                              ' ' +
+                              $formatter.formatPrice(netProfit)
+                            }}
+                          </span>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td>{{ $t('Provisions') }}</td>
+                        <td class="text-right">
+                          <span class="mr-4">
+                            {{
+                              $auth.user.entity.currency.currency_symbol +
+                              ' ' +
+                              $formatter.formatPrice(provision)
+                            }}
+                          </span>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td>{{ $t('Receivables') }}</td>
+                        <td class="text-right">
+                          <span class="mr-4">
+                            {{
+                              $auth.user.entity.currency.currency_symbol +
+                              ' ' +
+                              $formatter.formatPrice(receiveable)
+                            }}
+                          </span>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td>{{ $t('Payables') }}</td>
+                        <td class="text-right">
+                          <span class="mr-4">
+                            {{
+                              $auth.user.entity.currency.currency_symbol +
+                              ' ' +
+                              $formatter.formatPrice(payable)
+                            }}
+                          </span>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td>{{ $t('Taxation') }}</td>
+                        <td class="text-right">
+                          <span class="mr-4">
+                            {{
+                              $auth.user.entity.currency.currency_symbol +
+                              ' ' +
+                              $formatter.formatPrice(taxation)
+                            }}
+                          </span>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td>{{ $t('Current Assets') }}</td>
+                        <td class="text-right">
+                          <span class="mr-4">
+                            {{
+                              $auth.user.entity.currency.currency_symbol +
+                              ' ' +
+                              $formatter.formatPrice(currentAsset)
+                            }}
+                          </span>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td>{{ $t('Current Liabilities') }}</td>
+                        <td class="text-right">
+                          <span class="mr-4">
+                            {{
+                              $auth.user.entity.currency.currency_symbol +
+                              ' ' +
+                              $formatter.formatPrice(currentLiability)
+                            }}
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+              </td>
             </tr>
 
             <tr>
-              <th>Provisions</th>
-              <th class="text-right">
-                <span class="mr-4">
-                  {{
-                    $auth.user.entity.currency.currency_symbol +
-                    ' ' +
-                    $formatter.formatPrice(provision)
-                  }}
-                </span>
-              </th>
-            </tr>
-
-            <tr>
-              <th>Receivables</th>
-              <th class="text-right">
-                <span class="mr-4">
-                  {{
-                    $auth.user.entity.currency.currency_symbol +
-                    ' ' +
-                    $formatter.formatPrice(receiveable)
-                  }}
-                </span>
-              </th>
-            </tr>
-
-            <tr>
-              <th>Payables</th>
-              <th class="text-right">
-                <span class="mr-4">
-                  {{
-                    $auth.user.entity.currency.currency_symbol +
-                    ' ' +
-                    $formatter.formatPrice(payable)
-                  }}
-                </span>
-              </th>
-            </tr>
-
-            <tr>
-              <th>Taxation</th>
-              <th class="text-right">
-                <span class="mr-4">
-                  {{
-                    $auth.user.entity.currency.currency_symbol +
-                    ' ' +
-                    $formatter.formatPrice(taxation)
-                  }}
-                </span>
-              </th>
-            </tr>
-
-            <tr>
-              <th>Current Assets</th>
-              <th class="text-right">
-                <span class="mr-4">
-                  {{
-                    $auth.user.entity.currency.currency_symbol +
-                    ' ' +
-                    $formatter.formatPrice(currentAsset)
-                  }}
-                </span>
-              </th>
-            </tr>
-
-            <tr>
-              <th>Current Liabilities</th>
-              <th class="text-right">
-                <span class="mr-4">
-                  {{
-                    $auth.user.entity.currency.currency_symbol +
-                    ' ' +
-                    $formatter.formatPrice(currentLiability)
-                  }}
-                </span>
-              </th>
-            </tr>
-
-            <tr>
-              <th>Total Operations Cash Flow</th>
-              <th class="text-right" style="border-top: 2px solid #222 !important;">
+              <th>{{ $t('Total Operations Cash Flow') }}</th>
+              <th
+                class="text-right"
+                style="border-top: 2px solid #222 !important"
+              >
                 <span class="mr-4">
                   {{
                     $auth.user.entity.currency.currency_symbol +
@@ -119,26 +132,39 @@
             </tr>
 
             <tr>
-              <th>Investment Cash Flow</th>
+              <th>{{ $t('Investment Cash Flow') }}</th>
               <th></th>
             </tr>
 
             <tr>
-              <th>Non Current Assets</th>
-              <th class="text-right">
-                <span class="mr-4">
-                  {{
-                    $auth.user.entity.currency.currency_symbol +
-                    ' ' +
-                    $formatter.formatPrice(nonCurrentAsset)
-                  }}
-                </span>
-              </th>
+              <td colspan="2" style="padding-right: 0 !important">
+                <v-simple-table dense>
+                  <template #default>
+                    <tbody>
+                      <tr>
+                        <td>Non Current Assets</td>
+                        <td class="text-right">
+                          <span class="mr-4">
+                            {{
+                              $auth.user.entity.currency.currency_symbol +
+                              ' ' +
+                              $formatter.formatPrice(nonCurrentAsset)
+                            }}
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+              </td>
             </tr>
 
             <tr>
-              <th>Total Investment Cash Flow</th>
-              <th class="text-right" style="border-top: 2px solid #222 !important;">
+              <th>{{ $t('Total Investment Cash Flow') }}</th>
+              <th
+                class="text-right"
+                style="border-top: 2px solid #222 !important"
+              >
                 <span class="mr-4">
                   {{
                     $auth.user.entity.currency.currency_symbol +
@@ -150,39 +176,52 @@
             </tr>
 
             <tr>
-              <th>Financing Cash Flow</th>
+              <th>{{ $t('Financing Cash Flow') }}</th>
               <th></th>
             </tr>
 
             <tr>
-              <th>Non Current Liabilities</th>
-              <th class="text-right">
-                <span class="mr-4">
-                  {{
-                    $auth.user.entity.currency.currency_symbol +
-                    ' ' +
-                    $formatter.formatPrice(nonCurrentLiability)
-                  }}
-                </span>
-              </th>
+              <td colspan="2" style="padding-right: 0 !important">
+                <v-simple-table dense>
+                  <template #default>
+                    <tbody>
+                      <tr>
+                        <td>{{ $t('Non Current Liabilities') }}</td>
+                        <td class="text-right">
+                          <span class="mr-4">
+                            {{
+                              $auth.user.entity.currency.currency_symbol +
+                              ' ' +
+                              $formatter.formatPrice(nonCurrentLiability)
+                            }}
+                          </span>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td>{{ $t('Equity') }}</td>
+                        <td class="text-right">
+                          <span class="mr-4">
+                            {{
+                              $auth.user.entity.currency.currency_symbol +
+                              ' ' +
+                              $formatter.formatPrice(equity)
+                            }}
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+              </td>
             </tr>
 
             <tr>
-              <th>Equity</th>
-              <th class="text-right">
-                <span class="mr-4">
-                  {{
-                    $auth.user.entity.currency.currency_symbol +
-                    ' ' +
-                    $formatter.formatPrice(equity)
-                  }}
-                </span>
-              </th>
-            </tr>
-
-            <tr>
-              <th>Total Financing Cash Flow</th>
-              <th class="text-right" style="border-top: 2px solid #222 !important;">
+              <th>{{ $t('Total Financing Cash Flow') }}</th>
+              <th
+                class="text-right"
+                style="border-top: 2px solid #222 !important"
+              >
                 <span class="mr-4">
                   {{
                     $auth.user.entity.currency.currency_symbol +
@@ -194,39 +233,52 @@
             </tr>
 
             <tr>
-              <th>Net Cash Flow</th>
+              <th>{{ $t('Net Cash Flow') }}</th>
               <th></th>
             </tr>
 
             <tr>
-              <th>Beginning Cash balance</th>
-              <th class="text-right">
-                <span class="mr-4">
-                  {{
-                    $auth.user.entity.currency.currency_symbol +
-                    ' ' +
-                    $formatter.formatPrice(beginningCash)
-                  }}
-                </span>
-              </th>
+              <td colspan="2" style="padding-right: 0 !important">
+                <v-simple-table dense>
+                  <template #default>
+                    <tbody>
+                      <tr>
+                        <td>{{ $t('Beginning Cash balance') }}</td>
+                        <td class="text-right">
+                          <span class="mr-4">
+                            {{
+                              $auth.user.entity.currency.currency_symbol +
+                              ' ' +
+                              $formatter.formatPrice(beginningCash)
+                            }}
+                          </span>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td>{{ $t('Net Cash Flow') }}</td>
+                        <td class="text-right">
+                          <span class="mr-4">
+                            {{
+                              $auth.user.entity.currency.currency_symbol +
+                              ' ' +
+                              $formatter.formatPrice(netCashflow)
+                            }}
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+              </td>
             </tr>
 
             <tr>
-              <th> Net Cash Flow</th>
-              <th class="text-right">
-                <span class="mr-4">
-                  {{
-                    $auth.user.entity.currency.currency_symbol +
-                    ' ' +
-                    $formatter.formatPrice(netCashflow)
-                  }}
-                </span>
-              </th>
-            </tr>
-
-            <tr>
-              <th>Ending Cash balance</th>
-              <th class="text-right" style="border-top: 2px solid #222 !important;">
+              <th>{{ $t('Ending Cash balance') }}</th>
+              <th
+                class="text-right"
+                style="border-top: 2px solid #222 !important"
+              >
                 <span class="mr-4">
                   {{
                     $auth.user.entity.currency.currency_symbol +
@@ -238,8 +290,11 @@
             </tr>
 
             <tr>
-              <th>Cashbook balance</th>
-              <th class="text-right" style="border-top: 2px solid #222 !important;">
+              <th>{{ $t('Cashbook balance') }}</th>
+              <th
+                class="text-right"
+                style="border-top: 2px solid #222 !important"
+              >
                 <span class="mr-4">
                   {{
                     $auth.user.entity.currency.currency_symbol +

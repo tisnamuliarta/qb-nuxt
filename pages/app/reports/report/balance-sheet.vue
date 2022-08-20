@@ -10,7 +10,7 @@
         <template #default>
           <tbody>
             <tr>
-              <th>Assets</th>
+              <th>{{ $t('Assets') }}</th>
               <th></th>
             </tr>
             <tr v-if="itemNonCurrentAsset">
@@ -44,7 +44,7 @@
               </td>
             </tr>
             <tr style="border-top: 2px solid #222 !important">
-              <th>Total Assets</th>
+              <th>{{ $t('Total Assets') }}</th>
               <th
                 class="text-right"
                 style="border-top: 2px solid #222 !important"
@@ -60,7 +60,7 @@
             </tr>
 
             <tr>
-              <th>Liabilities</th>
+              <th>{{ $t('Liabilities') }}</th>
               <th></th>
             </tr>
 
@@ -97,7 +97,7 @@
             </tr>
 
             <tr>
-              <th>Total Liabilities</th>
+              <th>{{ $t('Total Liabilities') }}</th>
 
               <th
                 class="text-right"
@@ -114,7 +114,7 @@
             </tr>
 
             <tr>
-              <th>Reconciliation</th>
+              <th>{{ $t('Reconciliation') }}</th>
               <th></th>
             </tr>
 
@@ -127,7 +127,7 @@
             </tr>
 
             <tr>
-              <th>Total Reconciliation</th>
+              <th>{{ $t('Total Reconciliation') }}</th>
               <th
                 class="text-right"
                 style="border-top: 2px solid #222 !important"
@@ -143,7 +143,7 @@
             </tr>
 
             <tr>
-              <th>Net Assets</th>
+              <th>{{ $t('Net Assets') }}</th>
               <th
                 class="text-right"
                 style="border-top: 2px solid #222 !important"
@@ -159,7 +159,7 @@
             </tr>
 
             <tr>
-              <th>Equity</th>
+              <th>{{ $t('Equity') }}</th>
               <th></th>
             </tr>
 
@@ -172,7 +172,7 @@
             </tr>
 
             <tr>
-              <th>Total Equity</th>
+              <th>{{ $t('Total Equity') }}</th>
               <th
                 class="text-right"
                 style="border-top: 2px solid #222 !important"
