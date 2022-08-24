@@ -32,15 +32,15 @@
             show-batch-action
             show-filter
             show-new-data
-            new-data-text="Run Payroll"
+            :new-data-text="$t('New Loans')"
             @emitData="emitData"
             @newData="newData"
             @getDataFromApi="getDataFromApi"
           />
         </template>
-        <template #[`item.transaction_no`]="{ item }">
+        <template #[`item.first_name`]="{ item }">
           <a @click="editItem(item)">
-            <strong v-text="item.transaction_no"></strong>
+            <strong v-text="item.first_name + ' ' + item.last_name"></strong>
           </a>
         </template>
 
@@ -50,19 +50,20 @@
           </v-chip>
         </template>
 
-        <template #[`item.main_account_amount`]="{ item }">
-          {{ $formatter.formatPrice(item.main_account_amount) }}
+        <template #[`item.amount`]="{ item }">
+          {{
+            $auth.user.entity.currency.currency_symbol +
+            ' ' +
+            $formatter.formatPrice(item.amount)
+          }}
         </template>
 
         <template #[`item.payment_method`]="{ item }">
-          {{
-            (item.payment_method === 1 ) ? 'Cash' : 'Direct Deposit'
-          }}
+          {{ item.payment_method === 1 ? 'Cash' : 'Direct Deposit' }}
         </template>
 
         <template #[`item.actions`]="{ item }">
           <v-btn
-            v-if="item.status === 'draft'"
             color="secondary"
             class="font-weight-bold text-right pr-0"
             text
@@ -71,38 +72,36 @@
           >
             Edit
           </v-btn>
-          <v-btn
-            v-else-if="item.status === 'closed'"
-            color="secondary"
-            class="font-weight-bold text-right pr-0"
-            text
-            small
-            @click="printDocument(item)"
-          >
-            Print
-          </v-btn>
-          <v-btn
-            v-else
-            color="secondary"
-            class="font-weight-bold text-right pr-0"
-            text
-            small
-            @click="actions('edit', item)"
-          >
-            View
-          </v-btn>
+          <v-menu transition="slide-y-transition" bottom>
+            <template #activator="{ on, attrs }">
+              <v-btn color="black" dark icon v-bind="attrs" v-on="on">
+                <v-icon>mdi-menu-down</v-icon>
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item
+                v-for="(value, i) in items"
+                :key="i"
+                @click="actions(value.action, item)"
+              >
+                <v-list-item-content>
+                  <v-list-item-title>{{ value.text }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-menu>
         </template>
       </v-data-table>
     </v-col>
 
-    <LazyPayrollFormEmployee
+    <LazyPayrollFormLoan
       ref="formData"
       :form-data="form"
       :form-title="formTitle"
       :button-title="buttonTitle"
       :form-url="formUrl"
       @getDataFromApi="getDataFromApi"
-    ></LazyPayrollFormEmployee>
+    ></LazyPayrollFormLoan>
   </v-row>
 </template>
 
@@ -125,7 +124,7 @@ export default {
     },
     btnTitle: {
       type: String,
-      default: 'New Transaction',
+      default: 'New Loan',
     },
     items: {
       type: Array,
@@ -172,8 +171,8 @@ export default {
   computed: {
     formTitle() {
       return this.editedIndex === -1
-        ? this.$t('New Employee')
-        : this.$t('Edit Employee')
+        ? this.$t('New Loans')
+        : this.$t('Edit Loans')
     },
     buttonTitle() {
       return this.editedIndex === -1 ? 'Save' : 'Update'
@@ -196,12 +195,8 @@ export default {
 
   methods: {
     newData() {
-      this.$router.push({
-        path: this.formUrl,
-        query: {
-          document: this.form.id,
-        },
-      })
+      this.editedIndex = -1
+      this.$refs.formData.newData(this.form)
     },
 
     statusColor(item) {
@@ -221,12 +216,9 @@ export default {
     },
 
     editItem(item) {
-      this.$router.push({
-        path: this.formUrl,
-        query: {
-          document: item.id,
-        },
-      })
+      this.editedIndex = 1
+      this.editedIndex = this.allData.indexOf(item)
+      this.$refs.formData.editItem(item, this.url)
     },
 
     actions(action, item) {
@@ -243,36 +235,6 @@ export default {
         .then((res) => {
           this.getDataFromApi()
           this.$nuxt.$emit('getMenu', 'nice payload')
-        })
-    },
-
-    printDocument(item) {
-      this.$nuxt.$loading.start()
-      this.$axios
-        .get(`/api/payroll/print/` + item.id, {
-          params: {
-            item
-          },
-          responseType: 'arraybuffer',
-        })
-        .then((response) => {
-          this.$nuxt.$loading.finish()
-          const url = window.URL.createObjectURL(new Blob([response.data]))
-          const link = document.createElement('a')
-
-          link.href = url
-          link.setAttribute('download', item.transaction_no + '.pdf') // set custom file name
-          document.body.appendChild(link)
-
-          link.click() // force download file without open new tab
-        })
-        .catch((err) => {
-          this.$nuxt.$loading.finish()
-          this.$swal({
-            type: 'error',
-            title: 'Error',
-            text: err.response.data.message,
-          })
         })
     },
 
@@ -297,7 +259,7 @@ export default {
         type: this.typeDocument,
       }
       this.$axios
-        .get(`/api/payroll/payroll`, {
+        .get(`/api/payroll/loan`, {
           params: {
             ...vm.options,
             ...status,
@@ -310,10 +272,7 @@ export default {
           this.itemSearch = res.data.filter
           this.form = Object.assign({}, res.data.form)
           this.defaultItem = Object.assign({}, res.data.form)
-          this.$refs.formData.setItemGender(res.data.itemGender)
-          this.$refs.formData.setPaymentMethod(res.data.paymentMethod)
-          this.$refs.formData.setPayFrequency(res.data.payFrequency)
-          this.$refs.formData.setPayType(res.data.payType)
+          this.$refs.formData.setItemEmployee(res.data.employee)
         })
         .catch((err) => {
           this.loading = false

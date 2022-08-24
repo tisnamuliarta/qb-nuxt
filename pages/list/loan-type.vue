@@ -19,9 +19,7 @@
         >
           <template #top>
             <div class="pl-4 pt-2">
-              <span class="font-weight-medium text-h6">{{
-                $t('Pay Types')
-              }}</span>
+              <span class="font-weight-medium text-h6">{{ $t('Loan Type') }}</span>
             </div>
 
             <LazyMainToolbar
@@ -33,7 +31,7 @@
               :filter="false"
               title="Master Permissions"
               show-new-data
-              new-data-text="New Pay Type"
+              new-data-text="New Loan Type"
               show-back-link
               show-batch-action
               @emitData="emitData"
@@ -76,14 +74,13 @@
             </v-col>
 
             <v-col cols="12" class="pr-1 pl-1 pb-1 pt-1 mt-1">
-              <v-autocomplete
-                v-model="form.category"
-                :items="itemCategory"
-                label="Category"
+              <v-text-field
+                v-model="form.narration"
+                label="Notes"
                 outlined
                 dense
                 hide-details="auto"
-              ></v-autocomplete>
+              ></v-text-field>
             </v-col>
           </v-row>
         </v-container>
@@ -115,7 +112,7 @@ export default {
       dialog: false,
       loading: true,
       insert: true,
-      url: '/api/payroll/pay-types',
+      url: '/api/payroll/loan-type',
 
       valueWhenIsEmpty: '0',
       moneyOptions: {
@@ -131,14 +128,12 @@ export default {
       search: '',
 
       itemAccounts: [],
-      itemCategory: ['Jenis pembayaran umum', 'Jenis Pembayaran Tambahan'],
       allData: [],
       form: {},
       defaultItem: {},
       options: {},
       headers: [
         { text: 'Name', value: 'name' },
-        { text: 'category', value: 'category' },
         { text: 'Action', value: 'ACTIONS', align: 'right' },
       ],
     }
@@ -146,7 +141,7 @@ export default {
 
   head() {
     return {
-      title: 'Pay Type',
+      title: 'Loan Type',
     }
   },
 
@@ -189,7 +184,7 @@ export default {
         .get(this.url, {
           params: {
             ...vm.options,
-            ...status,
+            ...status
           },
         })
         .then((res) => {
@@ -247,13 +242,7 @@ export default {
       if (status === 'insert') {
         this.store('post', this.url, this.form, 'insert', type)
       } else if (status === 'update') {
-        this.store(
-          'put',
-          this.url + '/' + this.form.id,
-          this.form,
-          'update',
-          type
-        )
+        this.store('put', this.url + '/' + this.form.id, this.form, 'update', type)
       }
     },
 

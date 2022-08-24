@@ -45,7 +45,7 @@
         <v-col cols="12" md="2" sm="12">
           <v-autocomplete
             v-model="form.status"
-            :items="['draft','closed','cancel']"
+            :items="['draft', 'closed', 'cancel']"
             label="Status"
             outlined
             dense
@@ -82,6 +82,20 @@
         </div>
       </v-card>
     </v-col>
+
+    <v-col cols="12" md="4" lg="4">
+      <v-col cols="12" md="12">
+        <v-textarea
+          v-model="form.narration"
+          rows="2"
+          label="Journal Remark"
+          outlined
+          dense
+          hide-details="auto"
+        ></v-textarea>
+      </v-col>
+    </v-col>
+
   </v-row>
 </template>
 
@@ -170,10 +184,10 @@ export default {
 
   methods: {
     async changePeriodDate() {
-       const res = await this.$axios.get(`/api/payroll/employee-commission`, {
+      const res = await this.$axios.get(`/api/payroll/employee-commission`, {
         params: {
-          'date_period': this.form.pay_period
-        }
+          date_period: this.form.pay_period,
+        },
       })
 
       this.$refs.childDetails.setCommission(res.data.data)
@@ -254,10 +268,11 @@ export default {
       this.$nuxt.$loading.start()
       try {
         const resItemPayPeriod = await this.$axios.get(
-          `/api/payroll/pay-period`, {
+          `/api/payroll/pay-period`,
+          {
             params: {
-              pay_schedule_id: 1
-            }
+              pay_schedule_id: 1,
+            },
           }
         )
         const resAccount = await this.$axios.get(`/api/financial/accounts`, {

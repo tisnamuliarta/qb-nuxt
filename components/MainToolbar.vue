@@ -66,7 +66,7 @@
         </v-btn>
       </template>
 
-      <v-card>
+      <v-card rounded elevation="10">
         <v-card-text>
           <v-row dense>
             <v-col cols="12" md="6">
@@ -80,12 +80,13 @@
             <v-col cols="12" md="6"> </v-col>
 
             <v-col cols="12" md="6">
-              <v-text-field
+              <v-autocomplete
                 label="Status"
+                :items="['All', 'Open', 'Draft', 'Cancel', 'Closed', 'Pending']"
                 outlined
                 dense
                 hide-details="auto"
-              ></v-text-field>
+              ></v-autocomplete>
             </v-col>
 
             <v-col cols="12" md="6">

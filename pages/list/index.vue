@@ -172,6 +172,16 @@ export default {
               route: '/list/pay-schedule',
               desc: this.$t('Displays the list of pay schedule.'),
             },
+            {
+              name: this.$t('Deduction'),
+              route: '/list/deduction',
+              desc: this.$t('Displays the list of deduction.'),
+            },
+            {
+              name: this.$t('Loan Type'),
+              route: '/list/loan-type',
+              desc: this.$t('Displays the list of loan type.'),
+            },
           ],
         },
 
