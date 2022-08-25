@@ -134,6 +134,8 @@ export default {
       options: {},
       itemText: '',
       itemAction: '',
+      dateFrom: null,
+      dateTo: null,
       headers: [
         { text: 'Name', value: 'employee_name', cellClass: 'disable-wrap' },
         {
@@ -235,6 +237,8 @@ export default {
       this.searchItem = data.searchItem
       this.search = data.search
       this.filters = data.filters
+      this.dateFrom = data.dateFrom
+      this.dateTo = data.dateTo
       this.getDataFromApi()
     },
 
@@ -247,6 +251,8 @@ export default {
         searchStatus: vm.searchStatus,
         search: vm.search,
         type: this.typeDocument,
+        dateFrom: this.dateFrom,
+        dateTo: this.dateTo,
       }
       this.$axios
         .get(`/api/payroll/list-commission`, {

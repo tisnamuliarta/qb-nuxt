@@ -1,4 +1,12 @@
 {
+  "Reference": "Reference",
+  "Interest Type": "Interest Type",
+  "Interest Rate": "Interest Rate",
+  "Installment Amount": "Installment Amount",
+  "Installment Start Date": "Installment Start Date",
+  "Admin Charge": "Admin Charge",
+  "Outstanding Loan": "Outstanding Loan",
+  "Loan Request Date": "Loan Request Date",
   "Loans": "Loans",
   "Loan Type": "Loan Type",
   "Displays the list of deduction.": "Displays the list of deduction.",

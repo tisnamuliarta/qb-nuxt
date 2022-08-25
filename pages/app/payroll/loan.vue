@@ -3,14 +3,17 @@
     <PayrollTableLoan
       ref="tableDocument"
       type-document="EMPLOYEE"
-      :table-title="$t('Pinjaman')"
+      :table-title="$t('Loans')"
       form-url="/app/purchasereturn/form"
       :header-table="[
-        { text: 'Name', value: 'employee.full_name', cellClass: 'disable-wrap' },
-        { text: 'Rate', value: 'transaction_date', cellClass: 'disable-wrap' },
-        { text: 'Amount', value: 'amount', cellClass: 'disable-wrap' },
+        { text: $t('Employees'), value: 'employee.full_name', cellClass: 'disable-wrap' },
+        { text: $t('Loan Request Date'), value: 'transaction_date', cellClass: 'disable-wrap' },
+        { text: $t('Amount'), value: 'amount', cellClass: 'disable-wrap' },
+        { text: $t('Installment Amount'), value: 'installment_amount', cellClass: 'disable-wrap' },
+        { text: $t('Installment Start Date'), value: 'installment_start_date', cellClass: 'disable-wrap' },
+        { text: $t('Loan Type'), value: 'loan_type', cellClass: 'disable-wrap' },
         {
-          text: 'Notes',
+          text: $t('Notes'),
           value: 'narration',
           cellClass: 'disable-wrap',
           sortable: false,

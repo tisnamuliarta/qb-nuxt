@@ -19,7 +19,9 @@
         >
           <template #top>
             <div class="pl-4 pt-2">
-              <span class="font-weight-medium text-h6">{{ $t('Deduction') }}</span>
+              <span class="font-weight-medium text-h6">{{
+                $t('Deduction')
+              }}</span>
             </div>
 
             <LazyMainToolbar
@@ -71,6 +73,19 @@
                 dense
                 hide-details="auto"
               ></v-text-field>
+            </v-col>
+
+            <v-col cols="12" class="pr-1 pl-1 pb-1 pt-1 mt-1">
+              <v-autocomplete
+                v-model="form.account_id"
+                :items="itemAccounts"
+                item-text="name"
+                item-value="id"
+                label="Account"
+                outlined
+                dense
+                hide-details="auto"
+              ></v-autocomplete>
             </v-col>
 
             <v-col cols="12" class="pr-1 pl-1 pb-1 pt-1 mt-1">
@@ -134,6 +149,7 @@ export default {
       options: {},
       headers: [
         { text: 'Name', value: 'name' },
+        { text: 'Account', value: 'account.name' },
         { text: 'Action', value: 'ACTIONS', align: 'right' },
       ],
     }
@@ -141,7 +157,7 @@ export default {
 
   head() {
     return {
-      title: 'Loan Type',
+      title: 'Deduction',
     }
   },
 
@@ -158,6 +174,10 @@ export default {
       },
       deep: true,
     },
+  },
+
+  activated() {
+    this.getAccounts()
   },
 
   methods: {
@@ -184,7 +204,7 @@ export default {
         .get(this.url, {
           params: {
             ...vm.options,
-            ...status
+            ...status,
           },
         })
         .then((res) => {
@@ -207,7 +227,7 @@ export default {
       this.$axios
         .get(`/api/financial/accounts`, {
           params: {
-            type: 'All',
+            type: 'NON_CURRENT_LIABILITY',
           },
         })
         .then((res) => {
@@ -242,7 +262,13 @@ export default {
       if (status === 'insert') {
         this.store('post', this.url, this.form, 'insert', type)
       } else if (status === 'update') {
-        this.store('put', this.url + '/' + this.form.id, this.form, 'update', type)
+        this.store(
+          'put',
+          this.url + '/' + this.form.id,
+          this.form,
+          'update',
+          type
+        )
       }
     },
 

@@ -1,4 +1,12 @@
 {
+  "Reference": "Referensi",
+  "Interest Type": "Jenis Bunga",
+  "Interest Rate": "Suku Bunga",
+  "Installment Amount": "Jumlah Angsuran",
+  "Installment Start Date": "Tanggal Mulai Angsuran",
+  "Admin Charge": "Biaya Admin",
+  "Outstanding Loan": "Sisa Pinjaman",
+  "Loan Request Date": "Tanggal Permintaan Pinjaman",
   "Loans": "Pinjaman",
   "Loan Type": "Tipe Pinjaman",
   "Displays the list of deduction.": "Displays the list of deduction.",

@@ -23,15 +23,38 @@
                 ></v-autocomplete>
               </v-col>
 
-              <v-col cols="12" md="12">
+              <v-col cols="12" md="6">
                 <v-text-field
                   v-model="form.transaction_date"
-                  :label="$t('Transaction Date')"
+                  :label="$t('Loan Request Date')"
                   outlined
                   type="date"
                   dense
                   hide-details="auto"
                 ></v-text-field>
+              </v-col>
+
+              <v-col cols="12" md="6">
+                <v-text-field
+                  v-model="form.reference_no"
+                  :label="$t('Reference')"
+                  outlined
+                  dense
+                  hide-details="auto"
+                ></v-text-field>
+              </v-col>
+
+              <v-col cols="12" md="12">
+                <v-autocomplete
+                  v-model="form.loan_type"
+                  :items="itemLoanType"
+                  :label="$t('Loan Type')"
+                  item-text="name"
+                  item-value="name"
+                  outlined
+                  dense
+                  hide-details="auto"
+                ></v-autocomplete>
               </v-col>
 
               <v-col cols="12" md="12">
@@ -46,20 +69,80 @@
                 ></vuetify-money>
               </v-col>
 
-              <v-col cols="12" md="12">
-                <v-text-field
-                  v-model="form.narration"
-                  :label="$t('Notes')"
+              <v-col cols="12" md="6">
+                <v-autocomplete
+                  v-model="form.interest_type"
+                  :label="$t('Interest Type')"
+                  :items="['none', 'flat', 'percent']"
                   outlined
+                  dense
+                  hide-details="auto"
+                ></v-autocomplete>
+              </v-col>
+
+              <v-col cols="12" md="6">
+                <vuetify-money
+                  v-model="form.interest_rate"
+                  :options="moneyOptionTotal"
+                  :label="$t('Interest Rate')"
+                  outlined
+                  type="number"
+                  dense
+                  hide-details="auto"
+                ></vuetify-money>
+              </v-col>
+
+              <v-col cols="12" md="6">
+                <vuetify-money
+                  v-model="form.installment_amount"
+                  :options="moneyOptionTotal"
+                  :label="$t('Installment Amount')"
+                  outlined
+                  type="number"
+                  dense
+                  hide-details="auto"
+                ></vuetify-money>
+              </v-col>
+
+              <v-col cols="12" md="6">
+                <v-text-field
+                  v-model="form.installment_start_date"
+                  :label="$t('Installment Start Date')"
+                  outlined
+                  type="date"
                   dense
                   hide-details="auto"
                 ></v-text-field>
               </v-col>
 
+              <v-col cols="12" md="6">
+                <vuetify-money
+                  v-model="form.admin_charge"
+                  :options="moneyOptionTotal"
+                  :label="$t('Admin Charge')"
+                  outlined
+                  type="number"
+                  dense
+                  hide-details="auto"
+                ></vuetify-money>
+              </v-col>
+
+              <v-col cols="12" md="6">
+                <vuetify-money
+                  v-model="form.outstanding_loan"
+                  :options="moneyOptionTotal"
+                  :label="$t('Outstanding Loan')"
+                  outlined
+                  type="number"
+                  dense
+                  hide-details="auto"
+                ></vuetify-money>
+              </v-col>
+
               <v-col cols="12" md="12">
                 <v-text-field
-                  v-model="form.reference_no"
-                  label="Reference"
+                  v-model="form.narration"
+                  :label="$t('Notes')"
                   outlined
                   dense
                   hide-details="auto"
@@ -116,7 +199,7 @@ export default {
       show: false,
       form: this.formData,
       defaultItem: this.formData,
-      itemWorkLocation: [],
+      itemLoanType: [],
       statusProcessing: 'insert',
       menu3: '',
       menu4: '',
@@ -126,6 +209,13 @@ export default {
         suffix: '',
         length: 11,
         precision: 2,
+        empty: 0
+      },
+      moneyOptionTotal: {
+        suffix: '',
+        length: 11,
+        precision: 0,
+        empty: 0
       },
       tab: null,
       itemEmployee: [],
@@ -149,9 +239,9 @@ export default {
   methods: {
     async getMasterData() {
       try {
-        const resEmployee = await this.$axios.get(`/api/payroll/work-locations`)
+        const resLoanType = await this.$axios.get(`/api/payroll/loan-type`)
 
-        this.itemWorkLocation = resEmployee.data.data
+        this.itemLoanType = resLoanType.data.data
       } catch (err) {
         this.$swal({
           type: 'error',

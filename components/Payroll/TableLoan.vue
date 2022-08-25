@@ -165,6 +165,9 @@ export default {
       itemText: '',
       itemAction: '',
       headers: this.headerTable,
+      dateFrom: null,
+      dateTo: null,
+      url: '/api/payroll/loan'
     }
   },
 
@@ -230,12 +233,34 @@ export default {
     },
 
     deleteItem(item) {
-      this.$axios
-        .delete(`/api/master/permissions/` + item.menu_name)
-        .then((res) => {
-          this.getDataFromApi()
-          this.$nuxt.$emit('getMenu', 'nice payload')
-        })
+      this.$swal({
+        title: this.$t('Are you sure you want to run this action?'),
+        text: 'Data cannot be change after posted!',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Save',
+      }).then((result) => {
+        if (result.value) {
+          this.$nuxt.$loading.start()
+          this.$axios
+            .delete(this.url + '/' + item.id)
+            .then((res) => {
+              this.getDataFromApi()
+            })
+            .catch((err) => {
+              this.$swal({
+                type: 'error',
+                title: 'Error',
+                text: err.response.data.message,
+              })
+            })
+            .finally(() => {
+              this.$nuxt.$loading.finish()
+            })
+        }
+      })
     },
 
     emitData(data) {
@@ -245,6 +270,8 @@ export default {
       this.searchItem = data.searchItem
       this.search = data.search
       this.filters = data.filters
+      this.dateFrom = data.dateFrom
+      this.dateTo = data.dateTo
       this.getDataFromApi()
     },
 
@@ -257,9 +284,11 @@ export default {
         searchStatus: vm.searchStatus,
         search: vm.search,
         type: this.typeDocument,
+        dateFrom: this.dateFrom,
+        dateTo: this.dateTo,
       }
       this.$axios
-        .get(`/api/payroll/loan`, {
+        .get(this.url, {
           params: {
             ...vm.options,
             ...status,

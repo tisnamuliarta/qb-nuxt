@@ -43,7 +43,7 @@
     <v-menu
       :close-on-content-click="false"
       :nudge-width="400"
-      max-width="400px"
+      max-width="550px"
       bottom
       offset-y
     >
@@ -69,7 +69,7 @@
       <v-card rounded elevation="10">
         <v-card-text>
           <v-row dense>
-            <v-col cols="12" md="6">
+            <v-col cols="12" md="4">
               <v-text-field
                 label="Transaction"
                 outlined
@@ -77,9 +77,10 @@
                 hide-details="auto"
               ></v-text-field>
             </v-col>
-            <v-col cols="12" md="6"> </v-col>
+            <v-col cols="12" md="4"> </v-col>
+            <v-col cols="12" md="4"> </v-col>
 
-            <v-col cols="12" md="6">
+            <v-col cols="12" md="4">
               <v-autocomplete
                 label="Status"
                 :items="['All', 'Open', 'Draft', 'Cancel', 'Closed', 'Pending']"
@@ -89,7 +90,7 @@
               ></v-autocomplete>
             </v-col>
 
-            <v-col cols="12" md="6">
+            <v-col cols="12" md="4">
               <v-text-field
                 label="Delivery Method"
                 outlined
@@ -98,7 +99,22 @@
               ></v-text-field>
             </v-col>
 
-            <v-col cols="12" md="6">
+            <v-col cols="12" md="4"> </v-col>
+
+            <v-col cols="12" md="4">
+              <v-autocomplete
+                v-model="form.date_filter"
+                :items="itemDateFilter"
+                label="Date Filter"
+                return-object
+                outlined
+                dense
+                hide-details="auto"
+                @change="changeDate"
+              ></v-autocomplete>
+            </v-col>
+
+            <v-col cols="12" md="4">
               <v-text-field
                 v-model="form.date_from"
                 label="Date From"
@@ -109,7 +125,7 @@
               ></v-text-field>
             </v-col>
 
-            <v-col cols="12" md="6">
+            <v-col cols="12" md="4">
               <v-text-field
                 v-model="form.date_to"
                 label="Date To"
@@ -120,7 +136,7 @@
               ></v-text-field>
             </v-col>
 
-            <v-col cols="12" md="6">
+            <v-col v-if="showZeroQty" cols="12" md="4">
               <v-select
                 v-model="form.show_zero_balance"
                 :items="['Yes', 'No']"
@@ -134,7 +150,7 @@
           </v-row>
         </v-card-text>
         <v-card-actions>
-          <v-btn text> Cancel </v-btn>
+          <v-btn text small> Cancel </v-btn>
           <v-spacer></v-spacer>
           <v-btn color="primary" small elevation="0" @click="passDataToToolbar">
             Apply
@@ -351,6 +367,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    showZeroQty: {
+      type: Boolean,
+      default: false,
+    },
     newDataMultipleItem: {
       type: Array,
       default() {
@@ -377,10 +397,13 @@ export default {
         { text: 'Delete', action: 'delete' },
       ],
 
+      itemDateFilter: [],
+
       form: {
         date_from: null,
         date_to: null,
         show_zero_balance: null,
+        date_filter: null,
       },
 
       itemsMenu: [
@@ -407,10 +430,24 @@ export default {
     },
   },
 
+  mounted() {
+    this.getDateFilter()
+  },
+
   methods: {
     newData() {
       this.$auth.$storage.setState('basePath', this.$route.path)
       this.$emit('newData')
+    },
+
+    async getDateFilter() {
+      const res = await this.$axios.get(`/api/date-filter`)
+      this.itemDateFilter = res.data.date_filter
+    },
+
+    changeDate() {
+      this.form.date_from = this.form.date_filter.date_from
+      this.form.date_to = this.form.date_filter.date_to
     },
 
     passDataToToolbar(data) {
@@ -420,8 +457,8 @@ export default {
         searchStatus: data.searchStatus,
         searchItem: data.searchItem,
         search: data.search,
-        date_from: this.form.date_from,
-        date_to: this.form.date_to,
+        dateFrom: this.form.date_from,
+        dateTo: this.form.date_to,
         show_zero_balance: this.form.show_zero_balance,
       })
     },
