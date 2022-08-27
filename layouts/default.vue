@@ -30,6 +30,7 @@
           next-icon="mdi-arrow-right-bold-box-outline"
           prev-icon="mdi-arrow-left-bold-box-outline"
           show-arrows
+          style="margin-left: 20px"
           slider-size="4"
         >
           <v-tab

@@ -2,7 +2,7 @@
   <div>
     <DocumentTableDocument
       ref="tableDocument"
-      type-document="BL"
+      type-document="CP"
       form-url="/app/form/purchase/cash"
       table-url="/api/transactions"
       :header-table="[

@@ -2,7 +2,7 @@
   <v-row dense>
     <v-col cols="12" md="9" sm="8">
       <v-row dense>
-        <v-col cols="12" md="4" sm="12">
+        <v-col cols="12" md="3" sm="12">
           <v-autocomplete
             v-model="form.contact_id"
             :items="itemContact"
@@ -57,9 +57,9 @@
             hide-details="auto"
           ></v-text-field>
         </v-col>
-        <!-- <v-col cols="12" md="2"></v-col> -->
+        <v-col cols="12" md="2"></v-col>
 
-        <v-col cols="12" md="4" sm="6">
+        <v-col cols="12" md="3" sm="6">
           <v-text-field
             v-model="form.reference_no"
             label="No Contract"
@@ -96,7 +96,9 @@
           </v-combobox>
         </v-col>
 
-        <v-col cols="12" md="4">
+        <v-col cols="12" md="2"></v-col>
+
+        <v-col cols="12" md="3">
           <v-autocomplete
             v-model="form.warehouse_id"
             :items="itemWarehouse"
@@ -112,7 +114,45 @@
           ></v-autocomplete>
         </v-col>
 
-        <v-col v-if="form.transaction_type === 'IN'" cols="12" md="6">
+        <v-col
+          v-if="formType === 'CS' || formType === 'CP'"
+          cols="12"
+          lg="2"
+          md="2"
+          sm="6"
+        >
+          <v-select
+            v-model="form.payment_term_id"
+            :items="itemPaymentMethod"
+            item-value="id"
+            item-text="name"
+            label="Payment Method"
+            outlined
+            dense
+            hide-details="auto"
+          ></v-select>
+        </v-col>
+
+        <v-col
+          v-if="formType === 'CS' || formType === 'CP'"
+          cols="12"
+          md="4"
+          sm="12"
+        >
+          <v-autocomplete
+            v-model="form.account_id"
+            :items="itemAccounts"
+            label="Deposit Account"
+            return-object
+            item-value="id"
+            item-text="name"
+            outlined
+            dense
+            hide-details="auto"
+          ></v-autocomplete>
+        </v-col>
+
+        <v-col v-if="form.transaction_type === 'IN' || form.transaction_type === 'CS'" cols="12" md="5">
           <v-autocomplete
             v-model="form.sales_person"
             :items="itemSalesPersons"
@@ -474,6 +514,7 @@ export default {
       itemFiles: [],
       taxDetails: [],
       itemSalesPersons: [],
+      itemPaymentMethod: [],
       statusProcessing: 'insert',
       valueWhenIsEmpty: '0',
       tempTotalTax: 0,
@@ -799,11 +840,8 @@ export default {
 
         let accountType = 'CURRENT_ASSET, BANK'
 
-        if (this.formType === 'CS') {
-          accountType = 'OPERATING_REVENUE'
-        } else if (this.formType === 'CP') {
-          accountType =
-            'OPERATING_EXPENSE, DIRECT_EXPENSE, OVERHEAD_EXPENSE, OTHER_EXPENSE, NON_CURRENT_ASSET, CURRENT_ASSET, INVENTORY'
+        if (this.formType === 'CS' || this.formType === 'CP') {
+          accountType = 'BANK'
         }
         const resItemUnit = await this.$axios.get(`/api/inventory/item-units`)
         const resWarehouse = await this.$axios.get(`/api/inventory/warehouse`)
@@ -824,6 +862,10 @@ export default {
           `/api/financial/payment-terms`
         )
 
+        const resPaymentMethod = await this.$axios.get(
+          `/api/financial/payment-methods`
+        )
+
         const resTax = await this.$axios.get(`/api/financial/taxes`)
 
         const resEmployee = await this.$axios.get(`/api/payroll/employees`, {
@@ -837,6 +879,7 @@ export default {
         this.itemAccounts = resAccount.data.data
         this.itemContact = resContact.data.data
         this.itemPaymentTerm = resPaymentTerm.data.auto_complete
+        this.itemPaymentMethod = resPaymentMethod.data.data
         this.itemWarehouse = resWarehouse.data.data
         this.$auth.$storage.removeState('tax')
         this.$auth.$storage.setState('tax', resTax.data.simple)
@@ -845,7 +888,10 @@ export default {
         this.$auth.$storage.setState('tax_row', resTax.data.data)
         this.$auth.$storage.setState('salesPerson', resEmployee.data.data)
         this.itemSalesPersons = resEmployee.data.data
-        this.$refs.uploadField.getFiles()
+
+        if (this.uploadField) {
+          this.$refs.uploadField.getFiles()
+        }
       } catch (err) {
         this.$swal({
           type: 'error',

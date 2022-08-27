@@ -151,6 +151,7 @@ export default {
       url: '/api/financial/accounts',
       headers: [],
       title: 'Chart Of Accounts',
+      formTypeData: null,
     }
   },
 
@@ -174,7 +175,7 @@ export default {
   },
 
   mounted() {
-    this.getDataFromApi()
+    // this.getDataFromApi()
     this.mappingHeader()
   },
 
@@ -192,8 +193,10 @@ export default {
       })
     },
 
-    setEmptyToSelected() {
+    setEmptyToSelected(formTypeData) {
       this.selected = []
+      this.formTypeData = this.$auth.$storage.getState('formType')
+      this.getDataFromApi()
     },
 
     newData() {
@@ -307,10 +310,9 @@ export default {
       const vm = this
 
       let accountType = ''
-
-      if (this.formType === 'CS') {
+      if (this.formTypeData === 'CS') {
         accountType = 'OPERATING_REVENUE'
-      } else if (this.formType === 'CP') {
+      } else if (this.formTypeData === 'CP') {
         accountType =
           'OPERATING_EXPENSE, DIRECT_EXPENSE, OVERHEAD_EXPENSE, OTHER_EXPENSE, NON_CURRENT_ASSET, CURRENT_ASSET, INVENTORY'
       }

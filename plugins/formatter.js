@@ -1,11 +1,11 @@
-export default ({app}, inject) => {
+export default ({ app }, inject) => {
   const i18n = app.i18n
 
   inject('formatter', {
     name: 'Formatter',
     formatPrice(value) {
       const val = (value / 1).toFixed(2).replace('.', ',')
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
     },
 
     formatCheckBox(value) {
@@ -14,10 +14,10 @@ export default ({app}, inject) => {
       } else if (value === '0') {
         return 'Off'
       } else if (value) {
-          return 'On'
-        } else {
-          return 'Off'
-        }
+        return 'On'
+      } else {
+        return 'Off'
+      }
     },
 
     statusColor(status) {
@@ -189,6 +189,9 @@ export default ({app}, inject) => {
               type: 'document',
             },
           ]
+
+        default:
+          return []
       }
     },
 

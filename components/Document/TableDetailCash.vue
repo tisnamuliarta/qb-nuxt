@@ -15,7 +15,7 @@
 
     <AccountingDialogAccount
       ref="dialogAccount"
-      :form-type="formType"
+      :form-type="formTypeData"
       @selectItems="selectItems"
     ></AccountingDialogAccount>
   </div>
@@ -97,6 +97,7 @@ export default {
 
   data() {
     return {
+      formTypeData: null,
       settings: {
         licenseKey: 'non-commercial-and-evaluation',
         currentRowClassName: 'currentRow',
@@ -174,7 +175,7 @@ export default {
 
                 button.addEventListener('mousedown', (event) => {
                   event.preventDefault()
-                  vm.$refs.dialogAccount.openDialog(row)
+                  vm.$refs.dialogAccount.openDialog(row, vm.form.transaction_type)
                 })
 
                 // dom.empty(td)
@@ -398,6 +399,7 @@ export default {
     setDataToDetails(data, form) {
       const vm = this
       this.form = form
+      this.formTypeData = form.transaction_type
       this.$refs.details.hotInstance.batch(() => {
         this.updateTableSettings()
         const items = form.line_items.length > 0 ? form.line_items : data

@@ -70,6 +70,24 @@
         <template #[`item.payment_method`]="{ item }">
           {{ item.payment_method === 1 ? 'Cash' : 'Direct Deposit' }}
         </template>
+        <template #[`item.id`]="{ item }">
+          <a @click="editItem(item)">
+            <strong>
+              {{
+                item.transaction_type === 'CS' || item.transaction_type === 'IN'
+                  ? item.transaction.transaction_no
+                  : item.document.transaction_no
+              }}
+            </strong>
+          </a>
+        </template>
+        <template #[`item.line_item`]="{ item }">
+          {{
+            item.transaction_type === 'CS' || item.transaction_type === 'IN'
+              ? item.transaction.narration
+              : item.document.narration
+          }}
+        </template>
       </v-data-table>
     </v-col>
   </v-row>
@@ -140,7 +158,7 @@ export default {
         { text: 'Name', value: 'employee_name', cellClass: 'disable-wrap' },
         {
           text: 'Transaction No',
-          value: 'transaction.transaction_no',
+          value: 'id',
           cellClass: 'disable-wrap',
         },
         {
@@ -155,7 +173,7 @@ export default {
         },
         {
           text: 'Notes',
-          value: 'transaction.narration',
+          value: 'line_item',
           cellClass: 'disable-wrap',
         },
         {
@@ -228,6 +246,20 @@ export default {
 
     statusColor(item) {
       return this.$formatter.statusColor(item.status)
+    },
+
+    editItem(item) {
+      if (item.transaction_type === 'JN') {
+        this.$refs.ledger.openDialog('/api/transaction/ledger/' + item.id)
+      } else {
+        this.$auth.$storage.setState('basePath', this.$route.path)
+        this.$router.push({
+          path: this.$formatter.mappingAction(item.transaction_type),
+          query: {
+            document: item.transaction_id,
+          },
+        })
+      }
     },
 
     emitData(data) {

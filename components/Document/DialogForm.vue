@@ -9,13 +9,12 @@
     </v-overlay>
 
     <template #content>
-      <LazyDocumentFormCash
+      <!-- <LazyDocumentFormCash
         v-if="formType === 'CP' || formType === 'CS'"
         ref="formDocument"
         :form-type="formType"
-      ></LazyDocumentFormCash>
+      ></LazyDocumentFormCash> -->
       <LazyDocumentFormDocument
-        v-else
         ref="formDocument"
         :form-type="formType"
       ></LazyDocumentFormDocument>
@@ -168,6 +167,7 @@ export default {
         { text: 'Journal Entry', action: 'journal' },
       ]
       this.itemAction = this.appendItemAction(this.formType)
+      this.$auth.$storage.setState('formType', this.formType)
       // this.dialog = true
       this.$refs.dialogForm.openDialog()
       this.getDataFromApi()
@@ -456,7 +456,7 @@ export default {
     },
 
     actionSave(action) {
-      const type = ['IN', 'RC', 'CN', 'SR', 'BL', 'PY', 'DN', 'GN']
+      const type = ['IN', 'RC', 'CN', 'SR', 'BL', 'PY', 'DN', 'GN', 'CS', 'CP']
       if (action === 'save' && type.includes(this.form.transaction_type)) {
         this.$swal({
           title: this.$t('Are you sure you want to run this action?'),
