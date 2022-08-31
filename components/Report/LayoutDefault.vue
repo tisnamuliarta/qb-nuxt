@@ -34,7 +34,7 @@
               @getDataFromApi="getDataFromApi"
             />
 
-            <v-col cols="12" class="mt-4">
+            <v-col cols="12" class="mt-1">
               <slot name="content"></slot>
             </v-col>
           </v-card-text>
@@ -108,8 +108,10 @@ export default {
       this.searchItem = data.searchItem
       this.search = data.search
       this.filters = data.filters
-      this.date_from = data.date_from
-      this.date_to = data.date_to
+      this.date_from = data.dateFrom
+      this.date_to = data.dateTo
+
+      this.$nuxt.$loading.start()
       this.getDataFromApi()
     },
 

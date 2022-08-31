@@ -77,9 +77,9 @@
             class="font-weight-bold text-right pr-0"
             text
             small
-            @click="printDocument(item)"
+            @click="payrollSummary(item)"
           >
-            Print
+            Summary
           </v-btn>
           <v-btn
             v-else
@@ -95,14 +95,14 @@
       </v-data-table>
     </v-col>
 
-    <LazyPayrollFormEmployee
+    <LazyPayrollDialogPayrollSummary
       ref="formData"
       :form-data="form"
       :form-title="formTitle"
       :button-title="buttonTitle"
       :form-url="formUrl"
       @getDataFromApi="getDataFromApi"
-    ></LazyPayrollFormEmployee>
+    ></LazyPayrollDialogPayrollSummary>
   </v-row>
 </template>
 
@@ -248,6 +248,10 @@ export default {
         })
     },
 
+    payrollSummary(item) {
+      this.$refs.formData.openDialog(item)
+    },
+
     printDocument(item) {
       this.$nuxt.$loading.start()
       this.$axios
@@ -302,6 +306,7 @@ export default {
         dateFrom: this.dateFrom,
         dateTo: this.dateTo,
       }
+      this.$nuxt.$loading.start()
       this.$axios
         .get(`/api/payroll/payroll`, {
           params: {
@@ -316,13 +321,11 @@ export default {
           this.itemSearch = res.data.filter
           this.form = Object.assign({}, res.data.form)
           this.defaultItem = Object.assign({}, res.data.form)
-          this.$refs.formData.setItemGender(res.data.itemGender)
-          this.$refs.formData.setPaymentMethod(res.data.paymentMethod)
-          this.$refs.formData.setPayFrequency(res.data.payFrequency)
-          this.$refs.formData.setPayType(res.data.payType)
+          this.$nuxt.$loading.finish()
         })
         .catch((err) => {
           this.loading = false
+          this.$nuxt.$loading.finish()
           this.$swal({
             type: 'error',
             title: 'Error',

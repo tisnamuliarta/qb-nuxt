@@ -1,4 +1,9 @@
 {
+  "Principle": "Pokok",
+  "Interest": "Bunga",
+  "Installment": "Angsuran",
+  "Reminder": "Pengingat",
+  "Loan Installment": "Angsuran Pinjaman",
   "Reference": "Referensi",
   "Interest Type": "Jenis Bunga",
   "Interest Rate": "Suku Bunga",

@@ -157,7 +157,7 @@ export default {
         //   filterable: false,
         // },
       ],
-      title: 'Chart Of Accounts',
+      title: 'Detail Transactions',
     }
   },
 

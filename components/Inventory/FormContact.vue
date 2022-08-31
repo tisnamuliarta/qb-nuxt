@@ -514,7 +514,7 @@ export default {
       this.$axios
         .get(`/api/financial/accounts`, {
           params: {
-            type: 'All',
+            type: 'RECEIVABLE, PAYABLE',
           },
         })
         .then((res) => {
@@ -602,6 +602,7 @@ export default {
       this.$axios({ method, url, data })
         .then((res) => {
           this.$refs.dialogForm.closeDialog()
+          this.getAccounts()
           this.$emit('getDataFromApi')
         })
         .catch((err) => {

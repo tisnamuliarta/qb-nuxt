@@ -1,4 +1,9 @@
 {
+  "Principle": "Principle",
+  "Interest": "Interest",
+  "Installment": "Installment",
+  "Reminder": "Reminder",
+  "Loan Installment": "Loan Installment",
   "Reference": "Reference",
   "Interest Type": "Interest Type",
   "Interest Rate": "Interest Rate",

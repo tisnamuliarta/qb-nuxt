@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" lg="10">
+      <!-- <v-col cols="12" lg="10">
         <v-row>
           <v-col cols="12" md="6" xl="4">
             <v-card class="mx-auto">
@@ -70,7 +70,7 @@
             </v-card>
           </v-col>
         </v-row>
-      </v-col>
+      </v-col> -->
 
       <v-col cols="12">
         <LazyPayrollTableCommission
@@ -87,7 +87,7 @@ export default {
 
   head() {
     return {
-      title: 'Sales Overview',
+      title: 'Payroll Overview',
     }
   },
 

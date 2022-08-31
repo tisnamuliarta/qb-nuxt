@@ -56,6 +56,7 @@
                     <th class="title"></th>
                     <th class="title"></th>
                     <th class="title"></th>
+                    <th class="title"></th>
                     <th class="title text-right">
                       {{
                         $auth.user.entity.currency.currency_symbol +
@@ -112,6 +113,7 @@ export default {
       loading: false,
       options: {},
       headers: [
+        { text: 'Reference', value: 'reference' },
         { text: 'Posting Date', value: 'posting_date' },
         { text: 'Account Code', value: 'post_account.code' },
         { text: 'Account Category', value: 'post_account.account_type' },

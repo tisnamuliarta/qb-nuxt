@@ -390,7 +390,7 @@ export default {
       const totalRow = this.$refs.details.hotInstance.countRows()
       this.$refs.details.hotInstance.alter('insert_row', totalRow + 1, 1)
       this.$refs.details.hotInstance.setDataAtRowProp([
-        [totalRow, 'item_type', 'resource', 'edit'],
+        [totalRow, 'item_type', 'item', 'edit'],
       ])
     },
 

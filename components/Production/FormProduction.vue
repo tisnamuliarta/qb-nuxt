@@ -387,7 +387,7 @@ export default {
         this.$refs.childDetails.setDataToDetails(
           [
             {
-              item_type: 'resource',
+              item_type: 'item',
               quantity: null,
             },
           ],

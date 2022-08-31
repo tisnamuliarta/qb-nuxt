@@ -155,7 +155,7 @@ export default {
               cellProperties
             ) {
               let button = null
-              const vm = window.details
+              const vm = window.detailDocument
               if (vm.form.status !== 'closed' && vm.form.status !== 'cancel') {
                 button = document.createElement('button')
                 button.type = 'button'
@@ -263,7 +263,7 @@ export default {
             editor: 'select',
             className: 'htCenter',
             selectOptions: () => {
-              const vm = window.details
+              const vm = window.detailDocument
               return vm.$auth.$storage.getState('tax')
             },
             visibleRows: 5,
@@ -279,7 +279,7 @@ export default {
             editor: 'select',
             className: 'htCenter',
             selectOptions: () => {
-              const vm = window.details
+              const vm = window.detailDocument
               return vm.$auth.$storage.getState('warehouse')
             },
             visibleRows: 5,
@@ -310,7 +310,7 @@ export default {
               cellProperties
             ) {
               let button = null
-              const vm = window.details
+              const vm = window.detailDocument
               if (vm.form.status !== 'closed' && vm.form.status !== 'cancel') {
                 button = document.createElement('button')
                 button.type = 'button'
@@ -346,7 +346,7 @@ export default {
 
   methods: {
     setInstance() {
-      window.details = this
+      window.detailDocument = this
     },
 
     removeRow(row) {
@@ -374,11 +374,11 @@ export default {
         },
         beforeOnCellMouseDown: doNotSelectColumn,
         afterRemoveRow: (index, amount, physicalRow, source) => {
-          const vm = window.details
+          const vm = window.detailDocument
           vm.calculateTotal()
         },
         beforeRemoveRow: (index, amount, physicalRow, source) => {
-          const vm = window.details
+          const vm = window.detailDocument
           const id = []
           physicalRow.forEach(function (index, value) {
             const entry = vm.$refs.details.hotInstance.getDataAtCell(index, 0)
@@ -405,7 +405,7 @@ export default {
         },
 
         afterChange: (changes, source) => {
-          const vm = window.details
+          const vm = window.detailDocument
           if (changes) {
             let propNew = 0
             changes.forEach(([row, prop, oldValue, newValue]) => {
@@ -425,12 +425,12 @@ export default {
         },
 
         beforeRender(isForced) {
-          const vm = window.details
+          const vm = window.detailDocument
           vm.$nuxt.$loading.start()
         },
 
         afterRender: (isForced) => {
-          const vm = window.details
+          const vm = window.detailDocument
           vm.$nuxt.$loading.finish()
         },
 

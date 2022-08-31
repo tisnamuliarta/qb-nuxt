@@ -102,6 +102,15 @@
       :form-url="formUrl"
       @getDataFromApi="getDataFromApi"
     ></LazyPayrollFormLoan>
+
+    <LazyPayrollDialogLoanInstallment
+      ref="dialogLoan"
+      :form-data="form"
+      :form-title="formTitle"
+      :button-title="buttonTitle"
+      :form-url="formUrl"
+      @getDataFromApi="getDataFromApi"
+    ></LazyPayrollDialogLoanInstallment>
   </v-row>
 </template>
 
@@ -129,7 +138,10 @@ export default {
     items: {
       type: Array,
       default() {
-        return [{ text: 'Delete', action: 'delete' }]
+        return [
+          { text: this.$t('Loan Installment'), action: 'installment' },
+          { text: 'Delete', action: 'delete' },
+        ]
       },
     },
     headerTable: {
@@ -227,6 +239,8 @@ export default {
     actions(action, item) {
       if (action === 'edit') {
         this.editItem(item)
+      } else if (action === 'installment') {
+        this.$refs.dialogLoan.openDialog(item)
       } else {
         this.deleteItem(item)
       }

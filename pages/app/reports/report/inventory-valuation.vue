@@ -1,51 +1,9 @@
 <template>
-  <LazyReportLayoutDefault ref="report" @getData="getData">
+  <LazyReportLayoutDefault ref="report" :period="period" @getData="getData">
     <template #content>
       <v-simple-table dense>
         <template #default>
-          <thead>
-            <tr>
-              <th class="text-left">Description</th>
-              <th class="text-left">Amount</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>NON_OPERATING_EXPENSES</td>
-              <td></td>
-            </tr>
-
-            <tr>
-              <td>NON_OPERATING_REVENUES</td>
-              <td></td>
-            </tr>
-
-            <tr>
-              <td>OPERATING_EXPENSES</td>
-              <td></td>
-            </tr>
-
-            <tr>
-              <td>OPERATING_REVENUES</td>
-              <td></td>
-            </tr>
-
-            <tr v-for="(item, i) in allData.accounts" :key="i + '1'">
-              <td>{{ item.OPERATING_EXPENSES }}</td>
-            </tr>
-
-            <tr v-for="(item, i) in allData.balances" :key="i + '2'">
-              <td>{{ item[i] }}</td>
-            </tr>
-
-            <tr v-for="(item, i) in allData.results" :key="i + '3'">
-              <td>{{ item[i] }}</td>
-            </tr>
-
-            <tr v-for="(item, i) in allData.totals" :key="i + '4'">
-              <td>{{ item[i] }}</td>
-            </tr>
-          </tbody>
+          <tbody v-html="allData"></tbody>
         </template>
       </v-simple-table>
     </template>
@@ -60,6 +18,7 @@ export default {
     return {
       loading: true,
       allData: [],
+      period: '',
     }
   },
 
@@ -71,7 +30,8 @@ export default {
 
   methods: {
     getData(data) {
-      this.allData = data
+      this.allData = data.data
+      this.period = data.startDate + ' to ' + data.endDate
     },
   },
 }

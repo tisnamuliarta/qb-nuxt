@@ -356,24 +356,12 @@
                             <template #default>
                               <thead>
                                 <tr>
-                                  <th class="text-left">
-                                    Warehouse
-                                  </th>
-                                  <th class="text-center">
-                                    On Hand
-                                  </th>
-                                  <th class="text-center">
-                                    Ordered
-                                  </th>
-                                  <th class="text-center">
-                                    Committed
-                                  </th>
-                                  <th class="text-center">
-                                    Available
-                                  </th>
-                                  <th class="text-center">
-                                    Cost
-                                  </th>
+                                  <th class="text-left">Warehouse</th>
+                                  <th class="text-center">On Hand</th>
+                                  <th class="text-center">Ordered</th>
+                                  <th class="text-center">Committed</th>
+                                  <th class="text-center">Available</th>
+                                  <th class="text-center">Cost</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -382,11 +370,26 @@
                                   :key="item.whs_name"
                                 >
                                   <td>{{ item.whs_name }}</td>
-                                  <td class="text-right">{{ item.on_hand_qty }}</td>
-                                  <td class="text-right">{{ item.ordered_qty }}</td>
-                                  <td class="text-right">{{ item.committed_qty }}</td>
-                                  <td class="text-right">{{ item.available_qty }}</td>
-                                  <td class="text-right">{{ item.item_cost }}</td>
+                                  <td class="text-right">
+                                    {{ $formatter.formatPrice(item.on_hand_qty) }}
+                                  </td>
+                                  <td class="text-right">
+                                    {{ $formatter.formatPrice(item.ordered_qty) }}
+                                  </td>
+                                  <td class="text-right">
+                                    {{ $formatter.formatPrice(item.committed_qty) }}
+                                  </td>
+                                  <td class="text-right">
+                                    {{ $formatter.formatPrice(item.available_qty) }}
+                                  </td>
+                                  <td class="text-right">
+                                    {{
+                                      $auth.user.entity.currency
+                                        .currency_symbol +
+                                      ' ' +
+                                      $formatter.formatPrice(item.item_cost)
+                                    }}
+                                  </td>
                                 </tr>
                               </tbody>
                             </template>

@@ -17,6 +17,14 @@
           filterable: false,
         },
         {
+          text: 'Reference',
+          value: 'reference',
+          align: 'left',
+          cellClass: 'disable-wrap',
+          sortable: false,
+          filterable: false,
+        },
+        {
           text: 'Status',
           value: 'status',
           align: 'left',

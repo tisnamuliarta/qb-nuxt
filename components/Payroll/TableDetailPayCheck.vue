@@ -114,7 +114,7 @@ export default {
 
   methods: {
     setInstance() {
-      window.details = this
+      window.detailPayCheck = this
     },
 
     removeRow(row) {
@@ -128,6 +128,25 @@ export default {
 
     updateTableSettings(columns, colHeaders) {
       // const listVat = this.$auth.$storage.getState('tax_row')
+      // const countCols = this.$refs.details.hotInstance.countCols()
+      // let columnSummary = []
+      // if (countCols > 0) {
+      //   for (let i = 0; i < countCols; i++) {
+      //     if (i > 3) {
+      //       const summary = [
+      //         {
+      //           // destinationRow: 0,
+      //           // reversedRowCoords: true,
+      //           destinationColumn: i,
+      //           type: 'sum',
+      //         },
+      //       ]
+
+      //       columnSummary = [...summary]
+      //     }
+      //   }
+      // }
+      // console.log(columnSummary)
       this.$refs.details.hotInstance.updateSettings({
         colHeaders,
         columns,
@@ -138,11 +157,11 @@ export default {
         },
         beforeOnCellMouseDown: doNotSelectColumn,
         afterRemoveRow: (index, amount, physicalRow, source) => {
-          const vm = window.details
+          const vm = window.detailPayCheck
           vm.calculateTotal()
         },
         beforeRemoveRow: (index, amount, physicalRow, source) => {
-          const vm = window.details
+          const vm = window.detailPayCheck
           const id = []
           physicalRow.forEach(function (index, value) {
             const entry = vm.$refs.details.hotInstance.getDataAtCell(index, 0)
@@ -169,12 +188,13 @@ export default {
         },
 
         afterChange: (changes, source) => {
-          const vm = window.details
+          const vm = window.detailPayCheck
           if (changes) {
             let propNew = 0
+            let prevRow
+            const cellChanges = []
             changes.forEach(([row, prop, oldValue, newValue]) => {
               propNew = prop
-
               if (
                 propNew !== 'payroll_id' ||
                 propNew !== 'employee_name' ||
@@ -182,21 +202,75 @@ export default {
                 propNew !== 'salary' ||
                 propNew !== 'sub_total'
               ) {
+                const total = 0
+
+                const cellChange = [row, prop, oldValue, newValue, total]
                 if (oldValue !== newValue) {
+                  prevRow = changes[0][0]
+                  cellChanges.push(cellChange)
+                }
+              }
+
+              // if (
+              //   propNew !== 'payroll_id' ||
+              //   propNew !== 'employee_name' ||
+              //   propNew !== 'employee_id' ||
+              //   propNew !== 'salary' ||
+              //   propNew !== 'sub_total'
+              // ) {
+              //   if (oldValue !== newValue) {
+              //     vm.calculateTotal()
+              //   }
+              // }
+            })
+
+            if (
+              propNew !== 'payroll_id' ||
+              propNew !== 'employee_name' ||
+              propNew !== 'employee_id' ||
+              propNew !== 'salary' ||
+              propNew !== 'sub_total'
+            ) {
+              const clearChanges = []
+              let count = 0
+              let changeIt = false
+              for (let j = 0, length2 = cellChanges.length; j < length2; j++) {
+                const row = cellChanges[j][0]
+                // console.log(row)
+                if (row !== '10') {
+                  changeIt = true
+                  if (prevRow === row) {
+                    count = count + 1
+                  } else {
+                    prevRow = row
+                    count = 0
+                  }
+                  if (count === 1) {
+                    clearChanges.push(cellChanges[j])
+                  }
+                }
+              }
+
+              if (changeIt) {
+                for (
+                  let k = 0, length3 = clearChanges.length;
+                  k < length3;
+                  k++
+                ) {
                   vm.calculateTotal()
                 }
               }
-            })
+            }
           }
         },
 
         beforeRender(isForced) {
-          const vm = window.details
+          const vm = window.detailPayCheck
           vm.$nuxt.$loading.start()
         },
 
         afterRender: (isForced) => {
-          const vm = window.details
+          const vm = window.detailPayCheck
           vm.$nuxt.$loading.finish()
         },
 

@@ -2,7 +2,7 @@
   <v-row dense>
     <v-col cols="12" md="9" sm="8">
       <v-row dense>
-        <v-col cols="12" md="4" sm="12">
+        <v-col cols="12" md="2" sm="12">
           <v-text-field
             v-model="form.reference_no"
             label="Reference"
@@ -24,7 +24,7 @@
           ></v-text-field>
         </v-col>
 
-        <v-col cols="12" md="4" sm="12">
+        <v-col cols="12" md="2" sm="12">
           <v-autocomplete
             v-model="form.warehouse_id"
             :items="itemWarehouse"

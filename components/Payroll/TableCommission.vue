@@ -236,6 +236,7 @@ export default {
   activated() {
     this.itemText = this.items[0].text
     this.itemAction = this.items[0].action
+    this.getDataFromApi()
   },
 
   methods: {

@@ -95,6 +95,13 @@
           <template #[`item.available_qty`]="{ item }">
             {{ checkAvailable(item.item_warehouse) }}
           </template>
+          <template #[`item.commision_rate`]="{ item }">
+            {{
+              $auth.user.entity.currency.currency_symbol +
+              ' ' +
+              formatPrice(item.commision_rate)
+            }}
+          </template>
         </v-data-table>
       </div>
     </v-flex>

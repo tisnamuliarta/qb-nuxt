@@ -41,6 +41,7 @@
     </v-menu>
 
     <v-menu
+      v-model="menu"
       :close-on-content-click="false"
       :nudge-width="400"
       max-width="550px"
@@ -388,6 +389,7 @@ export default {
   data() {
     return {
       loading: false,
+      menu: false,
       dialogFilter: false,
       searchStatusData: this.searchStatus,
       searchItemData: this.searchItem,
@@ -451,6 +453,7 @@ export default {
     },
 
     passDataToToolbar(data) {
+      this.menu = false
       this.$emit('emitData', {
         documentStatus: data.documentStatus,
         itemSearch: data.itemSearch,
