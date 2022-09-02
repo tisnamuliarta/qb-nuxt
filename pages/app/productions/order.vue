@@ -337,8 +337,16 @@ export default {
         ]
       } else {
         this.headers = [
-          { text: 'Transaction No', value: 'transaction_no' },
-          { text: 'Transaction Date', value: 'transaction_date' },
+          {
+            text: 'Transaction No',
+            value: 'transaction_no',
+            cellClass: 'disable-wrap',
+          },
+          {
+            text: 'Transaction Date',
+            value: 'transaction_date',
+            cellClass: 'disable-wrap',
+          },
           {
             text: 'Quantity',
             value: 'planned_qty',
@@ -350,6 +358,7 @@ export default {
             value: 'item_name',
             sortable: false,
             filterable: false,
+            cellClass: 'disable-wrap',
           },
           // {
           //   text: 'Reorder Point',
@@ -363,6 +372,7 @@ export default {
             value: 'main_account_amount',
             sortable: false,
             filterable: false,
+            cellClass: 'disable-wrap',
           },
           // {
           //   text: 'Buy Price',

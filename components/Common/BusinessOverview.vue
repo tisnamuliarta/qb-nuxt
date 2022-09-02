@@ -10,8 +10,9 @@
                   <v-card-text>
                     <div class="subtitle-1">INVOICES</div>
                   </v-card-text>
+                  <v-divider></v-divider>
                   <v-card-text>
-                    <LazyChartBarChart></LazyChartBarChart>
+                    <LazyChartBarChart ref="invoice"></LazyChartBarChart>
                   </v-card-text>
                 </v-card>
               </v-col>
@@ -21,8 +22,9 @@
                   <v-card-text>
                     <div class="subtitle-1">EXPENSES</div>
                   </v-card-text>
+                  <v-divider></v-divider>
                   <v-card-text>
-                    <LazyChartDoughnutChart></LazyChartDoughnutChart>
+                    <LazyChartDoughnutChart ref="expense"></LazyChartDoughnutChart>
                   </v-card-text>
                 </v-card>
               </v-col>
@@ -32,8 +34,9 @@
                   <v-card-text>
                     <div class="subtitle-1">PROFIT AND LOSS</div>
                   </v-card-text>
+                  <v-divider></v-divider>
                   <v-card-text>
-                    <LazyChartLineChart></LazyChartLineChart>
+                    <LazyChartLineChart ref="profitLoss"></LazyChartLineChart>
                   </v-card-text>
                 </v-card>
               </v-col>
@@ -43,8 +46,9 @@
                   <v-card-text>
                     <div class="subtitle-1">SALES</div>
                   </v-card-text>
+                  <v-divider></v-divider>
                   <v-card-text>
-                    <LazyChartLineChart></LazyChartLineChart>
+                    <LazyChartLineChart ref="sales"></LazyChartLineChart>
                   </v-card-text>
                 </v-card>
               </v-col>
@@ -82,6 +86,9 @@ export default {
   },
 
   activated() {
+    this.$nextTick(() => {
+      this.$nuxt.$loading.start()
+    })
     this.$nuxt.$emit('extensionSetting', {
       tabs: [
         {
@@ -96,6 +103,48 @@ export default {
       show: true,
       showBtn: false,
     })
+
+    this.getDataChart()
   },
+
+  methods: {
+    async getDataChart() {
+      const resInvoice = await this.$axios.get(`/api/chart`, {
+        params: {
+          type: 'bar',
+          data: 'invoice'
+        }
+      })
+
+      const resExpense = await this.$axios.get(`/api/chart`, {
+        params: {
+          type: 'doughnut',
+          data: 'expense'
+        }
+      })
+
+      const resProfitLoss = await this.$axios.get(`/api/chart`, {
+        params: {
+          type: 'line',
+          data: 'profitLoss'
+        }
+      })
+
+      const resSales = await this.$axios.get(`/api/chart`, {
+        params: {
+          type: 'line',
+          data: 'sales'
+        }
+      })
+
+      this.$refs.invoice.setData(resInvoice.data)
+      this.$refs.expense.setData(resExpense.data)
+      this.$refs.profitLoss.setData(resProfitLoss.data)
+      this.$refs.sales.setData(resSales.data)
+
+      this.$nuxt.$loading.finish()
+
+    }
+  }
 }
 </script>

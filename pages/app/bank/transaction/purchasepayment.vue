@@ -5,6 +5,7 @@
       type-document="PY"
       form-url="/app/form/purchase/payment"
       table-url="/api/transactions"
+      url="/api/transactions"
       :header-table="[
         { text: $t('Transaction No'), value: 'transaction_no', cellClass: 'disable-wrap' },
         { text: 'Vendor', value: 'contact.name', cellClass: 'disable-wrap' },

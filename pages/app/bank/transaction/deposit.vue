@@ -5,6 +5,7 @@
       type-document="CE"
       form-url="/app/form/purchase/payment"
       table-url="/api/transactions"
+      url="/api/transactions"
       :header-table="[
         { text: 'Number', value: 'transaction_no', cellClass: 'disable-wrap' },
         { text: 'Customer', value: 'contact.name', cellClass: 'disable-wrap' },

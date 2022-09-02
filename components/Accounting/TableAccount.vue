@@ -29,6 +29,7 @@
             :item-search="itemSearch"
             :search-item="searchItem"
             :search="search"
+            :show-zero-qty="true"
             title="Chart of Accounts"
             show-batch-action
             show-new-data

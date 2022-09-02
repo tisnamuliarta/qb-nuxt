@@ -164,7 +164,7 @@ export default {
           text: 'Employee Deductions',
           value: 'amount_deduction',
           align: 'right',
-          class: 'text-right'
+          class: 'text-right',
         },
         { text: 'Net Pay', value: 'amount', align: 'right' },
       ],

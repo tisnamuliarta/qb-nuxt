@@ -71,29 +71,18 @@ export default {
   },
   data() {
     return {
-      chartData: {
-        labels: [
-          'January',
-          'February',
-          'March',
-          'April',
-          'May',
-          'June',
-          'July',
-        ],
-        datasets: [
-          {
-            label: 'Data One',
-            backgroundColor: '#f87979',
-            data: [40, 20, 80, 10, 39, 80, 40],
-          },
-        ],
-      },
+      chartData: {},
       chartOptions: {
         responsive: true,
         maintainAspectRatio: false,
       },
     }
   },
+
+  methods: {
+    setData(data) {
+      this.chartData = data
+    }
+  }
 }
 </script>

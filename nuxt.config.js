@@ -64,10 +64,10 @@ export default {
    ** https://nuxtjs.org/guide/plugins
    */
   plugins: [
-    { src: '~/plugins/tabulator.js' },
     { src: '~/plugins/helper.js' },
     { src: '~/plugins/formatter.js' },
     { src: '~/plugins/dragable.js' },
+    { src: '~/plugins/vidle.js' },
     { src: '~/plugins/vue-gates.js' },
     // { src: '~/plugins/vue-graph.js' },
     { src: '~/plugins/vuetify-money.js' },

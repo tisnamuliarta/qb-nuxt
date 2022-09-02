@@ -20,6 +20,22 @@ export default ({ app }, inject) => {
       }
     },
 
+    transactionList() {
+      return [
+        'CS',
+        'IN',
+        'CN',
+        'IN',
+        'RC',
+        'CP',
+        'BL',
+        'PY',
+        'DN',
+        'JN',
+        'CE',
+      ]
+    },
+
     statusColor(status) {
       switch (status) {
         case 'open':
@@ -91,9 +107,14 @@ export default ({ app }, inject) => {
 
         case 'BL':
           return [
+            // {
+            //   text: 'Copy to ' + i18n.t('Outgoing Payment'),
+            //   action: 'PY',
+            //   type: 'transaction',
+            // },
             {
-              text: 'Copy to ' + i18n.t('Outgoing Payment'),
-              action: 'PY',
+              text: 'Copy to ' + i18n.t('A/P Credit Memo'),
+              action: 'DN',
               type: 'transaction',
             },
           ]
@@ -165,9 +186,14 @@ export default ({ app }, inject) => {
 
         case 'IN':
           return [
+            // {
+            //   text: 'Copy to ' + i18n.t('Incoming Payment'),
+            //   action: 'RC',
+            //   type: 'transaction',
+            // },
             {
-              text: 'Copy to ' + i18n.t('Incoming Payment'),
-              action: 'RC',
+              text: 'Copy to ' + i18n.t('A/R Credit Memo'),
+              action: 'CN',
               type: 'transaction',
             },
           ]
@@ -181,7 +207,7 @@ export default ({ app }, inject) => {
             },
           ]
 
-        case 'CN':
+        case 'SR':
           return [
             {
               text: 'Copy to ' + i18n.t('Sales Return'),

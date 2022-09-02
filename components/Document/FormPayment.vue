@@ -92,12 +92,12 @@
     </v-col>
 
     <v-col cols="12" class="mt-2">
-      <v-card flat>
+      <div class="scroll-container-min">
         <LazyPaymentTablePayment
           ref="childDetails"
           @calcTotal="calcTotal"
         ></LazyPaymentTablePayment>
-      </v-card>
+      </div>
     </v-col>
 
     <v-col cols="12" md="4" lg="4">

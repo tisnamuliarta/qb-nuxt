@@ -5,6 +5,7 @@
       type-document="CS"
       form-url="/app/form/sales/cash"
       table-url="/api/transactions"
+      url="/api/transactions"
       :header-table="[
         { text: $t('Transaction No'), value: 'transaction_no', cellClass: 'disable-wrap' },
         { text: 'No Contract', value: 'reference_no', cellClass: 'disable-wrap' },

@@ -5,6 +5,7 @@
       type-document="RC"
       form-url="/app/form/sales/payment"
       table-url="/api/transactions"
+      url="/api/transactions"
       :header-table="[
         { text: $t('Transaction No'), value: 'transaction_no', cellClass: 'disable-wrap' },
         { text: 'Customer', value: 'contact.name', cellClass: 'disable-wrap' },

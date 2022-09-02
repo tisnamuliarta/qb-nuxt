@@ -659,7 +659,7 @@ export default {
           this.form.discount_amount = 0
         }
 
-        this.changeCalculation(data)
+        // this.changeCalculation(data)
       } catch (e) {
         // eslint-disable-next-line no-console
         console.log(e)
@@ -668,6 +668,7 @@ export default {
 
     // Calculating the tax amount, discount amount, total amount, balance due, etc.
     changeCalculation(data) {
+      // console.log(data)
       // this.taxDetails = (data) ? data.taxDetail : []
       // calculate discount
       if (this.taxDetails.length > 0) {
@@ -707,10 +708,10 @@ export default {
 
       // calculate total amount
       this.form.main_account_amount =
-        parseFloat(this.form.sub_total) -
-        parseFloat(this.form.discount_per_line) -
-        parseFloat(this.form.discount_amount) +
-        parseFloat(this.taxAmount)
+        parseFloat(this.form.sub_total || 0) -
+        parseFloat(this.form.discount_per_line || 0) -
+        parseFloat(this.form.discount_amount || 0) +
+        parseFloat(this.taxAmount || 0);
 
       // calculate amount before tax for tax withholding
       this.amountBeforeTax = this.form.main_account_amount - this.taxAmount
@@ -722,14 +723,14 @@ export default {
             (this.form.withholding_rate / 100) * this.amountBeforeTax
         }
       } else {
-        this.form.withholding_amount = parseFloat(this.form.withholding_rate)
+        this.form.withholding_amount = parseFloat(this.form.withholding_rate || 0)
       }
 
       this.form.balance_due =
-        this.form.main_account_amount -
-        this.form.deposit_amount -
-        this.form.withholding_amount -
-        parseFloat(this.form.shipping_fee)
+        parseFloat(this.form.main_account_amount || 0) -
+        parseFloat(this.form.deposit_amount || 0) -
+        parseFloat(this.form.withholding_amount || 0) -
+        parseFloat(this.form.shipping_fee || 0)
     },
 
     // Reducing the array of tax details and returning the result.

@@ -125,6 +125,7 @@ export default {
       username: '',
       menu: false,
       menu2: false,
+      menu3: false,
     }
   },
 
@@ -133,6 +134,24 @@ export default {
   },
 
   methods: {
+    openActionForm(data) {
+      this.menu3 = false
+      if (data.item.route) {
+        this.overlay = true
+        this.$router.push({
+          path: data.item.route,
+          query: {
+            document: 0,
+          },
+        })
+        this.overlay = false
+      } else if (data.item.type === 'function') {
+        this[data.item.action]()
+      } else {
+        this.$refs.settingForm.openDialog(data, 0, null)
+      }
+    },
+
     openAction(data) {
       this.menu = false
       if (data.item.route) {

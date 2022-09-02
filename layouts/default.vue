@@ -10,7 +10,7 @@
 
       <v-toolbar-title class="ml-0 pl-0">
         <span
-          class="font-weight-bold"
+          class="font-weight-bold hidden-sm-and-down"
           style="cursor: pointer"
           @click="$router.push('/home/business-overview')"
           v-text="companyName"
@@ -27,10 +27,8 @@
           align-with-title
           color="black"
           slider-color="green"
-          next-icon="mdi-arrow-right-bold-box-outline"
-          prev-icon="mdi-arrow-left-bold-box-outline"
           show-arrows
-          style="margin-left: 20px"
+          style="margin-left: 10px"
           slider-size="4"
         >
           <v-tab
@@ -107,28 +105,40 @@
           >
           </v-skeleton-loader>
           <img v-show="!loadImage" :src="logo" class="mt-1 mb-3" height="50" />
-          <v-divider></v-divider>
         </NuxtLink>
 
-        <v-menu
-          v-model="menu"
-          transition="slide-y-transition"
-          bottom
-          offset-y
-          left
-          :nudge-width="600"
-        >
-          <template #activator="{ on }">
-            <v-btn outlined block small color="primary" class="mb-4" v-on="on">
-              <v-icon>mdi-plus</v-icon>
-              New
-            </v-btn>
-          </template>
+        <div class="text-center" style="margin-bottom: 10px; margin-top: -10px;">
+          <v-menu
+            v-model="menu"
+            class="text-center"
+            transition="slide-y-transition"
+            bottom
+            offset-y
+            left
+            close-on-content-click
+            :nudge-width="600"
+          >
+            <template #activator="{ on }">
+              <v-btn
+                rounded
+                small
+                color="primary"
+                class="text-center"
+                elevation="2"
+                v-on="on"
+              >
+                <!-- <v-icon>mdi-new-box</v-icon> -->
+                {{ $t('New Transactions') }}
+              </v-btn>
+            </template>
 
-          <v-card class="rounded-lg" elevation="18">
-            <LazyFormNew ref="formNew" @openAction="openAction" />
-          </v-card>
-        </v-menu>
+            <v-card class="rounded-lg" elevation="18">
+              <LazyFormNew ref="formNew" @openAction="openAction" />
+            </v-card>
+          </v-menu>
+        </div>
+
+        <v-divider></v-divider>
 
         <v-list-group
           v-for="item in items"
@@ -185,12 +195,21 @@
 
     <!-- <LazySetupListSetting ref="settingForm" /> -->
 
-    <v-footer color="grey lighten-3" padless>
+    <v-idle
+      :loop="true"
+      :reminders="[10, 15]"
+      :wait="5"
+      :duration="3600"
+      @idle="onIdle"
+      @remind="onRemind"
+    />
+
+    <!-- <v-footer color="grey lighten-3" padless>
       <v-col class="text-center" cols="12">
         Copyright © {{ new Date().getFullYear() }} —
         <strong> {{ company.company_name }} </strong>
       </v-col>
-    </v-footer>
+    </v-footer> -->
   </v-app>
 </template>
 
@@ -252,6 +271,27 @@ export default {
   },
 
   methods: {
+    onIdle() {
+      this.$swal({
+        type: 'warning',
+        title: 'Warning',
+        text: 'You have been logged out',
+      })
+      this.logout()
+    },
+    onRemind(time) {
+      this.$swal({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        icon: 'warning',
+        type: 'warning',
+        title: 'Warning',
+        text: time,
+      })
+    },
+
     openSnackbar(data) {
       if (data) {
         this.snackbar = true

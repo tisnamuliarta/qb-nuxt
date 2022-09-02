@@ -2,7 +2,7 @@
   <v-row no-gutters align="center" align-content="center" justify="center">
     <v-col cols="12" sm="6" md="5" lg="4" xl="3" align-self="center">
       <v-form @keyup.native.enter="login">
-        <v-card class="mt-3 rounded-lg" elevation="0" rounded="lg" tile>
+        <v-card class="mt-3" elevation="0">
           <v-row no-gutters>
             <v-col cols="12" md="12">
               <v-card-text class="pb-0 mt-4">

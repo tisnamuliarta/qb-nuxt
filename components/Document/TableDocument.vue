@@ -31,7 +31,7 @@
             :new-data-multiple-item="itemMultiple"
             show-batch-action
             show-filter
-            show-new-data-multiple
+            :show-new-data-multiple="showNewDataMultiple"
             new-data-text="New Transactions"
             @emitData="emitData"
             @newData="newData"
@@ -136,6 +136,12 @@ export default {
       type: String,
       default: '',
     },
+    typeTrans: {
+      type: Array,
+      default() {
+        return []
+      },
+    },
     formUrl: {
       type: String,
       default: '',
@@ -173,6 +179,10 @@ export default {
       default() {
         return []
       },
+    },
+    showNewDataMultiple: {
+      type: Boolean,
+      default: true,
     },
   },
 
@@ -361,6 +371,7 @@ export default {
         searchStatus: vm.searchStatus,
         search: vm.search,
         type: this.typeDocument,
+        typeTrans: this.typeTrans,
         dateFrom: this.dateFrom,
         dateTo: this.dateTo,
       }

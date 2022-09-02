@@ -16,8 +16,15 @@
           filterable: false,
         },
         {
-          text: $t('Due Date'),
-          value: 'due_date',
+          text: $t('Reference'),
+          value: 'reference_no',
+          cellClass: 'disable-wrap',
+          sortable: false,
+          filterable: false,
+        },
+        {
+          text: $t('Warehouse'),
+          value: 'warehouse.name',
           cellClass: 'disable-wrap',
           sortable: false,
           filterable: false,

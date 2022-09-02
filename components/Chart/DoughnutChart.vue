@@ -61,20 +61,18 @@ export default {
   },
   data() {
     return {
-      chartData: {
-        labels: ['Vuejs', 'EmberJs', 'ReactJs', 'AngularJs'],
-        datasets: [
-          {
-            backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
-            data: [40, 20, 80, 10],
-          },
-        ],
-      },
+      chartData: {},
       chartOptions: {
         responsive: true,
         maintainAspectRatio: false,
       },
     }
   },
+
+  methods: {
+    setData(data) {
+      this.chartData = data
+    }
+  }
 }
 </script>

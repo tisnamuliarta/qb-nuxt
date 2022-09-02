@@ -239,17 +239,33 @@ export default {
         const copyFrom = this.$route.query.copyFrom
         let res = ''
         if (copyFrom) {
-          res = await this.$axios.get(`/api/document/copy/` + copyFrom)
+          res = await this.$axios.get(`/api/document/copy`, {
+            params: {
+              type,
+              copyFromId,
+              copyFrom,
+            },
+          })
         } else {
-          res = await this.$axios.get(
-            this.url + '/' + this.$route.query.document,
-            {
-              params: {
-                type,
-                copyFromId,
-              },
-            }
-          )
+          const transaction = this.$formatter.transactionList()
+
+          const transactionType =
+            this.form.transaction_type === undefined
+              ? type
+              : this.form.transaction_type
+
+          const transactionUrl = transaction.includes(transactionType)
+            ? '/api/transactions'
+            : this.url
+
+          const url = transactionUrl + '/' + this.$route.query.document
+
+          res = await this.$axios.get(url, {
+            params: {
+              type,
+              copyFromId,
+            },
+          })
         }
 
         let form = ''
@@ -283,7 +299,6 @@ export default {
         }
 
         this.title = this.dialogTitle + ' #' + this.form.transaction_no
-
         this.$refs.dialogForm.setTitle(this.title)
         this.$refs.formDocument.setData(this.form)
 
@@ -479,7 +494,11 @@ export default {
     save(action) {
       this.actionOnSave = action
       const docId = this.$route.query.document
-      const url = docId === '0' ? this.url : this.url + '/' + docId
+      const transaction = this.$formatter.transactionList()
+      const transactionUrl = transaction.includes(this.form.transaction_type)
+        ? '/api/transactions'
+        : this.url
+      const url = docId === '0' ? transactionUrl : transactionUrl + '/' + docId
       const method = docId === '0' ? 'post' : 'patch'
       const data = {
         ...this.$refs.formDocument.returnData(docId),
