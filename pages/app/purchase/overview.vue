@@ -3,69 +3,26 @@
     <v-row>
       <v-col cols="12" lg="10">
         <v-row>
-          <v-col cols="12" md="6" xl="4">
-            <v-card class="mx-auto">
+          <v-col cols="12" sm="6" lg="6">
+            <v-card>
               <v-card-text>
-                <div class="subtitle-1">SHORTCUTS</div>
+                <div class="subtitle-1">PURCHASE</div>
               </v-card-text>
+              <v-divider></v-divider>
               <v-card-text>
-                <LazyChartBarChart></LazyChartBarChart>
-              </v-card-text>
-            </v-card>
-          </v-col>
-
-
-          <v-col cols="12" md="6" xl="4">
-            <v-card class="mx-auto">
-              <v-card-text>
-                <div class="subtitle-1">SHORTCUTS</div>
-              </v-card-text>
-              <v-card-text>
-                <LazyChartBarChart></LazyChartBarChart>
+                <LazyChartLineChart ref="sales"></LazyChartLineChart>
               </v-card-text>
             </v-card>
           </v-col>
 
-          <v-col cols="12" md="6" xl="4">
-            <v-card class="mx-auto">
+          <v-col cols="12" sm="6" lg="6">
+            <v-card>
               <v-card-text>
-                <div class="subtitle-1">SHORTCUTS</div>
+                <div class="subtitle-1">EXPENSES</div>
               </v-card-text>
+              <v-divider></v-divider>
               <v-card-text>
-                <LazyChartLineChart></LazyChartLineChart>
-              </v-card-text>
-            </v-card>
-          </v-col>
-
-          <v-col cols="12" md="6" xl="4">
-            <v-card class="mx-auto">
-              <v-card-text>
-                <div class="subtitle-1">SHORTCUTS</div>
-              </v-card-text>
-              <v-card-text>
-                <LazyChartLineChart></LazyChartLineChart>
-              </v-card-text>
-            </v-card>
-          </v-col>
-
-          <v-col cols="12" md="6" xl="4">
-            <v-card class="mx-auto">
-              <v-card-text>
-                <div class="subtitle-1">SHORTCUTS</div>
-              </v-card-text>
-              <v-card-text>
-                <LazyChartPieChart></LazyChartPieChart>
-              </v-card-text>
-            </v-card>
-          </v-col>
-
-          <v-col cols="12" md="6" xl="4">
-            <v-card class="mx-auto">
-              <v-card-text>
-                <div class="subtitle-1">SHORTCUTS</div>
-              </v-card-text>
-              <v-card-text>
-                <LazyChartDoughnutChart></LazyChartDoughnutChart>
+                <LazyChartDoughnutChart ref="expense"></LazyChartDoughnutChart>
               </v-card-text>
             </v-card>
           </v-col>
@@ -81,15 +38,20 @@ export default {
 
   head() {
     return {
-      title: 'Sales Overview',
+      title: 'Purchase Overview',
     }
   },
 
   activated() {
+    this.getDataChart()
     this.$nuxt.$emit('extensionSetting', {
       show: false,
       showBtn: false,
     })
+  },
+
+  mounted() {
+    this.getDataChart()
   },
 
   created() {
@@ -102,6 +64,26 @@ export default {
         this.$refs.tableDocument.getDataFromApi()
       }
     },
+
+    async getDataChart() {
+      const resSales = await this.$axios.get(`/api/chart`, {
+        params: {
+          type: 'line',
+          data: 'purchase'
+        }
+      })
+      const resExpense = await this.$axios.get(`/api/chart`, {
+        params: {
+          type: 'doughnut',
+          data: 'expense'
+        }
+      })
+      this.$refs.expense.setData(resExpense.data)
+      this.$refs.sales.setData(resSales.data)
+
+      this.$nuxt.$loading.finish()
+
+    }
   },
 }
 </script>

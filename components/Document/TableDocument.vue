@@ -1,7 +1,9 @@
 <template>
   <v-row>
     <v-col cols="12" class="mt-0">
+      <v-skeleton-loader v-show="loading" type="table" />
       <v-data-table
+        v-show="!loading"
         :mobile-breakpoint="0"
         :headers="headers"
         :items="allData"
@@ -234,9 +236,14 @@ export default {
     this.mappingDocument()
   },
 
+  activated() {
+    this.getDataFromApi()
+  },
+
   mounted() {
     this.itemText = this.items[0].text
     this.itemAction = this.items[0].action
+    // this.getDataFromApi()
   },
 
   methods: {

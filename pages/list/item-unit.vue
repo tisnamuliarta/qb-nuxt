@@ -10,7 +10,6 @@
           :options.sync="options"
           :server-items-length="totalData"
           :loading="loading"
-          hide-default-footer
           class="elevation-1"
           dense
           fixed-header

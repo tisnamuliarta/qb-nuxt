@@ -2,7 +2,9 @@
   <v-layout>
     <v-flex sm12>
       <div class="mt-0">
+        <v-skeleton-loader v-show="loading" type="table" />
         <v-data-table
+          v-show="!loading"
           item-key="menu_name"
           :mobile-breakpoint="0"
           :headers="headers"
@@ -490,7 +492,7 @@ export default {
         .get(`/api/master/permissions`, {
           params: {
             ...vm.options,
-            ...status
+            ...status,
           },
         })
         .then((res) => {

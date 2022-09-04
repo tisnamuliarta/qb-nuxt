@@ -2,7 +2,9 @@
   <v-layout>
     <v-flex sm12>
       <div class="mt-0">
+        <v-skeleton-loader v-show="loading" type="table" />
         <v-data-table
+          v-show="!loading"
           :mobile-breakpoint="0"
           :headers="headers"
           :items="allData"
@@ -195,7 +197,7 @@ export default {
         .get(this.url, {
           params: {
             ...vm.options,
-            ...status
+            ...status,
           },
         })
         .then((res) => {

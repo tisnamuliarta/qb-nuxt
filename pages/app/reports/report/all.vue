@@ -2,7 +2,7 @@
   <LazyReportLayoutDefault
     ref="report"
     :period="period"
-    md-width="12"
+    :md-width="width"
     @getData="getData"
   >
     <template #content>
@@ -24,6 +24,7 @@ export default {
       loading: true,
       allData: [],
       period: '',
+      width: '8'
     }
   },
 
@@ -36,7 +37,8 @@ export default {
   methods: {
     getData(data) {
       this.allData = data.data
-      this.period = data.startDate + ' to ' + data.endDate
+      this.period = data.startDate + ' - ' + data.endDate
+      this.width = data.width
     },
   },
 }

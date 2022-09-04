@@ -1,7 +1,7 @@
 <template>
   <LazyReportLayoutDefault
     ref="report"
-    md-width="8"
+    md-width="6"
     :period="period"
     @getData="getData"
   >
@@ -239,7 +239,7 @@ export default {
     getData(data) {
       this.allData = data.data
 
-      this.period = data.startDate + ' to ' + data.endDate
+      this.period = data.startDate + ' - ' + data.endDate
       // assets
       this.itemNonCurrentAsset = this.allData.accounts.ASSETS.NON_CURRENT_ASSET
       this.itemContraAsset = this.allData.accounts.ASSETS.CONTRA_ASSET

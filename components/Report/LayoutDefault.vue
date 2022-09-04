@@ -1,7 +1,8 @@
 <template>
   <v-container>
     <v-row align="center" align-content="center" justify="center">
-      <v-col cols="12" :md="mdWidth">
+      <v-skeleton-loader v-show="loading" type="table" />
+      <v-col v-show="!loading" cols="12" :md="mdWidth">
         <v-card>
           <v-card-text>
             <div class="pl-4 pt-2">
@@ -17,9 +18,15 @@
                 All Reports
               </v-chip>
 
-              <span class="font-weight-medium text-h6">{{
-                $t($route.query.name)
-              }} {{ period }}</span>
+              <div class="text-center">
+                <p class="font-weight-medium text-h5 mt-n4">
+                  {{ $t($route.query.name) }}
+                </p>
+                <p class="font-weight-medium mt-n4">
+                  Period: {{ period }}
+                </p>
+              </div>
+              <v-divider></v-divider>
             </div>
 
             <LazyMainToolbar
@@ -51,7 +58,7 @@ export default {
   props: {
     mdWidth: {
       type: String,
-      default: '12',
+      default: '6',
     },
     period: {
       type: String,
@@ -84,9 +91,13 @@ export default {
   },
 
   activated() {
-    this.$nextTick(() => {
-      this.$nuxt.$loading.start()
-    })
+    // this.$nextTick(() => {
+    //   this.$nuxt.$loading.start()
+    // })
+    this.getDataFromApi()
+  },
+
+  mounted() {
     this.getDataFromApi()
   },
 
@@ -111,7 +122,7 @@ export default {
       this.date_from = data.dateFrom
       this.date_to = data.dateTo
 
-      this.$nuxt.$loading.start()
+      // this.$nuxt.$loading.start()
       this.getDataFromApi()
     },
 
@@ -132,13 +143,14 @@ export default {
           },
         })
         .then((res) => {
-          this.$nuxt.$loading.finish()
+          // this.$nuxt.$loading.finish()
           this.loading = false
           this.allData = res.data.data
           this.$emit('getData', {
             data: this.allData,
             startDate: res.data.start_date,
             endDate: res.data.end_date,
+            width: res.data.width,
           })
           this.totalData = res.data.total
           this.itemSearch = res.data.filter
@@ -147,7 +159,7 @@ export default {
         })
         .catch((err) => {
           this.loading = false
-          this.$nuxt.$loading.finish()
+          // this.$nuxt.$loading.finish()
           this.$swal({
             type: 'error',
             title: 'Error',

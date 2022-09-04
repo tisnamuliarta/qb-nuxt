@@ -2,7 +2,9 @@
   <v-layout>
     <v-flex sm12>
       <div class="mt-0">
+        <v-skeleton-loader v-show="loading" type="table" />
         <v-data-table
+          v-show="!loading"
           :mobile-breakpoint="0"
           :headers="headers"
           :items="allData"
@@ -167,7 +169,7 @@ export default {
       this.$axios
         .get(this.url, {
           params: {
-           ...vm.options,
+            ...vm.options,
           },
         })
         .then((res) => {
@@ -224,7 +226,13 @@ export default {
       if (status === 'insert') {
         this.store('post', this.url, this.form, 'insert', type)
       } else if (status === 'update') {
-        this.store('put', this.url + '/' + this.form.id, this.form, 'update', type)
+        this.store(
+          'put',
+          this.url + '/' + this.form.id,
+          this.form,
+          'update',
+          type
+        )
       }
     },
 

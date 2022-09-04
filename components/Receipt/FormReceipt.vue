@@ -63,13 +63,13 @@
     </v-col>
 
     <v-col cols="12" class="mt-1">
+      <div class="scroll-container-min">
+        <LazyReceiptTableDetailReceipt
+          ref="childDetails"
+          @calcTotal="calcTotal"
+        ></LazyReceiptTableDetailReceipt>
+      </div>
       <v-card flat>
-        <div class="scroll-container-min">
-          <LazyReceiptTableDetailReceipt
-            ref="childDetails"
-            @calcTotal="calcTotal"
-          ></LazyReceiptTableDetailReceipt>
-        </div>
         <v-card-actions>
           <v-btn
             small

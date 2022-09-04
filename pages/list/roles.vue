@@ -181,6 +181,7 @@ export default {
         name: null,
         description: null,
       },
+      url: '/api/master/roles',
       options: {},
       optionDivision: {},
       headers: [

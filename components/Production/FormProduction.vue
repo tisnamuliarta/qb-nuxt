@@ -120,13 +120,13 @@
     </v-col>
 
     <v-col cols="12" class="mt-1">
+      <div class="scroll-container-min">
+        <LazyProductionTableDetailProduction
+          ref="childDetails"
+          @calcTotal="calcTotal"
+        ></LazyProductionTableDetailProduction>
+      </div>
       <v-card flat>
-        <div class="scroll-container-min">
-          <LazyProductionTableDetailProduction
-            ref="childDetails"
-            @calcTotal="calcTotal"
-          ></LazyProductionTableDetailProduction>
-        </div>
         <v-card-actions>
           <v-btn
             small

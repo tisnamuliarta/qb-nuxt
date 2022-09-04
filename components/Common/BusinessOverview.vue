@@ -6,7 +6,8 @@
           <v-col cols="12">
             <v-row>
               <v-col cols="12" sm="6" lg="6" xl="4">
-                <v-card>
+                <v-skeleton-loader v-show="loading" type="card" />
+                <v-card v-show="!loading">
                   <v-card-text>
                     <div class="subtitle-1">INVOICES</div>
                   </v-card-text>
@@ -18,7 +19,8 @@
               </v-col>
 
               <v-col cols="12" sm="6" lg="6" xl="4">
-                <v-card>
+                <v-skeleton-loader v-show="loading" type="card" />
+                <v-card v-show="!loading">
                   <v-card-text>
                     <div class="subtitle-1">EXPENSES</div>
                   </v-card-text>
@@ -30,7 +32,8 @@
               </v-col>
 
               <v-col cols="12" sm="6" lg="6" xl="4">
-                <v-card>
+                <v-skeleton-loader v-show="loading" type="card" />
+                <v-card v-show="!loading">
                   <v-card-text>
                     <div class="subtitle-1">PROFIT AND LOSS</div>
                   </v-card-text>
@@ -42,7 +45,8 @@
               </v-col>
 
               <v-col cols="12" sm="6" lg="6" xl="4">
-                <v-card>
+                <v-skeleton-loader v-show="loading" type="card" />
+                <v-card v-show="!loading">
                   <v-card-text>
                     <div class="subtitle-1">SALES</div>
                   </v-card-text>
@@ -80,15 +84,16 @@ export default {
   name: 'DashboardHome',
   data() {
     return {
+      loading: true,
       title: 'Dashboard',
       value: [423, 446, 675, 510, 590, 610, 760],
     }
   },
 
   activated() {
-    this.$nextTick(() => {
-      this.$nuxt.$loading.start()
-    })
+    // this.$nextTick(() => {
+    //   this.$nuxt.$loading.start()
+    // })
     this.$nuxt.$emit('extensionSetting', {
       tabs: [
         {
@@ -107,8 +112,13 @@ export default {
     this.getDataChart()
   },
 
+  mounted() {
+    this.getDataChart()
+  },
+
   methods: {
     async getDataChart() {
+      this.loading = true
       const resInvoice = await this.$axios.get(`/api/chart`, {
         params: {
           type: 'bar',
@@ -142,7 +152,8 @@ export default {
       this.$refs.profitLoss.setData(resProfitLoss.data)
       this.$refs.sales.setData(resSales.data)
 
-      this.$nuxt.$loading.finish()
+      // this.$nuxt.$loading.finish()
+      this.loading = false
 
     }
   }

@@ -57,19 +57,23 @@
                     <th class="title"></th>
                     <th class="title"></th>
                     <th class="title"></th>
-                    <th class="title text-right">
-                      {{
-                        $auth.user.entity.currency.currency_symbol +
-                        ' ' +
-                        $formatter.formatPrice(sumField('amount_debit'))
-                      }}
+                    <th class="text-right">
+                      <strong>
+                        {{
+                          $auth.user.entity.currency.currency_symbol +
+                          ' ' +
+                          $formatter.formatPrice(sumField('amount_debit'))
+                        }}
+                      </strong>
                     </th>
-                    <th class="title text-right">
-                      {{
-                        $auth.user.entity.currency.currency_symbol +
-                        ' ' +
-                        $formatter.formatPrice(sumField('amount_credit'))
-                      }}
+                    <th class="text-right">
+                      <strong>
+                        {{
+                          $auth.user.entity.currency.currency_symbol +
+                          ' ' +
+                          $formatter.formatPrice(sumField('amount_credit'))
+                        }}
+                      </strong>
                     </th>
                   </tr>
                   <tr>

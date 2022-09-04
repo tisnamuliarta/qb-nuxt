@@ -283,6 +283,12 @@ export default {
         .then((res) => {
           vm.submitLoad = false
           this.$refs.dialogForm.closeDialog()
+
+          this.$swal({
+            type: 'success',
+            title: 'Success',
+            text: res.data.message,
+          })
           this.getDataFromApi()
         })
         .catch((err) => {

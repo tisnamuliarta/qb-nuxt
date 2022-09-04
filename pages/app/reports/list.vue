@@ -28,7 +28,7 @@
               hoverable
             >
               <template #label="{ item }">
-                <a @click="openDialog(item)">{{ item.name }}</a>
+                <span style="cursor: pointer;" @click="openDialog(item)">{{ item.name }}</span>
               </template>
             </v-treeview>
           </v-card-text>

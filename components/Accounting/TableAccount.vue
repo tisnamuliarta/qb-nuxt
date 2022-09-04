@@ -1,7 +1,9 @@
 <template>
   <v-row>
     <v-col cols="12" class="mt-0">
+      <v-skeleton-loader v-show="loading" type="table" />
       <v-data-table
+        v-show="!loading"
         v-model="selected"
         :mobile-breakpoint="0"
         :headers="headers"
