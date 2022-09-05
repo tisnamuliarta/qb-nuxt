@@ -83,8 +83,9 @@
 
             <v-col cols="12" md="4">
               <v-autocomplete
+                v-model="searchStatusData"
                 label="Status"
-                :items="['All', 'Open', 'Draft', 'Cancel', 'Closed', 'Pending']"
+                :items="['All', 'Open', 'Paid', 'Draft', 'Cancel', 'Closed', 'Pending']"
                 outlined
                 dense
                 hide-details="auto"
@@ -457,7 +458,7 @@ export default {
       this.$emit('emitData', {
         documentStatus: data.documentStatus,
         itemSearch: data.itemSearch,
-        searchStatus: data.searchStatus,
+        searchStatus: this.searchStatusData,
         searchItem: data.searchItem,
         search: data.search,
         dateFrom: this.form.date_from,
