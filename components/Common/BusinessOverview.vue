@@ -61,7 +61,7 @@
         </v-row>
       </v-container>
     </v-col>
-
+<!--
     <v-col cols="12" md="3">
       <v-container>
         <v-row>
@@ -75,7 +75,7 @@
           </v-col>
         </v-row>
       </v-container>
-    </v-col>
+    </v-col> -->
   </v-row>
 </template>
 

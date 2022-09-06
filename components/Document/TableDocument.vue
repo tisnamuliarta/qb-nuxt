@@ -84,7 +84,11 @@
 
         <template #[`item.actions`]="{ item }">
           <v-btn
-            v-if="item.status === 'open' || item.status === 'draft'"
+            v-if="
+              item.status === 'open' ||
+              item.status === 'draft' ||
+              item.status === 'partial'
+            "
             color="secondary"
             class="font-weight-bold text-right pr-0"
             text

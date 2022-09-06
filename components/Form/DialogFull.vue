@@ -22,19 +22,27 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn icon>
+        <v-btn v-if="showIcon" icon @click="$emit('newData')">
           <v-icon>mdi-new-box</v-icon>
         </v-btn>
 
-        <v-btn icon>
+        <v-btn v-if="showIcon" icon @click="$emit('printAction')">
           <v-icon>mdi-printer</v-icon>
         </v-btn>
 
-        <v-btn icon @click="$emit('arrowLink', { status: 'prev' })">
+        <v-btn
+          v-if="showIcon"
+          icon
+          @click="$emit('arrowLink', { status: 'prev' })"
+        >
           <v-icon>mdi-arrow-left-thin</v-icon>
         </v-btn>
 
-        <v-btn icon @click="$emit('arrowLink', { status: 'next' })">
+        <v-btn
+          v-if="showIcon"
+          icon
+          @click="$emit('arrowLink', { status: 'next' })"
+        >
           <v-icon>mdi-arrow-right-thin</v-icon>
         </v-btn>
 
@@ -63,6 +71,13 @@
 <script>
 export default {
   name: 'DialogFull',
+
+  props: {
+    showIcon: {
+      type: Boolean,
+      default: false,
+    },
+  },
 
   data() {
     return {

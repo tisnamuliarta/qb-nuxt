@@ -1,8 +1,11 @@
 <template>
   <LazyFormDialogFull
     ref="dialogForm"
+    :show-icon="true"
     @arrowLink="arrowLink"
     @closeDialog="closeDialog"
+    @newData="newData"
+    @printAction="printAction('preview')"
   >
     <v-overlay :value="showLoading">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
@@ -170,11 +173,28 @@ export default {
       this.$auth.$storage.setState('formType', this.formType)
       // this.dialog = true
       this.$refs.dialogForm.openDialog()
+      // this.getDataFromApi()
+    }, 500)
+  },
+
+  mounted() {
+    setTimeout(() => {
       this.getDataFromApi()
     }, 500)
   },
 
   methods: {
+    newData() {
+      this.$router.push({
+        path: this.formUrl,
+        query: {
+          document: 0,
+        },
+      })
+      setTimeout(() => {
+        this.getDataFromApi()
+      }, 500)
+    },
     // A method that is called when the dialog is closed.
     close() {
       this.$emit('getDataFromApi')
@@ -430,6 +450,10 @@ export default {
           break
         case 'sendEmail':
           this.openDialogEmail()
+          break
+
+        default:
+          this.previewDocument()
           break
       }
     },
