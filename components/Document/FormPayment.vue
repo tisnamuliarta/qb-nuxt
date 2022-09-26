@@ -246,7 +246,9 @@ export default {
 
   // The above code is calling the methods that are defined in the methods section of the Vue instance.
   mounted() {
-    // this.getMasterData()
+    setTimeout(() => {
+      this.getMasterData()
+    }, 500)
   },
 
   methods: {

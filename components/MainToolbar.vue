@@ -228,7 +228,8 @@
       <v-icon>mdi-refresh</v-icon>
     </v-btn>
 
-    <!-- <v-btn
+    <v-btn
+      v-if="showPrintBtn"
       class="ml-1 mr-1 d-none d-sm-flex"
       :loading="loading"
       icon
@@ -239,6 +240,7 @@
     </v-btn>
 
     <v-btn
+      v-if="showPdfBtn"
       class="ml-1 mr-1 d-none d-sm-flex"
       :loading="loading"
       icon
@@ -248,7 +250,7 @@
       <v-icon>mdi-microsoft-excel</v-icon>
     </v-btn>
 
-    <v-btn
+    <!-- <v-btn
       class="d-none d-sm-flex"
       :loading="loading"
       icon
@@ -373,6 +375,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    showPrintBtn: {
+      type: Boolean,
+      default: false,
+    },
+    showPdfBtn: {
+      type: Boolean,
+      default: false,
+    },
     newDataMultipleItem: {
       type: Array,
       default() {
@@ -479,10 +489,10 @@ export default {
           this.$emit('getDataFromApi')
           break
         case 'print':
-          this.$emit('getDataFromApi')
+          this.$emit('printPdf')
           break
         case 'export-excel':
-          this.$emit('getDataFromApi')
+          this.$emit('exportExcel')
           break
         case 'setting':
           this.$emit('getDataFromApi')

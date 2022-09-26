@@ -121,14 +121,14 @@ export default {
         username: '',
         password: '',
         remember: false,
-        localeApp: 'en',
+        localeApp: 'id',
         app_name: process.env.appName,
       },
       defaultForm: {
         username: '',
         password: '',
         remember: false,
-        localeApp: 'en',
+        localeApp: 'id',
         app_name: process.env.appName,
       },
       language: [
@@ -169,10 +169,12 @@ export default {
 
   methods: {
     getLogo() {
-      this.$axios.get(`/api/logo`).then((res) => {
-        this.logo = res.data.default
-        this.bgLogin = res.data.bgLogin
-      })
+      this.$axios
+        .get(`/api/logo`)
+        .then((res) => {
+          this.logo = res.data.default
+          this.bgLogin = res.data.bgLogin
+        })
         .finally(() => {
           this.$nuxt.$loading.finish()
         })
@@ -192,6 +194,17 @@ export default {
           this.loading = false
           this.$i18n.setLocale(this.form.localeApp)
           // this.$router.push('/dashboard')
+
+          // Then check callback rediect
+          if (this.$auth.$state.redirect) {
+            // If rediect to login page from page that is required authentication (auth midleware), go that page
+            window.location.href = this.$auth.$state.redirect
+          } else if (this.$route.query.service) {
+            window.location.href = this.$route.query.service
+          } else {
+            // Otherwise, go to home page
+            window.location.href = '/qbi/home/business-overview'
+          }
         })
         .catch((err) => {
           this.loading = false

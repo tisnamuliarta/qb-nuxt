@@ -22,9 +22,7 @@
                 <p class="font-weight-medium text-h5 mt-n4">
                   {{ $t($route.query.name) }}
                 </p>
-                <p class="font-weight-medium mt-n4">
-                  Period: {{ period }}
-                </p>
+                <p class="font-weight-medium mt-n4">Period: {{ period }}</p>
               </div>
               <v-divider></v-divider>
             </div>
@@ -35,9 +33,13 @@
               :item-search="itemSearch"
               :search-item="searchItem"
               :search="search"
+              show-pdf-btn
+              show-print-btn
               title="Chart of Accounts"
               show-filter
               @emitData="emitData"
+              @printPdf="printPdf"
+              @exportExcel="exportExcel"
               @getDataFromApi="getDataFromApi"
             />
 
@@ -112,6 +114,78 @@ export default {
       })
     },
 
+    printPdf() {
+      const vm = this
+      this.$nuxt.$loading.start()
+      this.$axios
+        .get(`/api/report/pdf`, {
+          params: {
+            reportType: vm.$auth.$storage.getCookie('reportType'),
+            start_date: vm.date_from,
+            end_date: vm.date_to,
+          },
+          responseType: 'arraybuffer',
+        })
+        .then((response) => {
+          this.$nuxt.$loading.finish()
+          const url = window.URL.createObjectURL(new Blob([response.data]))
+          const link = document.createElement('a')
+
+          link.href = url
+          link.setAttribute(
+            'download',
+            vm.$auth.$storage.getCookie('reportType') + '.pdf'
+          ) // set custom file name
+          document.body.appendChild(link)
+
+          link.click() // force download file without open new tab
+        })
+        .catch((err) => {
+          this.$nuxt.$loading.finish()
+          this.$swal({
+            type: 'error',
+            title: 'Error',
+            text: err.response.data.message,
+          })
+        })
+    },
+
+    exportExcel() {
+      const vm = this
+      this.$nuxt.$loading.start()
+      this.$axios
+        .get(`/api/report/excel`, {
+          params: {
+            type: vm.$auth.$storage.getCookie('reportType'),
+            start_date: vm.date_from,
+            end_date: vm.date_to,
+          },
+          responseType: 'arraybuffer',
+        })
+        .then((response) => {
+          this.$nuxt.$loading.finish()
+          const url = window.URL.createObjectURL(new Blob([response.data]))
+          const link = document.createElement('a')
+
+          link.href = url
+          link.setAttribute(
+            'download',
+            vm.$auth.$storage.getCookie('reportType') + '.xlsx'
+          ) // set custom file name
+          document.body.appendChild(link)
+
+          link.click() // force download file without open new tab
+        })
+        .catch((err) => {
+          this.$nuxt.$loading.finish()
+          this.$swal({
+            type: 'error',
+            title: 'Error',
+            text: err.response.data.message,
+          })
+        })
+    },
+
     emitData(data) {
       this.documentStatus = data.documentStatus
       this.itemSearch = data.itemSearch
@@ -139,7 +213,7 @@ export default {
             search: vm.search,
             start_date: vm.date_from,
             end_date: vm.date_to,
-            report_type: vm.$route.query.name,
+            report_type: vm.$auth.$storage.getCookie('reportType'),
           },
         })
         .then((res) => {

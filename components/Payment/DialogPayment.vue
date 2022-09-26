@@ -166,18 +166,20 @@ export default {
       this.itemAction = this.appendItemAction(this.formType)
       // this.$refs.dialogForm.openDialog()
       this.$refs.dialogForm.openDialog()
-      this.getDataFromApi()
+      // this.getDataFromApi()
     }, 300)
   },
 
-  // mounted() {
-
-  //   setTimeout(() => {
-  //     this.$refs.dialogForm.openDialog()
-  //     this.$refs.dialogForm.openDialog()
-  //     this.getDataFromApi()
-  //   }, 300)
-  // },
+  mounted() {
+    setTimeout(() => {
+      this.getDataFromApi()
+    }, 500)
+    //   setTimeout(() => {
+    //     this.$refs.dialogForm.openDialog()
+    //     this.$refs.dialogForm.openDialog()
+    //     this.getDataFromApi()
+    //   }, 300)
+  },
 
   methods: {
     // A method that is called when the dialog is closed.

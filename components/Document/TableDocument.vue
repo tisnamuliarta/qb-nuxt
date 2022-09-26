@@ -74,6 +74,21 @@
           }}
         </template>
 
+        <template #[`item.tags`]="{ item }">
+          <v-chip
+            v-for="(value, index) in item.tags"
+            :key="index"
+            class="ma-2"
+            dense
+            label
+            small
+            outlined
+            color="green"
+          >
+            {{ value.name.en }}
+          </v-chip>
+        </template>
+
         <template #[`item.main_account_amount`]="{ item }">
           {{
             $auth.user.entity.currency.currency_symbol +

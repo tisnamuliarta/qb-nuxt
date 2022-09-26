@@ -100,6 +100,7 @@ export default {
           name: item.alias
         }
       })
+      this.$auth.$storage.setCookie('reportType', item.alias)
     },
 
     getDataFromApi() {

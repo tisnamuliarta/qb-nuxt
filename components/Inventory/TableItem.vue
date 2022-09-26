@@ -137,7 +137,6 @@ export default {
     return {
       selected: [],
       totalData: 0,
-      url: '',
       editedIndex: -1,
       loading: true,
       allData: [],
@@ -148,6 +147,7 @@ export default {
       searchItem: '',
       search: '',
       whs: '',
+      url: '/api/inventory/items',
       form: {},
       defaultItem: {},
       options: {},
@@ -242,6 +242,37 @@ export default {
       }
     },
 
+    deleteItem(item) {
+      this.$swal({
+        title: this.$t('Are you sure you want to run this action?'),
+        text: 'Data cannot be change after posted!',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Save',
+      }).then((result) => {
+        if (result.value) {
+          this.$nuxt.$loading.start()
+          this.$axios
+            .delete(this.url + '/' + item.id)
+            .then((res) => {
+              this.getDataFromApi()
+            })
+            .catch((err) => {
+              this.$swal({
+                type: 'error',
+                title: 'Error',
+                text: err.response.data.message,
+              })
+            })
+            .finally(() => {
+              this.$nuxt.$loading.finish()
+            })
+        }
+      })
+    },
+
     editItem(item) {
       this.editedIndex = 1
       this.editedIndex = this.allData.indexOf(item)
@@ -273,7 +304,7 @@ export default {
         dateTo: this.dateTo,
       }
       this.$axios
-        .get(`/api/inventory/items`, {
+        .get(this.url, {
           params: {
             ...vm.options,
             ...status,
@@ -286,7 +317,7 @@ export default {
           this.itemSearch = res.data.filter
           this.form = Object.assign({}, res.data.form)
           this.defaultItem = Object.assign({}, res.data.form)
-          this.url = res.data.url
+          // this.url = res.data.url
         })
         .catch((err) => {
           this.loading = false

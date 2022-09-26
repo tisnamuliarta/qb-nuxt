@@ -515,6 +515,7 @@ export default {
       taxDetails: [],
       itemSalesPersons: [],
       itemPaymentMethod: [],
+      itemTags: [],
       statusProcessing: 'insert',
       valueWhenIsEmpty: '0',
       tempTotalTax: 0,
@@ -616,7 +617,9 @@ export default {
 
   // The above code is calling the methods that are defined in the methods section of the Vue instance.
   mounted() {
-    // this.getMasterData()
+    setTimeout(() => {
+      this.getMasterData()
+    }, 500)
   },
 
   methods: {
@@ -868,6 +871,7 @@ export default {
         )
 
         const resTax = await this.$axios.get(`/api/financial/taxes`)
+        const resTags = await this.$axios.get(`/api/tags`)
 
         const resEmployee = await this.$axios.get(`/api/payroll/employees`, {
           params: {
@@ -889,6 +893,7 @@ export default {
         this.$auth.$storage.setState('tax_row', resTax.data.data)
         this.$auth.$storage.setState('salesPerson', resEmployee.data.data)
         this.itemSalesPersons = resEmployee.data.data
+        this.itemTags = resTags.data.data
 
         if (this.uploadField) {
           this.$refs.uploadField.getFiles()

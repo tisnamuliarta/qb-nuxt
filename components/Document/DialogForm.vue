@@ -173,7 +173,7 @@ export default {
       this.$auth.$storage.setState('formType', this.formType)
       // this.dialog = true
       this.$refs.dialogForm.openDialog()
-      // this.getDataFromApi()
+      this.getDataFromApi()
     }, 500)
   },
 

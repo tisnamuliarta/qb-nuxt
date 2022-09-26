@@ -131,6 +131,7 @@ export default {
       searchStatus: '',
       searchItem: '',
       search: '',
+      url: '/api/bp/contacts',
       form: {},
       defaultItem: {},
       options: {},
@@ -242,6 +243,39 @@ export default {
         this.deleteItem(item)
       }
     },
+
+    deleteItem(item) {
+      this.$swal({
+        title: this.$t('Are you sure you want to run this action?'),
+        text: 'Data cannot be change after posted!',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Save',
+      }).then((result) => {
+        if (result.value) {
+          this.$nuxt.$loading.start()
+          this.$axios
+            .delete(this.url + '/' + item.id)
+            .then((res) => {
+              this.getDataFromApi()
+            })
+            .catch((err) => {
+              this.$swal({
+                type: 'error',
+                title: 'Error',
+                text: err.response.data.message,
+              })
+            })
+            .finally(() => {
+              this.$nuxt.$loading.finish()
+            })
+        }
+      })
+    },
+
+
     editItem(item) {
       this.editedIndex = 1
       this.$refs.formData.editItem(item)
@@ -271,7 +305,7 @@ export default {
         dateTo: this.dateTo,
       }
       this.$axios
-        .get(`/api/bp/contacts`, {
+        .get(this.url, {
           params: {
             ...vm.options,
             ...status,

@@ -167,6 +167,7 @@ export default {
       headers: this.headerTable,
       dateFrom: null,
       dateTo: null,
+      url: '/api/payroll/employees'
     }
   },
 
@@ -232,12 +233,34 @@ export default {
     },
 
     deleteItem(item) {
-      this.$axios
-        .delete(`/api/master/permissions/` + item.menu_name)
-        .then((res) => {
-          this.getDataFromApi()
-          this.$nuxt.$emit('getMenu', 'nice payload')
-        })
+      this.$swal({
+        title: this.$t('Are you sure you want to run this action?'),
+        text: 'Data cannot be change after posted!',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Save',
+      }).then((result) => {
+        if (result.value) {
+          this.$nuxt.$loading.start()
+          this.$axios
+            .delete(this.url + '/' + item.id)
+            .then((res) => {
+              this.getDataFromApi()
+            })
+            .catch((err) => {
+              this.$swal({
+                type: 'error',
+                title: 'Error',
+                text: err.response.data.message,
+              })
+            })
+            .finally(() => {
+              this.$nuxt.$loading.finish()
+            })
+        }
+      })
     },
 
     emitData(data) {
@@ -265,7 +288,7 @@ export default {
         dateTo: this.dateTo,
       }
       this.$axios
-        .get(`/api/payroll/employees`, {
+        .get(this.url, {
           params: {
             ...vm.options,
             ...status,
