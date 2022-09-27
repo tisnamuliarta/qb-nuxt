@@ -1,4 +1,7 @@
 {
+  "Personal Info": "Informasi Pribadi",
+  "Employment details": "Detail Pekerjaan",
+  "Pay types": "Jenis Pembayaran",
   "Principle": "Pokok",
   "Interest": "Bunga",
   "Installment": "Angsuran",
@@ -94,7 +97,7 @@
   "Account Balance": "Saldo Akun",
   "Pay from": "Bayar dari",
   "First name": "Nama depan",
-  "Middle name": "Middle tengah",
+  "Middle name": "Nama tengah",
   "Last name": "Nama keluarga",
   "Birth Date": "Tanggal lahir",
   "Gender": "Jenis kelamin",

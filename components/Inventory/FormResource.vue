@@ -61,7 +61,7 @@
                   v-model="form.employee_id"
                   :items="itemEmployee"
                   label="Employee"
-                  item-text="first_name"
+                  item-text="full_name"
                   item-value="id"
                   outlined
                   persistent-hint

@@ -399,10 +399,10 @@ export default {
       itemPaySchedule: [],
       itemPayType: [],
       items: [
-        { tab: 'Personal Info', href: '#tab-1' },
-        { tab: 'Payment method', href: '#tab-2' },
-        { tab: 'Employment details', href: '#tab-3' },
-        { tab: 'Pay types', href: '#tab-4' },
+        { tab: this.$t('Personal Info'), href: '#tab-1' },
+        { tab: this.$t('Payment Method'), href: '#tab-2' },
+        { tab: this.$t('Employment details'), href: '#tab-3' },
+        { tab: this.$t('Pay types'), href: '#tab-4' },
       ],
     }
   },
