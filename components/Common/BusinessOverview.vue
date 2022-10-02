@@ -18,7 +18,7 @@
                 </v-card>
               </v-col>
 
-              <v-col cols="12" sm="6" lg="6" xl="4">
+              <!-- <v-col cols="12" sm="6" lg="6" xl="4">
                 <v-skeleton-loader v-show="loading" type="card" />
                 <v-card v-show="!loading">
                   <v-card-text>
@@ -26,10 +26,12 @@
                   </v-card-text>
                   <v-divider></v-divider>
                   <v-card-text>
-                    <LazyChartDoughnutChart ref="expense"></LazyChartDoughnutChart>
+                    <LazyChartDoughnutChart
+                      ref="expense"
+                    ></LazyChartDoughnutChart>
                   </v-card-text>
                 </v-card>
-              </v-col>
+              </v-col> -->
 
               <v-col cols="12" sm="6" lg="6" xl="4">
                 <v-skeleton-loader v-show="loading" type="card" />
@@ -58,10 +60,78 @@
               </v-col>
             </v-row>
           </v-col>
+
+          <v-col cols="12">
+            <LazyPayrollTableCommission
+              ref="tableCommission"
+            ></LazyPayrollTableCommission>
+          </v-col>
+
+          <v-col cols="12">
+            <DocumentTableDocument
+              ref="tableDocument"
+              :show-new-data-multiple="false"
+              type-document="JN"
+              form-url="/app/form/accounting/journal"
+              table-url="/api/transactions"
+              table-title="Journal Entry"
+              :header-table="[
+                {
+                  text: 'Number',
+                  value: 'transaction_no',
+                  cellClass: 'disable-wrap',
+                },
+                {
+                  text: 'Notes',
+                  value: 'narration',
+                  cellClass: 'disable-wrap',
+                },
+                {
+                  text: 'Date',
+                  value: 'date',
+                  cellClass: 'disable-wrap',
+                  sortable: false,
+                  filterable: false,
+                },
+                {
+                  text: 'Reference',
+                  value: 'reference',
+                  align: 'left',
+                  cellClass: 'disable-wrap',
+                  sortable: false,
+                  filterable: false,
+                },
+                {
+                  text: 'Status',
+                  value: 'status',
+                  align: 'left',
+                  cellClass: 'disable-wrap',
+                  sortable: false,
+                  filterable: false,
+                },
+                {
+                  text: 'Total',
+                  value: 'main_account_amount',
+                  align: 'right',
+                  cellClass: 'disable-wrap',
+                  sortable: false,
+                  filterable: false,
+                },
+                {
+                  text: 'Actions',
+                  value: 'actions',
+                  align: 'center',
+                  cellClass: 'disable-wrap',
+                  sortable: false,
+                  filterable: false,
+                },
+              ]"
+            ></DocumentTableDocument>
+          </v-col>
         </v-row>
       </v-container>
     </v-col>
-<!--
+    <!--
     <v-col cols="12" md="3">
       <v-container>
         <v-row>
@@ -122,40 +192,39 @@ export default {
       const resInvoice = await this.$axios.get(`/api/chart`, {
         params: {
           type: 'bar',
-          data: 'invoice'
-        }
+          data: 'invoice',
+        },
       })
 
-      const resExpense = await this.$axios.get(`/api/chart`, {
-        params: {
-          type: 'doughnut',
-          data: 'expense'
-        }
-      })
+      // const resExpense = await this.$axios.get(`/api/chart`, {
+      //   params: {
+      //     type: 'doughnut',
+      //     data: 'expense',
+      //   },
+      // })
 
       const resProfitLoss = await this.$axios.get(`/api/chart`, {
         params: {
           type: 'line',
-          data: 'profitLoss'
-        }
+          data: 'profitLoss',
+        },
       })
 
       const resSales = await this.$axios.get(`/api/chart`, {
         params: {
           type: 'line',
-          data: 'sales'
-        }
+          data: 'sales',
+        },
       })
 
       this.$refs.invoice.setData(resInvoice.data)
-      this.$refs.expense.setData(resExpense.data)
+      // this.$refs.expense.setData(resExpense.data)
       this.$refs.profitLoss.setData(resProfitLoss.data)
       this.$refs.sales.setData(resSales.data)
 
       // this.$nuxt.$loading.finish()
       this.loading = false
-
-    }
-  }
+    },
+  },
 }
 </script>

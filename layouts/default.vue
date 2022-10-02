@@ -177,6 +177,7 @@
       </v-overlay>
 
       <v-container fluid>
+        <!-- <Nuxt/> -->
         <Nuxt
           keep-alive
           :keep-alive-props="{ exclude: ['pages/sales/quote.vue'] }"

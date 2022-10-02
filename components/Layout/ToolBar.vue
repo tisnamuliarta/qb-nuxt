@@ -17,24 +17,11 @@
     <!--      </v-card>-->
     <!--    </v-menu>-->
 
-    <v-menu
-      v-model="menu2"
-      transition="slide-y-transition"
-      bottom
-      offset-y
-      left
-      :nudge-width="400"
-    >
-      <template #activator="{ on }">
-        <v-btn small icon class="mr-2" v-on="on">
-          <v-icon>mdi-magnify</v-icon>
-        </v-btn>
-      </template>
+    <LayoutSearchBar ref="searchBar"></LayoutSearchBar>
 
-      <v-card>
-        <LazyFormSearch ref="formSetting" @openAction="openAction" />
-      </v-card>
-    </v-menu>
+    <v-btn v-hotkey="keymap" small icon class="mr-2">
+      <v-icon>mdi-magnify</v-icon>
+    </v-btn>
 
     <v-tooltip bottom>
       <template #activator="{ on }">
@@ -129,11 +116,24 @@ export default {
     }
   },
 
+  computed: {
+    keymap () {
+      return {
+        // 'esc+ctrl' is OK.
+        '/': this.openSearchDialog,
+      }
+    }
+  },
+
   mounted() {
     this.username = this.$auth.user.name.substring(0, 1)
   },
 
   methods: {
+    openSearchDialog() {
+      this.$refs.searchBar.openDialog()
+    },
+
     openActionForm(data) {
       this.menu3 = false
       if (data.item.route) {

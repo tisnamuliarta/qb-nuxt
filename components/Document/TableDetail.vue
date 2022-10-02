@@ -464,7 +464,7 @@ export default {
             [rowData, 'item_id', item.id],
             [rowData, 'amount', price],
             [rowData, 'tax_name', salesTax],
-            [rowData, 'whs_name', item.whs_name],
+            // [rowData, 'whs_name', item.whs_name],
             [rowData, 'quantity', 1],
           ])
           rowData++

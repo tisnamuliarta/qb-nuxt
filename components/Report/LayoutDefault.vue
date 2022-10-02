@@ -128,17 +128,40 @@ export default {
         })
         .then((response) => {
           this.$nuxt.$loading.finish()
-          const url = window.URL.createObjectURL(new Blob([response.data]))
-          const link = document.createElement('a')
+          // const url = window.URL.createObjectURL(new Blob([response.data]))
+          // const link = document.createElement('a')
 
-          link.href = url
-          link.setAttribute(
-            'download',
-            vm.$auth.$storage.getCookie('reportType') + '.pdf'
-          ) // set custom file name
-          document.body.appendChild(link)
+          // link.href = url
+          // link.setAttribute(
+          //   'download',
+          //   vm.$auth.$storage.getCookie('reportType') + '.pdf'
+          // ) // set custom file name
+          // document.body.appendChild(link)
 
-          link.click() // force download file without open new tab
+          // link.click() // force download file without open new tab
+
+          const blob = new Blob([response.data], {
+            type: 'application/pdf',
+          })
+          const url = window.URL.createObjectURL(blob)
+          // const link = document.createElement('a')
+          // link.href = window.URL.createObjectURL(blob)
+          // link.download ='approval check list '+details[0]+'.pdf'
+          // document.body.appendChild(link)
+          // link.click()
+          // setTimeout(function () {
+          //   document.body.removeChild(link)
+          //   window.URL.revokeObjectURL(url)
+          // }, 100)
+
+          const theWindow = window.open(url)
+          const theDoc = theWindow.document
+          const theScript = document.createElement('script')
+          function injectThis() {
+            window.print()
+          }
+          theScript.innerHTML = `window.onload = ${injectThis.toString()};`
+          theDoc.body.appendChild(theScript)
         })
         .catch((err) => {
           this.$nuxt.$loading.finish()

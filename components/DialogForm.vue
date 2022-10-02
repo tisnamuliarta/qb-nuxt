@@ -13,7 +13,7 @@
         <span class="subtitle-2">{{ dialogTitle }}</span>
         <v-spacer></v-spacer>
         <v-btn icon color="red" dark @click="closeDialog()">
-          <v-icon>mdi-close-circle</v-icon>
+          <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-card-title>
       <v-divider></v-divider>

@@ -152,12 +152,18 @@
           ></v-autocomplete>
         </v-col>
 
-        <v-col v-if="form.transaction_type === 'IN' || form.transaction_type === 'CS'" cols="12" md="5">
+        <v-col
+          v-if="
+            form.transaction_type === 'IN' || form.transaction_type === 'CS'
+          "
+          cols="12"
+          md="5"
+        >
           <v-autocomplete
             v-model="form.sales_person"
             :items="itemSalesPersons"
             item-value="user_id"
-            item-text="first_name"
+            item-text="full_name"
             label="Sales Person"
             outlined
             dense
@@ -714,7 +720,7 @@ export default {
         parseFloat(this.form.sub_total || 0) -
         parseFloat(this.form.discount_per_line || 0) -
         parseFloat(this.form.discount_amount || 0) +
-        parseFloat(this.taxAmount || 0);
+        parseFloat(this.taxAmount || 0)
 
       // calculate amount before tax for tax withholding
       this.amountBeforeTax = this.form.main_account_amount - this.taxAmount
@@ -726,7 +732,9 @@ export default {
             (this.form.withholding_rate / 100) * this.amountBeforeTax
         }
       } else {
-        this.form.withholding_amount = parseFloat(this.form.withholding_rate || 0)
+        this.form.withholding_amount = parseFloat(
+          this.form.withholding_rate || 0
+        )
       }
 
       this.form.balance_due =
@@ -792,6 +800,11 @@ export default {
     },
 
     changeWarehouse() {
+      this.itemWarehouse.forEach((value, index) => {
+        if(this.form.warehouse_id === value.id) {
+          this.form.warehouse_name = value.code
+        }
+      })
       this.setData(this.form)
     },
 

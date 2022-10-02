@@ -72,6 +72,7 @@ export default {
     // { src: '~/plugins/vue-graph.js' },
     { src: '~/plugins/vuetify-money.js' },
     { src: '~/plugins/axios-host.js' },
+    { src: '~/plugins/hotkey.js' },
     // { src: '~/plugins/vue-mask.js' },
   ],
   /*

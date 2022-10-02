@@ -8,16 +8,15 @@
           :mobile-breakpoint="0"
           :headers="headers"
           :items="allData"
-          :items-per-page="100"
+          :items-per-page="20"
           :options.sync="options"
           :server-items-length="totalData"
           :loading="loading"
-          hide-default-footer
           class="elevation-1"
           dense
           fixed-header
           height="75vh"
-          :footer-props="{ 'items-per-page-options': [100, -1] }"
+          :footer-props="{ 'items-per-page-options': [20, 50, 100, 500 -1] }"
         >
           <template #top>
             <div class="pl-4 pt-2">
